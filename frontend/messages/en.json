@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "notLoggedIn": "You are not logged in"
+  },
+  "home": {
+    "title": "Loyalty Cards",
+    "description": "Universal QR loyalty card system",
+    "ready": "App is ready. Start building the authentication pages."
+  },
+  "customer": {
+    "qr": {
+      "title": "My QR code",
+      "stampTab": "Stamp",
+      "rewardsTab": "Rewards",
+      "expiresIn": "Expires in",
+      "showToStaff": "Show this code to the shop staff",
+      "noRewards": "No rewards available",
+      "rewardLabel": "Reward — show to redeem"
+    }
+  },
+  "staff": {
+    "scan": {
+      "title": "Scan customer QR",
+      "startCamera": "Starting camera...",
+      "aim": "Point the camera at the customer's QR code",
+      "scanAgain": "Scan another",
+      "processing": "Processing...",
+      "stamped": "Stamp added!",
+      "stampsProgress": "{count} of {goal} stamps",
+      "rewardAvailable": "Reward available!",
+      "rewardRedeemed": "Reward redeemed successfully!",
+      "errors": {
+        "qr_invalid": "Invalid QR code",
+        "qr_expired": "QR code expired — ask the customer for a new one",
+        "duplicate_scan": "This customer was already stamped less than a minute ago",
+        "unauthorized": "Unauthorized",
+        "not_staff": "You don't have staff permissions",
+        "stamp_failed": "Error adding stamp",
+        "redeem_failed": "Error redeeming reward",
+        "reward_not_found": "Reward not found",
+        "reward_already_used": "This reward has already been redeemed",
+        "camera_error": "Could not access the camera"
+      }
+    }
+  }
+}

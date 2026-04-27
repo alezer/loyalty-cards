@@ -1,0 +1,49 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "back": "Volver",
+    "notLoggedIn": "No has iniciado sesión"
+  },
+  "home": {
+    "title": "Loyalty Cards",
+    "description": "Sistema de tarjetas de fidelización con QR universal",
+    "ready": "La app está lista. Comienza construyendo las páginas de autenticación."
+  },
+  "customer": {
+    "qr": {
+      "title": "Mi código QR",
+      "stampTab": "Sello",
+      "rewardsTab": "Recompensas",
+      "expiresIn": "Expira en",
+      "showToStaff": "Muestra este código al personal del comercio",
+      "noRewards": "No tienes recompensas disponibles",
+      "rewardLabel": "Recompensa — muéstrala para canjearla"
+    }
+  },
+  "staff": {
+    "scan": {
+      "title": "Escanear QR del cliente",
+      "startCamera": "Iniciando cámara...",
+      "aim": "Apunta la cámara al código QR del cliente",
+      "scanAgain": "Escanear otro",
+      "processing": "Procesando...",
+      "stamped": "¡Sello añadido!",
+      "stampsProgress": "{count} de {goal} sellos",
+      "rewardAvailable": "¡Recompensa disponible!",
+      "rewardRedeemed": "¡Recompensa canjeada con éxito!",
+      "errors": {
+        "qr_invalid": "Código QR no válido",
+        "qr_expired": "Código QR expirado — pide al cliente uno nuevo",
+        "duplicate_scan": "Este cliente ya recibió un sello hace menos de un minuto",
+        "unauthorized": "No autorizado",
+        "not_staff": "No tienes permisos de personal",
+        "stamp_failed": "Error al añadir el sello",
+        "redeem_failed": "Error al canjear la recompensa",
+        "reward_not_found": "Recompensa no encontrada",
+        "reward_already_used": "Esta recompensa ya fue canjeada",
+        "camera_error": "No se pudo acceder a la cámara"
+      }
+    }
+  }
+}
