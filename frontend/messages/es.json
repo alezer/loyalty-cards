@@ -3,7 +3,46 @@
     "loading": "Cargando...",
     "error": "Ha ocurrido un error",
     "back": "Volver",
-    "notLoggedIn": "No has iniciado sesión"
+    "notLoggedIn": "No has iniciado sesión",
+    "save": "Guardar",
+    "saving": "Guardando..."
+  },
+  "nav": {
+    "brand": "Loyalty Cards",
+    "language": "Idioma",
+    "signOut": "Cerrar sesión"
+  },
+  "auth": {
+    "title": "Bienvenido",
+    "subtitle": "Acumula sellos, canjea recompensas",
+    "continueWithGoogle": "Continuar con Google",
+    "continueWithEmail": "Continuar con email",
+    "orDivider": "o",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Iniciar sesión",
+    "signUp": "Crear cuenta",
+    "switchToRegister": "¿No tienes cuenta? Regístrate",
+    "switchToLogin": "¿Ya tienes cuenta? Inicia sesión",
+    "registrationSuccess": "¡Revisa tu correo!",
+    "registrationSuccessDesc": "Te hemos enviado un enlace de confirmación. Haz clic en él para activar tu cuenta.",
+    "errors": {
+      "invalidCredentials": "Correo o contraseña incorrectos",
+      "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión",
+      "emailAlreadyExists": "Ya existe una cuenta con ese correo",
+      "generic": "Ha ocurrido un error. Inténtalo de nuevo."
+    }
+  },
+  "roleSelect": {
+    "title": "¿Cómo usarás la app?",
+    "subtitle": "Podrás cambiar esto más adelante",
+    "businessTitle": "Soy un Comercio",
+    "businessDesc": "Gestiona tu programa de fidelización y escanea los códigos QR de tus clientes",
+    "customerTitle": "Soy un Cliente",
+    "customerDesc": "Acumula sellos y canjea recompensas en tus comercios favoritos",
+    "saving": "Guardando..."
   },
   "home": {
     "title": "Loyalty Cards",

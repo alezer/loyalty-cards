@@ -1,7 +1,10 @@
 import { setRequestLocale } from 'next-intl/server'
-import { useTranslations } from 'next-intl'
-import { QrCode } from 'lucide-react'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import type { UserRole } from '@/lib/types/database'
 
+// Smart home page: checks auth state and routes to the right place.
+// This avoids landing on a static page that immediately redirects.
 export default async function HomePage({
   params,
 }: {
@@ -10,24 +13,24 @@ export default async function HomePage({
   const { locale } = await params
   setRequestLocale(locale)
 
-  return <HomeContent />
-}
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-function HomeContent() {
-  const t = useTranslations('home')
+  if (!user) {
+    redirect(`/${locale}/login`)
+  }
 
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-50 to-white">
-      <div className="text-center px-4">
-        <div className="flex justify-center mb-6">
-          <div className="bg-brand-600 text-white rounded-2xl p-4">
-            <QrCode size={48} />
-          </div>
-        </div>
-        <h1 className="text-4xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="mt-3 text-lg text-gray-500">{t('description')}</p>
-        <p className="mt-2 text-sm text-gray-400">{t('ready')}</p>
-      </div>
-    </main>
-  )
+  const roleSelected = user.user_metadata?.role_selected as boolean | undefined
+  if (!roleSelected) {
+    redirect(`/${locale}/role-select`)
+  }
+
+  const appRole = user.user_metadata?.app_role as UserRole | undefined
+  if (appRole === 'owner' || appRole === 'staff' || appRole === 'admin') {
+    redirect(`/${locale}/staff/scan`)
+  }
+
+  redirect(`/${locale}/customer/qr`)
 }
