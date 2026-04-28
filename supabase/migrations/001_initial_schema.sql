@@ -126,10 +126,10 @@ CREATE TRIGGER trg_loyalty_cards_updated_at
 CREATE OR REPLACE FUNCTION fn_handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, email, full_name, role)
+  INSERT INTO public.profiles (id, email, full_name, role)
   VALUES (
     NEW.id,
-    NEW.email,
+    COALESCE(NEW.email, ''),
     COALESCE(
       NEW.raw_user_meta_data->>'full_name',  -- Google OAuth field
       NEW.raw_user_meta_data->>'name',       -- fallback
@@ -138,13 +138,13 @@ BEGIN
     'customer'
   )
   ON CONFLICT (id) DO UPDATE SET
-    email      = EXCLUDED.email,
-    full_name  = COALESCE(EXCLUDED.full_name, profiles.full_name),
+    email      = COALESCE(NULLIF(EXCLUDED.email, ''), public.profiles.email),
+    full_name  = COALESCE(NULLIF(EXCLUDED.full_name, ''), public.profiles.full_name),
     updated_at = NOW();
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 CREATE TRIGGER trg_on_auth_user_created
   AFTER INSERT ON auth.users
