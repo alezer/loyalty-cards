@@ -3,7 +3,46 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "back": "Back",
-    "notLoggedIn": "You are not logged in"
+    "notLoggedIn": "You are not logged in",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "nav": {
+    "brand": "Loyalty Cards",
+    "language": "Language",
+    "signOut": "Sign out"
+  },
+  "auth": {
+    "title": "Welcome",
+    "subtitle": "Collect stamps, redeem rewards",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithEmail": "Continue with email",
+    "orDivider": "or",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "switchToRegister": "No account? Sign up",
+    "switchToLogin": "Already have an account? Sign in",
+    "registrationSuccess": "Check your email!",
+    "registrationSuccessDesc": "We sent you a confirmation link. Click it to activate your account.",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "emailNotConfirmed": "Please confirm your email before signing in",
+      "emailAlreadyExists": "An account with that email already exists",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "roleSelect": {
+    "title": "How will you use the app?",
+    "subtitle": "You can change this later",
+    "businessTitle": "I'm a Business",
+    "businessDesc": "Manage your loyalty program and scan your customers' QR codes",
+    "customerTitle": "I'm a Customer",
+    "customerDesc": "Collect stamps and redeem rewards at your favourite shops",
+    "saving": "Saving..."
   },
   "home": {
     "title": "Loyalty Cards",
