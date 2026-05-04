@@ -81,18 +81,18 @@ CREATE INDEX idx_rewards_card ON rewards(card_id);
 
 CREATE OR REPLACE FUNCTION get_my_role()
 RETURNS user_role AS $$
-  SELECT role FROM profiles WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT role FROM public.profiles WHERE id = auth.uid();
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 CREATE OR REPLACE FUNCTION get_my_business_id()
 RETURNS UUID AS $$
-  SELECT business_id FROM profiles WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT business_id FROM public.profiles WHERE id = auth.uid();
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 CREATE OR REPLACE FUNCTION is_admin()
 RETURNS BOOLEAN AS $$
-  SELECT EXISTS(SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin');
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT EXISTS(SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin');
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 -- ================================================================
 -- Trigger: auto-update updated_at on every row change
