@@ -62,7 +62,9 @@ export async function GET(request: NextRequest) {
 
   // Route based on the app_role stored in metadata (set during role selection).
   const appRole = user.user_metadata?.app_role as UserRole | undefined
-  if (appRole === 'owner' || appRole === 'staff' || appRole === 'admin') {
+  if (appRole === 'admin') return NextResponse.redirect(`${origin}/${locale}/admin/dashboard`)
+  if (appRole === 'owner') return NextResponse.redirect(`${origin}/${locale}/owner/team`)
+  if (appRole === 'staff') {
     return NextResponse.redirect(`${origin}/${locale}/staff/scan`)
   }
 

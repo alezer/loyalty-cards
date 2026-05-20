@@ -47,7 +47,7 @@
   "home": {
     "title": "Loyalty Cards",
     "description": "Sistema de tarjetas de fidelización con QR universal",
-    "ready": "La app está lista. Comienza construyendo las páginas de autenticación."
+    "ready": "La app está lista."
   },
   "customer": {
     "qr": {
@@ -83,6 +83,107 @@
         "reward_already_used": "Esta recompensa ya fue canjeada",
         "camera_error": "No se pudo acceder a la cámara"
       }
+    }
+  },
+  "owner": {
+    "team": {
+      "title": "Mi Equipo",
+      "subtitle": "Gestiona el personal de tu comercio",
+      "addStaff": "Añadir Personal",
+      "noStaff": "No tienes personal aún",
+      "noBusiness": "No tienes un comercio asignado. Contacta a un administrador.",
+      "name": "Nombre",
+      "email": "Email",
+      "since": "Miembro desde",
+      "createTitle": "Nuevo miembro del equipo",
+      "createDesc": "Crea una cuenta para un nuevo miembro del personal de tu comercio.",
+      "deleteTitle": "Eliminar miembro",
+      "deleteDesc": "¿Eliminar a {name}? Esta acción no se puede deshacer.",
+      "fullNameLabel": "Nombre completo",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña temporal",
+      "create": "Crear cuenta",
+      "creating": "Creando...",
+      "delete": "Eliminar",
+      "deleting": "Eliminando...",
+      "cancel": "Cancelar"
+    },
+    "clients": {
+      "title": "Clientes",
+      "subtitle": "Clientes con tarjeta de fidelización en tu comercio",
+      "noClients": "Ningún cliente aún",
+      "name": "Nombre",
+      "email": "Email",
+      "stamps": "Sellos",
+      "backToClients": "Volver a clientes",
+      "noHistory": "Sin historial de sellos",
+      "stampDate": "Fecha",
+      "stampBy": "Puesto por"
+    }
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "businesses": "Comercios",
+      "users": "Usuarios"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Vista global de la plataforma",
+      "totalBusinesses": "Comercios",
+      "totalStampsToday": "Sellos hoy",
+      "totalUsers": "Clientes activos",
+      "stampsPerBusiness": "Actividad por comercio",
+      "business": "Comercio",
+      "totalStamps": "Total sellos",
+      "stampsToday": "Sellos hoy"
+    },
+    "businesses": {
+      "title": "Comercios",
+      "subtitle": "Gestión de comercios de la plataforma",
+      "addBusiness": "Nuevo Comercio",
+      "noBusiness": "No hay comercios aún",
+      "name": "Nombre",
+      "stampsGoal": "Meta",
+      "owner": "Owner",
+      "createTitle": "Nuevo Comercio",
+      "editTitle": "Editar Comercio",
+      "deleteTitle": "Eliminar Comercio",
+      "deleteDesc": "¿Eliminar \"{name}\"? Se eliminarán todas las tarjetas y sellos asociados.",
+      "nameLabel": "Nombre del comercio",
+      "stampsGoalLabel": "Sellos para recompensa",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "delete": "Eliminar",
+      "deleting": "Eliminando..."
+    },
+    "users": {
+      "title": "Owners",
+      "subtitle": "Propietarios de comercios",
+      "addOwner": "Nuevo Owner",
+      "noUsers": "No hay owners aún",
+      "name": "Nombre",
+      "email": "Email",
+      "business": "Comercio",
+      "createTitle": "Nuevo Owner",
+      "deleteTitle": "Eliminar Owner",
+      "deleteDesc": "¿Eliminar a {name}? Esta acción no se puede deshacer.",
+      "impersonate": "Impersonar",
+      "impersonateTitle": "Acceder como usuario",
+      "impersonateDesc": "Enlace de acceso único para {name}. Ábrelo en una ventana de incógnito.",
+      "copyLink": "Copiar enlace",
+      "openLink": "Abrir en nueva pestaña",
+      "fullNameLabel": "Nombre completo",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña temporal",
+      "businessLabel": "Comercio asignado",
+      "noBusiness": "Sin comercio",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "delete": "Eliminar",
+      "deleting": "Eliminando..."
     }
   }
 }
