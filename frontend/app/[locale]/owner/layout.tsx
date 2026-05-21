@@ -1,18 +1,17 @@
 import { redirect } from 'next/navigation'
-import { setRequestLocale } from 'next-intl/server'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardShell } from '@/components/dashboard/DashboardShell'
 
+export const dynamic = 'force-dynamic'
+
 export default async function OwnerLayout({
   children,
-  params,
 }: {
   children: React.ReactNode
   params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
-  setRequestLocale(locale)
+  const locale = await getLocale()
 
   const supabase = await createClient()
   const {

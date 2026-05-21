@@ -1,7 +1,7 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
 import {
   Table,
   TableBody,
@@ -13,13 +13,9 @@ import {
 import { Building2, Stamp, Users } from 'lucide-react'
 import type { AdminMetrics } from '@/lib/types/database'
 
-export default async function AdminDashboardPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export const dynamic = 'force-dynamic'
+
+export default async function AdminDashboardPage() {
   const t = await getTranslations('admin.dashboard')
 
   // Parallel data fetch

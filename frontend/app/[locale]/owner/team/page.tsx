@@ -1,16 +1,13 @@
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { TeamManager } from '@/components/owner/TeamManager'
 import type { Profile } from '@/lib/types/database'
 
-export default async function TeamPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export const dynamic = 'force-dynamic'
+
+export default async function TeamPage() {
+  const locale = await getLocale()
 
   const supabase = await createClient()
   const {

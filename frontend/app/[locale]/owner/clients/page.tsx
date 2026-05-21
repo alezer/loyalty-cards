@@ -1,17 +1,13 @@
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { ClientsTable } from '@/components/owner/ClientsTable'
 import type { ClientWithCard } from '@/lib/types/database'
 
-export default async function ClientsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export const dynamic = 'force-dynamic'
+
+export default async function ClientsPage() {
+  const locale = await getLocale()
 
   const supabase = await createClient()
   const {

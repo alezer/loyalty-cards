@@ -1,15 +1,10 @@
-import { setRequestLocale } from 'next-intl/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { BusinessesManager } from '@/components/admin/BusinessesManager'
 import type { Business, BusinessWithOwner } from '@/lib/types/database'
 
-export default async function AdminBusinessesPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export const dynamic = 'force-dynamic'
+
+export default async function AdminBusinessesPage() {
 
   type BizRow = { id: string; name: string; stamps_goal: number; created_at: string }
   type OwnerRow = { id: string; email: string; full_name: string | null; business_id: string | null }

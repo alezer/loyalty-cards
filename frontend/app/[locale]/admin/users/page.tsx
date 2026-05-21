@@ -1,15 +1,10 @@
-import { setRequestLocale } from 'next-intl/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { UsersManager } from '@/components/admin/UsersManager'
 import type { OwnerWithBusiness } from '@/lib/types/database'
 
-export default async function AdminUsersPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  setRequestLocale(locale)
+export const dynamic = 'force-dynamic'
+
+export default async function AdminUsersPage() {
 
   type OwnerRow = {
     id: string
