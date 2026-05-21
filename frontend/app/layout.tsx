@@ -1,3 +1,8 @@
+import { Geist } from "next/font/google";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
+
 // Minimal root layout required by Next.js.
 // All real layout (html, body, fonts, providers) lives in app/[locale]/layout.tsx
 // so that the <html lang> attribute can be set dynamically per locale.

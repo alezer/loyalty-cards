@@ -50,9 +50,9 @@ function AuthSkeleton() {
 // ─── Helper: get destination after login ──────────────────────────────────────
 
 function getDestination(locale: string, appRole?: UserRole): string {
-  if (appRole === 'owner' || appRole === 'staff' || appRole === 'admin') {
-    return `/${locale}/staff/scan`
-  }
+  if (appRole === 'admin') return `/${locale}/admin/dashboard`
+  if (appRole === 'owner') return `/${locale}/owner/team`
+  if (appRole === 'staff') return `/${locale}/staff/scan`
   return `/${locale}/customer/qr`
 }
 

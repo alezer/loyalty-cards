@@ -50,6 +50,54 @@ export interface Reward {
   created_at: string
 }
 
+// Dashboard aggregate types
+export interface ClientWithCard {
+  id: string
+  email: string
+  full_name: string | null
+  stamps_count: number
+  card_id: string
+}
+
+export interface StampWithStaff {
+  id: string
+  created_at: string
+  staff_id: string
+  staff_name: string | null
+  staff_email: string
+}
+
+export interface BusinessWithOwner {
+  id: string
+  name: string
+  stamps_goal: number
+  created_at: string
+  owner_id: string | null
+  owner_name: string | null
+  owner_email: string | null
+}
+
+export interface OwnerWithBusiness {
+  id: string
+  email: string
+  full_name: string | null
+  business_id: string | null
+  business_name: string | null
+  created_at: string
+}
+
+export interface AdminMetrics {
+  totalBusinesses: number
+  stampsToday: number
+  totalCustomers: number
+  businessMetrics: Array<{
+    id: string
+    name: string
+    totalStamps: number
+    stampsToday: number
+  }>
+}
+
 // RPC response from add_stamp()
 export interface AddStampResult {
   success: boolean

@@ -47,7 +47,7 @@
   "home": {
     "title": "Loyalty Cards",
     "description": "Universal QR loyalty card system",
-    "ready": "App is ready. Start building the authentication pages."
+    "ready": "App is ready."
   },
   "customer": {
     "qr": {
@@ -83,6 +83,107 @@
         "reward_already_used": "This reward has already been redeemed",
         "camera_error": "Could not access the camera"
       }
+    }
+  },
+  "owner": {
+    "team": {
+      "title": "My Team",
+      "subtitle": "Manage your business staff",
+      "addStaff": "Add Staff",
+      "noStaff": "No staff yet",
+      "noBusiness": "You don't have a business assigned. Contact an administrator.",
+      "name": "Name",
+      "email": "Email",
+      "since": "Member since",
+      "createTitle": "New team member",
+      "createDesc": "Create an account for a new staff member of your business.",
+      "deleteTitle": "Remove member",
+      "deleteDesc": "Remove {name}? This action cannot be undone.",
+      "fullNameLabel": "Full name",
+      "emailLabel": "Email",
+      "passwordLabel": "Temporary password",
+      "create": "Create account",
+      "creating": "Creating...",
+      "delete": "Remove",
+      "deleting": "Removing...",
+      "cancel": "Cancel"
+    },
+    "clients": {
+      "title": "Clients",
+      "subtitle": "Customers with a loyalty card at your business",
+      "noClients": "No clients yet",
+      "name": "Name",
+      "email": "Email",
+      "stamps": "Stamps",
+      "backToClients": "Back to clients",
+      "noHistory": "No stamp history",
+      "stampDate": "Date",
+      "stampBy": "Stamped by"
+    }
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "businesses": "Businesses",
+      "users": "Users"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Platform-wide overview",
+      "totalBusinesses": "Businesses",
+      "totalStampsToday": "Stamps today",
+      "totalUsers": "Active customers",
+      "stampsPerBusiness": "Activity by business",
+      "business": "Business",
+      "totalStamps": "Total stamps",
+      "stampsToday": "Stamps today"
+    },
+    "businesses": {
+      "title": "Businesses",
+      "subtitle": "Manage platform businesses",
+      "addBusiness": "New Business",
+      "noBusiness": "No businesses yet",
+      "name": "Name",
+      "stampsGoal": "Goal",
+      "owner": "Owner",
+      "createTitle": "New Business",
+      "editTitle": "Edit Business",
+      "deleteTitle": "Delete Business",
+      "deleteDesc": "Delete \"{name}\"? All cards and stamps will be permanently removed.",
+      "nameLabel": "Business name",
+      "stampsGoalLabel": "Stamps needed for reward",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    },
+    "users": {
+      "title": "Owners",
+      "subtitle": "Business owners",
+      "addOwner": "New Owner",
+      "noUsers": "No owners yet",
+      "name": "Name",
+      "email": "Email",
+      "business": "Business",
+      "createTitle": "New Owner",
+      "deleteTitle": "Delete Owner",
+      "deleteDesc": "Delete {name}? This action cannot be undone.",
+      "impersonate": "Impersonate",
+      "impersonateTitle": "Access as user",
+      "impersonateDesc": "One-time access link for {name}. Open it in an incognito window.",
+      "copyLink": "Copy link",
+      "openLink": "Open in new tab",
+      "fullNameLabel": "Full name",
+      "emailLabel": "Email",
+      "passwordLabel": "Temporary password",
+      "businessLabel": "Assigned business",
+      "noBusiness": "No business",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "delete": "Delete",
+      "deleting": "Deleting..."
     }
   }
 }

@@ -81,18 +81,18 @@ CREATE INDEX idx_rewards_card ON rewards(card_id);
 
 CREATE OR REPLACE FUNCTION get_my_role()
 RETURNS user_role AS $$
-  SELECT role FROM profiles WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT role FROM public.profiles WHERE id = auth.uid();
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 CREATE OR REPLACE FUNCTION get_my_business_id()
 RETURNS UUID AS $$
-  SELECT business_id FROM profiles WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT business_id FROM public.profiles WHERE id = auth.uid();
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 CREATE OR REPLACE FUNCTION is_admin()
 RETURNS BOOLEAN AS $$
-  SELECT EXISTS(SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin');
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+  SELECT EXISTS(SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin');
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '';
 
 -- ================================================================
 -- Trigger: auto-update updated_at on every row change
@@ -126,10 +126,10 @@ CREATE TRIGGER trg_loyalty_cards_updated_at
 CREATE OR REPLACE FUNCTION fn_handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, email, full_name, role)
+  INSERT INTO public.profiles (id, email, full_name, role)
   VALUES (
     NEW.id,
-    NEW.email,
+    COALESCE(NEW.email, ''),
     COALESCE(
       NEW.raw_user_meta_data->>'full_name',  -- Google OAuth field
       NEW.raw_user_meta_data->>'name',       -- fallback
@@ -138,13 +138,13 @@ BEGIN
     'customer'
   )
   ON CONFLICT (id) DO UPDATE SET
-    email      = EXCLUDED.email,
-    full_name  = COALESCE(EXCLUDED.full_name, profiles.full_name),
+    email      = COALESCE(NULLIF(EXCLUDED.email, ''), public.profiles.email),
+    full_name  = COALESCE(NULLIF(EXCLUDED.full_name, ''), public.profiles.full_name),
     updated_at = NOW();
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 CREATE TRIGGER trg_on_auth_user_created
   AFTER INSERT ON auth.users

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { getMessages, getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { Navbar } from '@/components/Navbar'
@@ -30,10 +30,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
 }
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
-}
-
 export default async function LocaleLayout({
   children,
   params,
@@ -47,12 +43,11 @@ export default async function LocaleLayout({
     notFound()
   }
 
-  setRequestLocale(locale)
-
+  const currentLocale = await getLocale()
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={currentLocale}>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
           <Navbar />

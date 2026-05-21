@@ -52,7 +52,7 @@ export default function RoleSelectPage() {
       })
 
       if (role === 'owner') {
-        router.replace('/staff/scan')
+        router.replace('/owner/team')
       } else {
         router.replace('/customer/qr')
       }
