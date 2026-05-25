@@ -32,6 +32,43 @@ interface Props {
 
 type EditTarget = { id: string; name: string; stampsGoal: number }
 
+interface FormFieldsProps {
+  name: string
+  stampsGoal: string
+  formError: string | null
+  onNameChange: (v: string) => void
+  onStampsGoalChange: (v: string) => void
+  nameLabel: string
+  stampsGoalLabel: string
+}
+
+function FormFields({ name, stampsGoal, formError, onNameChange, onStampsGoalChange, nameLabel, stampsGoalLabel }: FormFieldsProps) {
+  return (
+    <div className="space-y-4 py-2">
+      <div className="space-y-1.5">
+        <Label htmlFor="biz-name">{nameLabel}</Label>
+        <Input
+          id="biz-name"
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          placeholder="Mi Cafetería"
+        />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="biz-goal">{stampsGoalLabel}</Label>
+        <Input
+          id="biz-goal"
+          type="number"
+          min={1}
+          value={stampsGoal}
+          onChange={(e) => onStampsGoalChange(e.target.value)}
+        />
+      </div>
+      {formError && <p className="text-sm text-red-500">{formError}</p>}
+    </div>
+  )
+}
+
 export function BusinessesManager({ initialBusinesses }: Props) {
   const t = useTranslations('admin.businesses')
   const router = useRouter()
@@ -93,36 +130,6 @@ export function BusinessesManager({ initialBusinesses }: Props) {
       router.refresh()
     })
   }
-
-  const formatDate = (iso: string) =>
-    new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' }).format(
-      new Date(iso),
-    )
-
-  const FormFields = () => (
-    <div className="space-y-4 py-2">
-      <div className="space-y-1.5">
-        <Label htmlFor="biz-name">{t('nameLabel')}</Label>
-        <Input
-          id="biz-name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Mi Cafetería"
-        />
-      </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="biz-goal">{t('stampsGoalLabel')}</Label>
-        <Input
-          id="biz-goal"
-          type="number"
-          min={1}
-          value={stampsGoal}
-          onChange={(e) => setStampsGoal(e.target.value)}
-        />
-      </div>
-      {formError && <p className="text-sm text-red-500">{formError}</p>}
-    </div>
-  )
 
   return (
     <div>
@@ -189,7 +196,15 @@ export function BusinessesManager({ initialBusinesses }: Props) {
           <DialogHeader>
             <DialogTitle>{t('createTitle')}</DialogTitle>
           </DialogHeader>
-          <FormFields />
+          <FormFields
+            name={name}
+            stampsGoal={stampsGoal}
+            formError={formError}
+            onNameChange={setName}
+            onStampsGoalChange={setStampsGoal}
+            nameLabel={t('nameLabel')}
+            stampsGoalLabel={t('stampsGoalLabel')}
+          />
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>{t('cancel')}</Button>
             <Button onClick={handleCreate} disabled={isPending || !name}>
@@ -205,7 +220,15 @@ export function BusinessesManager({ initialBusinesses }: Props) {
           <DialogHeader>
             <DialogTitle>{t('editTitle')}</DialogTitle>
           </DialogHeader>
-          <FormFields />
+          <FormFields
+            name={name}
+            stampsGoal={stampsGoal}
+            formError={formError}
+            onNameChange={setName}
+            onStampsGoalChange={setStampsGoal}
+            nameLabel={t('nameLabel')}
+            stampsGoalLabel={t('stampsGoalLabel')}
+          />
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditTarget(null)}>{t('cancel')}</Button>
             <Button onClick={handleEdit} disabled={isPending || !name}>
