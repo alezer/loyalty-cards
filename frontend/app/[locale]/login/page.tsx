@@ -160,6 +160,7 @@ export default function LoginPage() {
           const user = data.user
           const roleSelected = user?.user_metadata?.role_selected as boolean | undefined
           if (!roleSelected) { router.replace('/role-select'); return }
+          
           const { data: profile } = (await supabase
             .from('profiles').select('role').eq('id', user!.id).single()
           ) as unknown as { data: { role: UserRole } | null }
