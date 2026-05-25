@@ -108,6 +108,15 @@ export default function LoginPage() {
     // Page will navigate away; no state cleanup needed.
   }
 
+  // ── Validation ──────────────────────────────────────────────────────────────
+  function validateRegisterForm(): string | null {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) return 'errors.invalidEmail'
+    if (password.length < 8) return 'errors.passwordTooShort'
+    if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return 'errors.passwordNeedsLetterAndNumber'
+    return null
+  }
+
   // ── Email / password form submit ────────────────────────────────────────────
   function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -117,7 +126,13 @@ export default function LoginPage() {
       const supabase = createClient()
 
       if (formMode === 'register') {
-        const { error } = await supabase.auth.signUp({
+        const validationError = validateRegisterForm()
+        if (validationError) {
+          setErrorKey(validationError)
+          return
+        }
+
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -131,6 +146,17 @@ export default function LoginPage() {
               ? 'errors.emailAlreadyExists'
               : 'errors.generic',
           )
+          return
+        }
+
+        // When email confirmation is disabled in Supabase, signUp returns a
+        // session immediately — redirect the user instead of showing email-sent.
+        if (data.session) {
+          const user = data.user
+          const roleSelected = user?.user_metadata?.role_selected as boolean | undefined
+          if (!roleSelected) { router.replace('/role-select'); return }
+          const appRole = user?.user_metadata?.app_role as UserRole | undefined
+          router.replace(getDestination(locale, appRole) as never)
           return
         }
 
@@ -254,28 +280,33 @@ export default function LoginPage() {
                 </div>
 
                 {/* Password */}
-                <div className="relative">
-                  <label htmlFor="password" className="sr-only">
-                    {t('passwordLabel')}
-                  </label>
-                  <input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete={formMode === 'login' ? 'current-password' : 'new-password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={t('passwordPlaceholder')}
-                    className="w-full h-14 px-4 pr-12 rounded-2xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
+                <div className="space-y-1">
+                  <div className="relative">
+                    <label htmlFor="password" className="sr-only">
+                      {t('passwordLabel')}
+                    </label>
+                    <input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete={formMode === 'login' ? 'current-password' : 'new-password'}
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t('passwordPlaceholder')}
+                      className="w-full h-14 px-4 pr-12 rounded-2xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                  {formMode === 'register' && (
+                    <p className="text-xs text-gray-400 px-1">{t('passwordHint')}</p>
+                  )}
                 </div>
 
                 {/* Submit */}

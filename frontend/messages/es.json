@@ -28,10 +28,14 @@
     "switchToLogin": "¿Ya tienes cuenta? Inicia sesión",
     "registrationSuccess": "¡Revisa tu correo!",
     "registrationSuccessDesc": "Te hemos enviado un enlace de confirmación. Haz clic en él para activar tu cuenta.",
+    "passwordHint": "Mínimo 8 caracteres, al menos 1 letra y 1 número",
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
       "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión",
       "emailAlreadyExists": "Ya existe una cuenta con ese correo",
+      "invalidEmail": "Introduce un correo electrónico válido",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "passwordNeedsLetterAndNumber": "La contraseña debe contener al menos 1 letra y 1 número",
       "generic": "Ha ocurrido un error. Inténtalo de nuevo."
     }
   },

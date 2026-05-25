@@ -28,10 +28,14 @@
     "switchToLogin": "Already have an account? Sign in",
     "registrationSuccess": "Check your email!",
     "registrationSuccessDesc": "We sent you a confirmation link. Click it to activate your account.",
+    "passwordHint": "At least 8 characters, with at least 1 letter and 1 number",
     "errors": {
       "invalidCredentials": "Incorrect email or password",
       "emailNotConfirmed": "Please confirm your email before signing in",
       "emailAlreadyExists": "An account with that email already exists",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordNeedsLetterAndNumber": "Password must contain at least 1 letter and 1 number",
       "generic": "Something went wrong. Please try again."
     }
   },
