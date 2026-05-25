@@ -1,12 +1,36 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { QrCode } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import { QrCode, LogOut } from 'lucide-react'
+import { Link, useRouter } from '@/i18n/navigation'
 import { LanguageSelector } from './LanguageSelector'
+import { createClient } from '@/lib/supabase/client'
 
 export function Navbar() {
   const t = useTranslations('nav')
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.replace('/login')
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
@@ -23,7 +47,19 @@ export function Navbar() {
         </Link>
 
         {/* Right side */}
-        <LanguageSelector />
+        <div className="flex items-center gap-1">
+          <LanguageSelector />
+          {isLoggedIn && (
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 min-h-[44px] px-2 rounded-lg transition-colors"
+              aria-label={t('signOut')}
+            >
+              <LogOut size={15} />
+              <span className="hidden sm:inline">{t('signOut')}</span>
+            </button>
+          )}
+        </div>
       </div>
     </header>
   )
