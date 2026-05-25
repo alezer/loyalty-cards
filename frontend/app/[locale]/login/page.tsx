@@ -49,11 +49,11 @@ function AuthSkeleton() {
 
 // ─── Helper: get destination after login ──────────────────────────────────────
 
-function getDestination(locale: string, appRole?: UserRole): string {
-  if (appRole === 'admin') return `/${locale}/admin/dashboard`
-  if (appRole === 'owner') return `/${locale}/owner/team`
-  if (appRole === 'staff') return `/${locale}/staff/scan`
-  return `/${locale}/customer/qr`
+function getDestination(appRole?: UserRole): string {
+  if (appRole === 'admin') return '/admin/dashboard'
+  if (appRole === 'owner') return '/owner/team'
+  if (appRole === 'staff') return '/staff/scan'
+  return '/customer/qr'
 }
 
 // ─── Page component ───────────────────────────────────────────────────────────
@@ -93,7 +93,7 @@ export default function LoginPage() {
         .eq('id', session.user.id)
         .single()) as unknown as { data: { role: UserRole } | null }
       const appRole = profile?.role
-      router.replace(getDestination(locale, appRole) as never)
+      router.replace(getDestination(appRole) as never)
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -164,7 +164,7 @@ export default function LoginPage() {
           const { data: profile } = (await supabase
             .from('profiles').select('role').eq('id', user!.id).single()
           ) as unknown as { data: { role: UserRole } | null }
-          router.replace(getDestination(locale, profile?.role) as never)
+          router.replace(getDestination(profile?.role) as never)
           return
         }
 
@@ -195,7 +195,7 @@ export default function LoginPage() {
       const { data: profile } = (await supabase
         .from('profiles').select('role').eq('id', user.id).single()
       ) as unknown as { data: { role: UserRole } | null }
-      router.replace(getDestination(locale, profile?.role) as never)
+      router.replace(getDestination(profile?.role) as never)
     })
   }
 
