@@ -60,13 +60,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/${locale}/role-select`)
   }
 
-  // Route based on the app_role stored in metadata (set during role selection).
-  const appRole = user.user_metadata?.app_role as UserRole | undefined
+  // Route based on the role stored in the profiles table (source of truth).
+  // user_metadata.app_role can be stale if the role was changed via SQL.
+  const { data: profile } = (await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()) as unknown as { data: { role: UserRole } | null }
+  const appRole = profile?.role
   if (appRole === 'admin') return NextResponse.redirect(`${origin}/${locale}/admin/dashboard`)
   if (appRole === 'owner') return NextResponse.redirect(`${origin}/${locale}/owner/team`)
-  if (appRole === 'staff') {
-    return NextResponse.redirect(`${origin}/${locale}/staff/scan`)
-  }
+  if (appRole === 'staff') return NextResponse.redirect(`${origin}/${locale}/staff/scan`)
 
   return NextResponse.redirect(`${origin}/${locale}/customer/qr`)
 }

@@ -75,7 +75,7 @@ export default function LoginPage() {
   useEffect(() => {
     const supabase = createClient()
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session) {
         setPhase('idle')
         return
@@ -87,7 +87,12 @@ export default function LoginPage() {
         return
       }
 
-      const appRole = session.user.user_metadata?.app_role as UserRole | undefined
+      const { data: profile } = (await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()) as unknown as { data: { role: UserRole } | null }
+      const appRole = profile?.role
       router.replace(getDestination(locale, appRole) as never)
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -155,8 +160,11 @@ export default function LoginPage() {
           const user = data.user
           const roleSelected = user?.user_metadata?.role_selected as boolean | undefined
           if (!roleSelected) { router.replace('/role-select'); return }
-          const appRole = user?.user_metadata?.app_role as UserRole | undefined
-          router.replace(getDestination(locale, appRole) as never)
+          
+          const { data: profile } = (await supabase
+            .from('profiles').select('role').eq('id', user!.id).single()
+          ) as unknown as { data: { role: UserRole } | null }
+          router.replace(getDestination(locale, profile?.role) as never)
           return
         }
 
@@ -184,8 +192,10 @@ export default function LoginPage() {
         return
       }
 
-      const appRole = user.user_metadata?.app_role as UserRole | undefined
-      router.replace(getDestination(locale, appRole) as never)
+      const { data: profile } = (await supabase
+        .from('profiles').select('role').eq('id', user.id).single()
+      ) as unknown as { data: { role: UserRole } | null }
+      router.replace(getDestination(locale, profile?.role) as never)
     })
   }
 
