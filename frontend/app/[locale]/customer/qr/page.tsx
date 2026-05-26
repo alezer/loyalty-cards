@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 
 // Loaded client-only: qrcode.react uses canvas/SVG APIs not available in SSR
@@ -39,6 +41,7 @@ type Tab = 'stamp' | 'rewards' | 'stamps'
 export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
 
   const [userId, setUserId] = useState<string | null>(null)
   const [rewards, setRewards] = useState<Reward[]>([])
@@ -86,8 +89,14 @@ export default function CustomerQRPage() {
 
   if (!userId) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3">
         <p className="text-gray-500">{tCommon('notLoggedIn')}</p>
+        <Link
+          href={`/${locale}/login`}
+          className="text-brand-600 hover:underline font-medium"
+        >
+          {tCommon('signIn')}
+        </Link>
       </div>
     )
   }
