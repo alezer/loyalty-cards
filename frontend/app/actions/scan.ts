@@ -93,10 +93,11 @@ export async function processScan(qrString: string): Promise<ScanResult> {
 
     if (!data) return { success: false, error: 'stamp_failed' }
 
+    const cycleCount = data.stamps_count % data.stamps_goal || data.stamps_goal
     return {
       success: true,
       type: 'stamp',
-      stampsCount: data.stamps_count,
+      stampsCount: cycleCount,
       stampsGoal: data.stamps_goal,
       rewardAvailable: data.reward_available,
     }

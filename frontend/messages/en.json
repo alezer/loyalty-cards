@@ -78,7 +78,7 @@
       "errors": {
         "qr_invalid": "Invalid QR code",
         "qr_expired": "QR code expired — ask the customer for a new one",
-        "duplicate_scan": "This customer was already stamped less than a minute ago",
+        "duplicate_scan": "This customer was already stamped less than 5 seconds ago",
         "unauthorized": "Unauthorized",
         "not_staff": "You don't have staff permissions",
         "stamp_failed": "Error adding stamp",
