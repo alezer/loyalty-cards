@@ -59,7 +59,8 @@
   "customer": {
     "qr": {
       "title": "Mi código QR",
-      "stampTab": "Sello",
+      "greeting": "¡Hola, {name}!",
+      "stampTab": "Mi QR",
       "rewardsTab": "Recompensas",
       "expiresIn": "Expira en",
       "showToStaff": "Muestra este código al personal del comercio",
