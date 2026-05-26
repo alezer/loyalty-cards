@@ -3,9 +3,9 @@
 //   Reward: reward:{rewardCode}:{unixMs}
 //
 // Both carry a millisecond timestamp so scanners can reject QRs older than
-// QR_EXPIRY_MS (default 5 minutes), preventing screenshot replay attacks.
+// QR_EXPIRY_MS (5 seconds), preventing screenshot replay attacks.
 
-export const QR_EXPIRY_MS = 5 * 60 * 1000
+export const QR_EXPIRY_MS = 5 * 1000
 
 export function generateStampQR(customerId: string): string {
   return `stamp:${customerId}:${Date.now()}`
