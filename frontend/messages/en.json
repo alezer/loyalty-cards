@@ -59,7 +59,8 @@
   "customer": {
     "qr": {
       "title": "My QR code",
-      "stampTab": "Stamp",
+      "greeting": "Hi, {name}!",
+      "stampTab": "My QR",
       "rewardsTab": "Rewards",
       "expiresIn": "Expires in",
       "showToStaff": "Show this code to the shop staff",

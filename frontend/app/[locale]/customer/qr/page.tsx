@@ -44,6 +44,7 @@ export default function CustomerQRPage() {
   const locale = useLocale()
 
   const [userId, setUserId] = useState<string | null>(null)
+  const [userName, setUserName] = useState<string | null>(null)
   const [rewards, setRewards] = useState<Reward[]>([])
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -59,6 +60,7 @@ export default function CustomerQRPage() {
       }
 
       setUserId(user.id)
+      setUserName(user.user_metadata?.full_name ?? null)
 
       // Fetch unredeemed rewards — RLS filters to this customer automatically
       const { data } = await supabase
@@ -103,7 +105,9 @@ export default function CustomerQRPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white py-10 px-4">
-      <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">{t('title')}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
+        {userName ? t('greeting', { name: userName }) : t('title')}
+      </h1>
 
       {/* Tab bar */}
       <div className="flex max-w-sm mx-auto rounded-xl overflow-hidden border border-gray-200 mb-8">
