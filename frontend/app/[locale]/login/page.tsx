@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { QrCode, Mail, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { QrCode, Mail, Eye, EyeOff, AlertCircle, CheckCircle2, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from '@/i18n/navigation'
 import type { UserRole } from '@/lib/types/database'
@@ -65,6 +65,7 @@ export default function LoginPage() {
 
   const [phase, setPhase] = useState<PagePhase>('checking')
   const [formMode, setFormMode] = useState<FormMode>('login')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -117,6 +118,7 @@ export default function LoginPage() {
 
   // ── Validation ──────────────────────────────────────────────────────────────
   function validateRegisterForm(): string | null {
+    if (!name.trim()) return 'errors.nameRequired'
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) return 'errors.invalidEmail'
     if (password.length < 8) return 'errors.passwordTooShort'
@@ -144,6 +146,7 @@ export default function LoginPage() {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/api/auth/callback?locale=${locale}`,
+            data: { full_name: name.trim() },
           },
         })
 
@@ -281,6 +284,26 @@ export default function LoginPage() {
             {/* Email form (expanded) */}
             {(phase === 'email-form' || phase === 'loading') && (
               <form onSubmit={handleEmailSubmit} className="space-y-3" noValidate>
+                {/* Name — register only */}
+                {formMode === 'register' && (
+                  <div className="relative">
+                    <label htmlFor="name" className="sr-only">
+                      {t('nameLabel')}
+                    </label>
+                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <input
+                      id="name"
+                      type="text"
+                      autoComplete="name"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder={t('namePlaceholder')}
+                      className="w-full h-14 pl-11 pr-4 rounded-2xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition"
+                    />
+                  </div>
+                )}
+
                 {/* Email */}
                 <div>
                   <label htmlFor="email" className="sr-only">
@@ -346,6 +369,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => {
                     setFormMode((m) => (m === 'login' ? 'register' : 'login'))
+                    setName('')
                     setErrorKey(null)
                   }}
                   className="w-full text-sm text-brand-600 font-medium py-3 min-h-[44px] hover:underline"
