@@ -53,11 +53,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/${locale}/login?error=no_session`)
   }
 
-  // If the user hasn't gone through role selection yet, send them there.
-  // We persist this flag in Supabase user_metadata to survive across sign-ins.
+  // Auto-assign customer role for new users; owners are created by admin only.
+  // Role-select page is preserved but not shown in the current flow.
   const roleSelected = user.user_metadata?.role_selected as boolean | undefined
   if (!roleSelected) {
-    return NextResponse.redirect(`${origin}/${locale}/role-select`)
+    await supabase.from('profiles').update({ role: 'customer' } as never).eq('id', user.id)
+    await supabase.auth.updateUser({ data: { role_selected: true, app_role: 'customer' } })
+    return NextResponse.redirect(`${origin}/${locale}/customer/qr`)
   }
 
   // Route based on the role stored in the profiles table (source of truth).

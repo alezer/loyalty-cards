@@ -83,7 +83,9 @@ export default function LoginPage() {
 
       const roleSelected = session.user.user_metadata?.role_selected as boolean | undefined
       if (!roleSelected) {
-        router.replace('/role-select')
+        await supabase.from('profiles').update({ role: 'customer' } as never).eq('id', session.user.id)
+        await supabase.auth.updateUser({ data: { role_selected: true, app_role: 'customer' } })
+        router.replace('/customer/qr')
         return
       }
 
@@ -159,8 +161,13 @@ export default function LoginPage() {
         if (data.session) {
           const user = data.user
           const roleSelected = user?.user_metadata?.role_selected as boolean | undefined
-          if (!roleSelected) { router.replace('/role-select'); return }
-          
+          if (!roleSelected) {
+            await supabase.from('profiles').update({ role: 'customer' } as never).eq('id', user!.id)
+            await supabase.auth.updateUser({ data: { role_selected: true, app_role: 'customer' } })
+            router.replace('/customer/qr')
+            return
+          }
+
           const { data: profile } = (await supabase
             .from('profiles').select('role').eq('id', user!.id).single()
           ) as unknown as { data: { role: UserRole } | null }
@@ -188,7 +195,9 @@ export default function LoginPage() {
       const roleSelected = user.user_metadata?.role_selected as boolean | undefined
 
       if (!roleSelected) {
-        router.replace('/role-select')
+        await supabase.from('profiles').update({ role: 'customer' } as never).eq('id', user.id)
+        await supabase.auth.updateUser({ data: { role_selected: true, app_role: 'customer' } })
+        router.replace('/customer/qr')
         return
       }
 
