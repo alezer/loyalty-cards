@@ -61,7 +61,9 @@
       "expiresIn": "Expires in",
       "showToStaff": "Show this code to the shop staff",
       "noRewards": "No rewards available",
-      "rewardLabel": "Reward — show to redeem"
+      "rewardLabel": "Reward — show to redeem",
+      "stampsTab": "My Stamps",
+      "noStamps": "No stamps yet"
     }
   },
   "staff": {

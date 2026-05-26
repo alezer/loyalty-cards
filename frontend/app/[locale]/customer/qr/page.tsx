@@ -28,7 +28,13 @@ interface Reward {
   created_at: string
 }
 
-type Tab = 'stamp' | 'rewards'
+interface LoyaltyCardEntry {
+  business_id: string
+  stamps_count: number
+  businesses: { name: string; stamps_goal: number } | null
+}
+
+type Tab = 'stamp' | 'rewards' | 'stamps'
 
 export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
@@ -36,6 +42,7 @@ export default function CustomerQRPage() {
 
   const [userId, setUserId] = useState<string | null>(null)
   const [rewards, setRewards] = useState<Reward[]>([])
+  const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>('stamp')
 
@@ -58,6 +65,13 @@ export default function CustomerQRPage() {
         .order('created_at', { ascending: false })
 
       setRewards(data ?? [])
+
+      const { data: cards } = await supabase
+        .from('loyalty_cards')
+        .select('business_id, stamps_count, businesses(name, stamps_goal)')
+        .order('updated_at', { ascending: false })
+
+      setLoyaltyCards((cards as unknown as LoyaltyCardEntry[]) ?? [])
       setLoading(false)
     })
   }, [])
@@ -83,8 +97,8 @@ export default function CustomerQRPage() {
       <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">{t('title')}</h1>
 
       {/* Tab bar */}
-      <div className="flex max-w-xs mx-auto rounded-xl overflow-hidden border border-gray-200 mb-8">
-        {(['stamp', 'rewards'] as Tab[]).map((tab) => (
+      <div className="flex max-w-sm mx-auto rounded-xl overflow-hidden border border-gray-200 mb-8">
+        {(['stamp', 'rewards', 'stamps'] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -94,7 +108,11 @@ export default function CustomerQRPage() {
                 : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
-            {tab === 'stamp' ? t('stampTab') : `${t('rewardsTab')} (${rewards.length})`}
+            {tab === 'stamp'
+              ? t('stampTab')
+              : tab === 'rewards'
+                ? `${t('rewardsTab')} (${rewards.length})`
+                : t('stampsTab')}
           </button>
         ))}
       </div>
@@ -107,6 +125,27 @@ export default function CustomerQRPage() {
             expiresInLabel={t('expiresIn')}
             showToStaffLabel={t('showToStaff')}
           />
+        </div>
+      )}
+
+      {/* My Stamps */}
+      {activeTab === 'stamps' && (
+        <div className="max-w-sm mx-auto flex flex-col gap-3">
+          {loyaltyCards.length === 0 ? (
+            <p className="text-gray-400 text-sm text-center mt-4">{t('noStamps')}</p>
+          ) : (
+            loyaltyCards.map((card) => (
+              <div
+                key={card.business_id}
+                className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100"
+              >
+                <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
+                <span className="text-brand-600 font-semibold tabular-nums">
+                  {card.stamps_count}/{card.businesses?.stamps_goal ?? '?'}
+                </span>
+              </div>
+            ))
+          )}
         </div>
       )}
 
