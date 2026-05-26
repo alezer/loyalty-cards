@@ -24,7 +24,10 @@ export default async function HomePage({
 
   const roleSelected = user.user_metadata?.role_selected as boolean | undefined
   if (!roleSelected) {
-    redirect(`/${locale}/role-select`)
+    // Auto-assign customer role; owners are created by admin only.
+    await supabase.from('profiles').update({ role: 'customer' } as never).eq('id', user.id)
+    await supabase.auth.updateUser({ data: { role_selected: true, app_role: 'customer' } })
+    redirect(`/${locale}/customer/qr`)
   }
 
   const appRole = user.user_metadata?.app_role as UserRole | undefined
