@@ -203,15 +203,15 @@ BEGIN
   IF v_last_stamp_time IS NOT NULL THEN
     v_seconds_elapsed := EXTRACT(EPOCH FROM (NOW() - v_last_stamp_time));
 
-    IF v_seconds_elapsed < 60 THEN
+    IF v_seconds_elapsed < 5 THEN
       RAISE EXCEPTION 'Escaneo duplicado detectado'
         USING
           ERRCODE = 'P0001',
           DETAIL  = format(
-            'Último sello hace %s segundos. Mínimo requerido: 60 segundos.',
+            'Último sello hace %s segundos. Mínimo requerido: 5 segundos.',
             ROUND(v_seconds_elapsed)::TEXT
           ),
-          HINT = 'Espere al menos 1 minuto antes de escanear al mismo cliente.';
+          HINT = 'Espere al menos 5 segundos antes de escanear al mismo cliente.';
     END IF;
   END IF;
 

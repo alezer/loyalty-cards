@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { generateStampQR, generateRewardQR, QR_EXPIRY_MS, formatCountdown } from '@/lib/qr'
 
-// How often the QR regenerates — set to 80% of expiry so there's always
-// a comfortable margin before the scanner would reject it.
-const REFRESH_INTERVAL_MS = QR_EXPIRY_MS * 0.8
+const REFRESH_INTERVAL_MS = 5 * 1000
 
 interface StampQRCardProps {
   customerId: string
