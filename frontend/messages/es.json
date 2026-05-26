@@ -61,7 +61,9 @@
       "expiresIn": "Expira en",
       "showToStaff": "Muestra este código al personal del comercio",
       "noRewards": "No tienes recompensas disponibles",
-      "rewardLabel": "Recompensa — muéstrala para canjearla"
+      "rewardLabel": "Recompensa — muéstrala para canjearla",
+      "stampsTab": "Mis Sellos",
+      "noStamps": "Aún no tienes sellos"
     }
   },
   "staff": {
