@@ -134,17 +134,23 @@ export default function CustomerQRPage() {
           {loyaltyCards.length === 0 ? (
             <p className="text-gray-400 text-sm text-center mt-4">{t('noStamps')}</p>
           ) : (
-            loyaltyCards.map((card) => (
-              <div
-                key={card.business_id}
-                className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100"
-              >
-                <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
-                <span className="text-brand-600 font-semibold tabular-nums">
-                  {card.stamps_count}/{card.businesses?.stamps_goal ?? '?'}
-                </span>
-              </div>
-            ))
+            loyaltyCards.map((card) => {
+              const goal = card.businesses?.stamps_goal
+              const cycleCount = goal
+                ? card.stamps_count % goal || goal
+                : card.stamps_count
+              return (
+                <div
+                  key={card.business_id}
+                  className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100"
+                >
+                  <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
+                  <span className="text-brand-600 font-semibold tabular-nums">
+                    {cycleCount}/{goal ?? '?'}
+                  </span>
+                </div>
+              )
+            })
           )}
         </div>
       )}
