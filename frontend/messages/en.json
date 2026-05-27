@@ -31,6 +31,9 @@
     "registrationSuccess": "Check your email!",
     "registrationSuccessDesc": "We sent you a confirmation link. Click it to activate your account.",
     "passwordHint": "At least 8 characters, with at least 1 letter and 1 number",
+    "termsCheckboxLabel": "I have read and agree to the <link>Terms of Service</link>",
+    "termsRequired": "You must accept the Terms of Service to create an account",
+    "viewTerms": "Terms of Service",
     "errors": {
       "invalidCredentials": "Incorrect email or password",
       "emailNotConfirmed": "Please confirm your email before signing in",

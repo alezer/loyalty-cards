@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { QrCode, Mail, Eye, EyeOff, AlertCircle, CheckCircle2, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import type { UserRole } from '@/lib/types/database'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -69,6 +69,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const [errorKey, setErrorKey] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -351,10 +352,35 @@ export default function LoginPage() {
                   )}
                 </div>
 
+                {/* Terms checkbox — register only */}
+                {formMode === 'register' && (
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      className="mt-1 h-4 w-4 shrink-0 rounded border-gray-300 text-brand-600 accent-brand-600 cursor-pointer"
+                    />
+                    <span className="text-sm text-gray-600 leading-snug">
+                      {t.rich('termsCheckboxLabel', {
+                        link: (chunks) => (
+                          <Link
+                            href="/terms"
+                            target="_blank"
+                            className="text-brand-600 underline hover:text-brand-700"
+                          >
+                            {chunks}
+                          </Link>
+                        ),
+                      })}
+                    </span>
+                  </label>
+                )}
+
                 {/* Submit */}
                 <button
                   type="submit"
-                  disabled={isPending || phase === 'loading'}
+                  disabled={isPending || phase === 'loading' || (formMode === 'register' && !termsAccepted)}
                   className="w-full h-14 bg-brand-600 rounded-2xl font-semibold text-white shadow-sm shadow-brand-200 hover:bg-brand-700 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isPending
@@ -371,6 +397,7 @@ export default function LoginPage() {
                     setFormMode((m) => (m === 'login' ? 'register' : 'login'))
                     setName('')
                     setErrorKey(null)
+                    setTermsAccepted(false)
                   }}
                   className="w-full text-sm text-brand-600 font-medium py-3 min-h-[44px] hover:underline"
                 >
@@ -381,6 +408,13 @@ export default function LoginPage() {
           </div>
         )}
       </div>
+
+      {/* Terms link */}
+      <p className="mt-8 text-xs text-gray-400">
+        <Link href="/terms" className="hover:text-gray-600 hover:underline transition-colors">
+          {t('viewTerms')}
+        </Link>
+      </p>
     </main>
   )
 }
