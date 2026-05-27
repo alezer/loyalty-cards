@@ -298,7 +298,7 @@ function EsContent() {
           de comercio).
         </LI>
         <LI>
-          <strong>Datos de uso:</strong> sellos acumulados, recompensas obtenidas y canjeadas, y marcas
+          <strong>Datos de uso:</strong> sellos acumulados, premios obtenidos y canjeadas, y marcas
           de tiempo de la actividad.
         </LI>
         <LI>
@@ -333,7 +333,7 @@ function EsContent() {
       <SectionTitle>5. Cómo utilizamos tus datos</SectionTitle>
       <P>Tus datos personales se utilizan exclusivamente para:</P>
       <UL>
-        <LI>Prestar el servicio de tarjetas de fidelización (seguimiento de sellos y recompensas).</LI>
+        <LI>Prestar el servicio de tarjetas de fidelización (seguimiento de sellos y premios).</LI>
         <LI>Autenticar tu identidad y mantener tu sesión activa.</LI>
         <LI>Enviarte correos electrónicos transaccionales (confirmación de cuenta, restablecimiento de contraseña).</LI>
         <LI>Prevenir el fraude y garantizar la seguridad del Servicio.</LI>
@@ -346,7 +346,7 @@ function EsContent() {
       <SectionTitle>6. Conservación de los datos</SectionTitle>
       <P>
         Conservamos tus datos personales mientras tu cuenta esté activa. El historial de sellos y las
-        recompensas se mantienen como parte del servicio de fidelización durante la vida de tu cuenta.
+        premios se mantienen como parte del servicio de fidelización durante la vida de tu cuenta.
         Tras la eliminación de la cuenta, todos los datos personales se borran de forma permanente e
         irreversible en un plazo de 30 días.
       </P>
@@ -409,7 +409,7 @@ function EsContent() {
         </LI>
         <LI>Incluye la dirección de correo electrónico asociada a tu cuenta.</LI>
         <LI>
-          Tu cuenta y todos los datos relacionados (nombre, correo, historial de sellos, recompensas)
+          Tu cuenta y todos los datos relacionados (nombre, correo, historial de sellos, premios)
           serán eliminados permanentemente en un plazo de 30 días.
         </LI>
       </UL>

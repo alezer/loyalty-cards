@@ -10,7 +10,8 @@
   "nav": {
     "brand": "Loyalty Cards",
     "language": "Language",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "profile": "Profile"
   },
   "auth": {
     "title": "Welcome",
@@ -132,6 +133,22 @@
       "noHistory": "No stamp history",
       "stampDate": "Date",
       "stampBy": "Stamped by"
+    }
+  },
+  "profile": {
+    "title": "Your Profile",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "savedConfirmation": "Changes saved",
+    "dangerZone": "Danger zone",
+    "deleteAccountDesc": "Permanently delete your account and all associated data.",
+    "deleteAccount": "Delete Account",
+    "deleteDialog": {
+      "title": "Delete account?",
+      "description": "This will permanently delete your account, stamps, and rewards. You will not be able to recover your data after this action.",
+      "irreversible": "This action is irreversible and cannot be undone.",
+      "cancel": "Cancel"
     }
   },
   "admin": {

@@ -10,11 +10,12 @@
   "nav": {
     "brand": "Loyalty Cards",
     "language": "Idioma",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "profile": "Perfil"
   },
   "auth": {
     "title": "Bienvenido",
-    "subtitle": "Acumula sellos, canjea recompensas",
+    "subtitle": "Acumula sellos, canjea premios",
     "continueWithGoogle": "Continuar con Google",
     "continueWithEmail": "Continuar con email",
     "orDivider": "o",
@@ -51,7 +52,7 @@
     "businessTitle": "Soy un Comercio",
     "businessDesc": "Gestiona tu programa de fidelización y escanea los códigos QR de tus clientes",
     "customerTitle": "Soy un Cliente",
-    "customerDesc": "Acumula sellos y canjea recompensas en tus comercios favoritos",
+    "customerDesc": "Acumula sellos y canjea premios en tus comercios favoritos",
     "saving": "Guardando..."
   },
   "home": {
@@ -64,10 +65,10 @@
       "title": "Mi código QR",
       "greeting": "¡Hola, {name}!",
       "stampTab": "Mi QR",
-      "rewardsTab": "Recompensas",
+      "rewardsTab": "Premios",
       "expiresIn": "Expira en",
       "showToStaff": "Muestra este código al personal del comercio",
-      "noRewards": "No tienes recompensas disponibles",
+      "noRewards": "No tienes premios disponibles",
       "rewardLabel": "Recompensa — muéstrala para canjearla",
       "stampsTab": "Mis Sellos",
       "noStamps": "Aún no tienes sellos"
@@ -132,6 +133,22 @@
       "noHistory": "Sin historial de sellos",
       "stampDate": "Fecha",
       "stampBy": "Puesto por"
+    }
+  },
+  "profile": {
+    "title": "Tu Perfil",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Correo electrónico",
+    "savedConfirmation": "Cambios guardados",
+    "dangerZone": "Zona de peligro",
+    "deleteAccountDesc": "Elimina permanentemente tu cuenta y todos los datos asociados.",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteDialog": {
+      "title": "¿Eliminar cuenta?",
+      "description": "Esto eliminará permanentemente tu cuenta, sellos y premios. No podrás recuperar tus datos tras realizar esta acción.",
+      "irreversible": "Esta acción es irreversible y no se puede deshacer.",
+      "cancel": "Cancelar"
     }
   },
   "admin": {
