@@ -31,6 +31,9 @@
     "registrationSuccess": "¡Revisa tu correo!",
     "registrationSuccessDesc": "Te hemos enviado un enlace de confirmación. Haz clic en él para activar tu cuenta.",
     "passwordHint": "Mínimo 8 caracteres, al menos 1 letra y 1 número",
+    "termsCheckboxLabel": "He leído y acepto los <link>Términos de Servicio</link>",
+    "termsRequired": "Debes aceptar los Términos de Servicio para crear una cuenta",
+    "viewTerms": "Términos de Servicio",
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
       "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión",

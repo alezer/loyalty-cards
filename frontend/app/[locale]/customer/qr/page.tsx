@@ -92,12 +92,12 @@ export default function CustomerQRPage() {
   if (!userId) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-3">
-        <p className="text-gray-500">{tCommon('notLoggedIn')}</p>
+        <p className="text-gray-500">Login</p>
         <Link
           href={`/${locale}/login`}
           className="text-brand-600 hover:underline font-medium"
         >
-          {tCommon('signIn')}
+          Login
         </Link>
       </div>
     )
