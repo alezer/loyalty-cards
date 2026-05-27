@@ -87,7 +87,11 @@ export default function ProfilePage() {
     setPasswordSaving(false)
 
     if (error) {
-      setPasswordError(t('password.errorGeneric'))
+      setPasswordError(
+        error.code === 'same_password'
+          ? t('password.errorSamePassword')
+          : t('password.errorGeneric')
+      )
       return
     }
 
