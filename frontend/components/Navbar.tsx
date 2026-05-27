@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { QrCode, LogOut } from 'lucide-react'
+import { QrCode, LogOut, UserRound } from 'lucide-react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { LanguageSelector } from './LanguageSelector'
 import { createClient } from '@/lib/supabase/client'
@@ -50,14 +50,24 @@ export function Navbar() {
         <div className="flex items-center gap-1">
           <LanguageSelector />
           {isLoggedIn && (
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 min-h-[44px] px-2 rounded-lg transition-colors"
-              aria-label={t('signOut')}
-            >
-              <LogOut size={15} />
-              <span className="hidden sm:inline">{t('signOut')}</span>
-            </button>
+            <>
+              <Link
+                href="/profile"
+                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 min-h-[44px] px-2 rounded-lg transition-colors"
+                aria-label={t('profile')}
+              >
+                <UserRound size={15} />
+                <span className="hidden sm:inline">{t('profile')}</span>
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 min-h-[44px] px-2 rounded-lg transition-colors"
+                aria-label={t('signOut')}
+              >
+                <LogOut size={15} />
+                <span className="hidden sm:inline">{t('signOut')}</span>
+              </button>
+            </>
           )}
         </div>
       </div>
