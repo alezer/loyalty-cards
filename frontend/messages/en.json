@@ -153,6 +153,7 @@
       "errorTooShort": "Password must be at least 8 characters",
       "errorWeakPassword": "Password must contain at least 1 letter and 1 number",
       "errorMismatch": "Passwords do not match",
+      "errorSamePassword": "Your new password must be different from your current one.",
       "errorGeneric": "Something went wrong. Please try again."
     },
     "dangerZone": "Danger zone",
