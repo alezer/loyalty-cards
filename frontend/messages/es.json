@@ -11,7 +11,9 @@
     "brand": "Loyalty Cards",
     "language": "Idioma",
     "signOut": "Cerrar sesión",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "terms": "Términos y Condiciones",
+    "menu": "Menú"
   },
   "auth": {
     "title": "Bienvenido",
