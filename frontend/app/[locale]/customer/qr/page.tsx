@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { Home, Stamp, QrCode, Gift, TrendingUp, X } from 'lucide-react'
 
@@ -136,15 +135,16 @@ export default function CustomerQRPage() {
                   ? card.stamps_count % goal || goal
                   : card.stamps_count
                 return (
-                  <div
+                  <Link
                     key={card.business_id}
-                    className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100"
+                    href={`/${locale}/customer/business/${card.business_id}`}
+                    className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-brand-50 transition-colors"
                   >
                     <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
                     <span className="text-brand-600 font-semibold tabular-nums">
                       {cycleCount}/{goal ?? '?'}
                     </span>
-                  </div>
+                  </Link>
                 )
               })
             )}
