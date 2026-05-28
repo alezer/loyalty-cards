@@ -70,7 +70,11 @@
       "stampsCollected": "sellos acumulados",
       "address": "Dirección",
       "viewOnMaps": "Ver en Google Maps",
-      "openingHours": "Horario de apertura"
+      "openingHours": "Horario de apertura",
+      "rewardsTitle": "Premios",
+      "tapToRedeem": "Toca para ver tus códigos QR",
+      "expiresIn": "Expira en",
+      "rewardLabel": "Premio — muéstralo para canjearlo"
     },
     "qr": {
       "title": "Mi código QR",

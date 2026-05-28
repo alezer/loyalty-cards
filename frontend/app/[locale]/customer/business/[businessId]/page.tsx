@@ -1,12 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useParams, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, MapPin, Clock, ExternalLink } from 'lucide-react'
+import { ChevronLeft, MapPin, Clock, ExternalLink, X } from 'lucide-react'
+
+const RewardQRCard = dynamic(
+  () => import('@/components/QRDisplay').then((m) => m.RewardQRCard),
+  { ssr: false, loading: () => <div className="w-[180px] h-[180px] bg-amber-100 rounded-xl animate-pulse" /> },
+)
 
 type Tab = 'stamps' | 'news' | 'info'
+
+interface Reward {
+  id: string
+  reward_code: string
+}
 
 interface NewsItem {
   id: string
@@ -52,6 +63,8 @@ export default function BusinessDetailPage() {
   const [businessName, setBusinessName] = useState<string>('—')
   const [stampsCount, setStampsCount] = useState<number>(0)
   const [stampsGoal, setStampsGoal] = useState<number>(10)
+  const [rewards, setRewards] = useState<Reward[]>([])
+  const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>('stamps')
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
@@ -60,15 +73,24 @@ export default function BusinessDetailPage() {
     const supabase = createClient()
     supabase
       .from('loyalty_cards')
-      .select('stamps_count, businesses(name, stamps_goal)')
+      .select('id, stamps_count, businesses(name, stamps_goal)')
       .eq('business_id', businessId)
       .single()
-      .then(({ data }) => {
-        const row = data as unknown as { stamps_count: number; businesses: { name: string; stamps_goal: number } | null } | null
+      .then(async ({ data }) => {
+        const row = data as unknown as { id: string; stamps_count: number; businesses: { name: string; stamps_goal: number } | null } | null
         if (row) {
           setBusinessName(row.businesses?.name ?? '—')
           setStampsCount(row.stamps_count)
           setStampsGoal(row.businesses?.stamps_goal ?? 10)
+
+          const { data: rewardData } = await supabase
+            .from('rewards')
+            .select('id, reward_code')
+            .eq('loyalty_card_id', row.id)
+            .eq('is_redeemed', false)
+            .order('created_at', { ascending: false })
+
+          setRewards((rewardData as unknown as Reward[]) ?? [])
         }
         setLoading(false)
       })
@@ -141,24 +163,43 @@ export default function BusinessDetailPage() {
       <div className="max-w-lg mx-auto px-4 py-6">
         {/* My Stamps tab */}
         {activeTab === 'stamps' && (
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-baseline gap-1">
-                <span className="text-5xl font-bold text-brand-600 tabular-nums">{cycleCount}</span>
-                <span className="text-2xl text-gray-400">/{stampsGoal}</span>
+          <div className="flex flex-col gap-4">
+            {/* Progress card */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-baseline gap-1">
+                  <span className="text-5xl font-bold text-brand-600 tabular-nums">{cycleCount}</span>
+                  <span className="text-2xl text-gray-400">/{stampsGoal}</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">{t('stampsCollected')}</p>
               </div>
-              <p className="text-sm text-gray-500 mt-1">{t('stampsCollected')}</p>
+              <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-brand-500 to-brand-600 rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-400 mt-2">
+                <span>0</span>
+                <span>{stampsGoal}</span>
+              </div>
             </div>
-            <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-brand-500 to-brand-600 rounded-full transition-all duration-700 ease-out"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-gray-400 mt-2">
-              <span>0</span>
-              <span>{stampsGoal}</span>
-            </div>
+
+            {/* Rewards card */}
+            {rewards.length > 0 && (
+              <button
+                onClick={() => setRewardsModalOpen(true)}
+                className="w-full text-left bg-amber-50 rounded-2xl p-5 border border-amber-200 hover:bg-amber-100 active:bg-amber-200 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-amber-900">{t('rewardsTitle')}</h3>
+                    <p className="text-sm text-amber-700 mt-0.5">{t('tapToRedeem')}</p>
+                  </div>
+                  <span className="text-3xl font-bold text-amber-600 tabular-nums">{rewards.length}</span>
+                </div>
+              </button>
+            )}
           </div>
         )}
 
@@ -229,6 +270,37 @@ export default function BusinessDetailPage() {
           </div>
         )}
       </div>
+      {/* Rewards modal */}
+      {rewardsModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+          onClick={() => setRewardsModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-gray-900">{t('rewardsTitle')}</h2>
+              <button
+                onClick={() => setRewardsModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            {rewards.map((reward) => (
+              <RewardQRCard
+                key={reward.id}
+                rewardCode={reward.reward_code}
+                expiresInLabel={t('expiresIn')}
+                rewardLabel={t('rewardLabel')}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </main>
   )
 }
