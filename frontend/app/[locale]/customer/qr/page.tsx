@@ -28,12 +28,19 @@ interface Reward {
   id: string
   reward_code: string
   created_at: string
+  loyalty_cards: { business_id: string; businesses: { name: string } | null } | null
 }
 
 interface LoyaltyCardEntry {
   business_id: string
   stamps_count: number
   businesses: { name: string; stamps_goal: number } | null
+}
+
+interface RewardGroup {
+  businessId: string
+  businessName: string
+  rewards: Reward[]
 }
 
 type Tab = 'stamp' | 'rewards' | 'stamps'
@@ -49,6 +56,7 @@ export default function CustomerQRPage() {
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>('stamp')
+  const [selectedGroup, setSelectedGroup] = useState<RewardGroup | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -62,14 +70,14 @@ export default function CustomerQRPage() {
       setUserId(user.id)
       setUserName(user.user_metadata?.full_name ?? null)
 
-      // Fetch unredeemed rewards — RLS filters to this customer automatically
+      // Fetch unredeemed rewards with business name via loyalty_cards join
       const { data } = await supabase
         .from('rewards')
-        .select('id, reward_code, created_at')
+        .select('id, reward_code, created_at, loyalty_cards(business_id, businesses(name))')
         .eq('is_redeemed', false)
         .order('created_at', { ascending: false })
 
-      setRewards(data ?? [])
+      setRewards((data as unknown as Reward[]) ?? [])
 
       const { data: cards } = await supabase
         .from('loyalty_cards')
@@ -168,21 +176,69 @@ export default function CustomerQRPage() {
         </div>
       )}
 
-      {/* Rewards QRs */}
-      {activeTab === 'rewards' && (
-        <div className="flex flex-col items-center gap-6 max-w-sm mx-auto">
-          {rewards.length === 0 ? (
-            <p className="text-gray-400 text-sm mt-4">{t('noRewards')}</p>
-          ) : (
-            rewards.map((r) => (
+      {/* Rewards — business list */}
+      {activeTab === 'rewards' && (() => {
+        const groups: RewardGroup[] = Object.values(
+          rewards.reduce<Record<string, RewardGroup>>((acc, r) => {
+            const bizId = r.loyalty_cards?.business_id ?? 'unknown'
+            const bizName = r.loyalty_cards?.businesses?.name ?? '—'
+            if (!acc[bizId]) acc[bizId] = { businessId: bizId, businessName: bizName, rewards: [] }
+            acc[bizId].rewards.push(r)
+            return acc
+          }, {}),
+        )
+
+        return (
+          <div className="max-w-sm mx-auto flex flex-col gap-3">
+            {groups.length === 0 ? (
+              <p className="text-gray-400 text-sm text-center mt-4">{t('noRewards')}</p>
+            ) : (
+              groups.map((g) => (
+                <button
+                  key={g.businessId}
+                  onClick={() => setSelectedGroup(g)}
+                  className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-amber-50 transition-colors text-left w-full"
+                >
+                  <span className="font-medium text-gray-900">{g.businessName}</span>
+                  <span className="text-amber-600 font-semibold tabular-nums">
+                    {g.rewards.length} ×
+                  </span>
+                </button>
+              ))
+            )}
+          </div>
+        )
+      })()}
+
+      {/* Reward modal */}
+      {selectedGroup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+          onClick={() => setSelectedGroup(null)}
+        >
+          <div
+            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-gray-900">{selectedGroup.businessName}</h2>
+              <button
+                onClick={() => setSelectedGroup(null)}
+                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            {selectedGroup.rewards.map((r) => (
               <RewardQRCard
                 key={r.id}
                 rewardCode={r.reward_code}
                 expiresInLabel={t('expiresIn')}
                 rewardLabel={t('rewardLabel')}
               />
-            ))
-          )}
+            ))}
+          </div>
         </div>
       )}
     </main>
