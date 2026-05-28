@@ -73,7 +73,12 @@
       "noRewards": "No rewards available",
       "rewardLabel": "Reward — show to redeem",
       "stampsTab": "My Stamps",
-      "noStamps": "No stamps yet"
+      "noStamps": "No stamps yet",
+      "navHome": "Home",
+      "navStamps": "My Stamps",
+      "navRewards": "Rewards",
+      "navTrend": "Trend",
+      "qrModalTitle": "Scan my QR"
     }
   },
   "staff": {
