@@ -22,6 +22,12 @@ interface LoyaltyCardEntry {
   businesses: { name: string; stamps_goal: number } | null
 }
 
+interface BusinessEntry {
+  id: string
+  name: string
+  logo_url: string | null
+}
+
 type Tab = 'home' | 'stamps'
 
 export default function CustomerQRPage() {
@@ -32,8 +38,9 @@ export default function CustomerQRPage() {
   const [userId, setUserId] = useState<string | null>(null)
   const [userName, setUserName] = useState<string | null>(null)
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
+  const [businesses, setBusinesses] = useState<BusinessEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<Tab>('stamps')
+  const [activeTab, setActiveTab] = useState<Tab>('home')
   const [qrModalOpen, setQrModalOpen] = useState(false)
 
   useEffect(() => {
@@ -48,12 +55,19 @@ export default function CustomerQRPage() {
       setUserId(user.id)
       setUserName(user.user_metadata?.full_name ?? null)
 
-      const { data: cards } = await supabase
-        .from('loyalty_cards')
-        .select('business_id, stamps_count, businesses(name, stamps_goal)')
-        .order('updated_at', { ascending: false })
+      const [{ data: cards }, { data: allBusinesses }] = await Promise.all([
+        supabase
+          .from('loyalty_cards')
+          .select('business_id, stamps_count, businesses(name, stamps_goal)')
+          .order('updated_at', { ascending: false }),
+        supabase
+          .from('businesses')
+          .select('id, name, logo_url')
+          .order('name', { ascending: true }),
+      ])
 
       setLoyaltyCards((cards as unknown as LoyaltyCardEntry[]) ?? [])
+      setBusinesses((allBusinesses as unknown as BusinessEntry[]) ?? [])
       setLoading(false)
     })
   }, [])
@@ -85,7 +99,40 @@ export default function CustomerQRPage() {
           {userName ? t('greeting', { name: userName }) : t('title')}
         </h1>
 
-        {/* My Stamps */}
+        {/* Home tab */}
+        {activeTab === 'home' && (
+          <div className="max-w-sm mx-auto">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
+              {t('sectionShops')}
+            </h2>
+            {businesses.length === 0 ? (
+              <p className="text-gray-400 text-sm text-center mt-4">{t('noShops')}</p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {businesses.map((biz) => (
+                  <Link
+                    key={biz.id}
+                    href={`/${locale}/customer/business/${biz.id}?source=home`}
+                    className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                  >
+                    <img
+                      src={biz.logo_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
+                      alt={biz.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {/* Gradient overlay for text legibility */}
+                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+                    <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
+                      {biz.name}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* My Stamps tab */}
         {activeTab === 'stamps' && (
           <div className="max-w-sm mx-auto flex flex-col gap-3">
             {loyaltyCards.length === 0 ? (

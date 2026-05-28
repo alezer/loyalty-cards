@@ -92,7 +92,9 @@
       "navStamps": "My Stamps",
       "navRewards": "Rewards",
       "navTrend": "Trend",
-      "qrModalTitle": "Scan my QR"
+      "qrModalTitle": "Scan my QR",
+      "sectionShops": "Shops",
+      "noShops": "No shops available yet"
     }
   },
   "staff": {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { ChevronLeft, MapPin, Clock, ExternalLink, X } from 'lucide-react'
@@ -58,7 +58,9 @@ export default function BusinessDetailPage() {
   const tCommon = useTranslations('common')
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
   const businessId = params.businessId as string
+  const fromHome = searchParams.get('source') === 'home'
 
   const [businessName, setBusinessName] = useState<string>('—')
   const [stampsCount, setStampsCount] = useState<number>(0)
@@ -66,7 +68,7 @@ export default function BusinessDetailPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
   const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<Tab>('stamps')
+  const [activeTab, setActiveTab] = useState<Tab>(fromHome ? 'info' : 'stamps')
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
 
   useEffect(() => {
@@ -111,11 +113,16 @@ export default function BusinessDetailPage() {
       return next
     })
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'stamps', label: t('tabStamps') },
-    { id: 'news', label: t('tabNews') },
-    { id: 'info', label: t('tabInfo') },
-  ]
+  const tabs: { id: Tab; label: string }[] = fromHome
+    ? [
+        { id: 'news', label: t('tabNews') },
+        { id: 'info', label: t('tabInfo') },
+      ]
+    : [
+        { id: 'stamps', label: t('tabStamps') },
+        { id: 'news', label: t('tabNews') },
+        { id: 'info', label: t('tabInfo') },
+      ]
 
   if (loading) {
     return (
@@ -129,6 +136,11 @@ export default function BusinessDetailPage() {
     <main className="min-h-screen bg-gray-50">
       {/* Hero image */}
       <div className="relative h-56 bg-gradient-to-br from-brand-400 to-brand-700 overflow-hidden">
+        <img
+          src={`https://picsum.photos/seed/${businessId}/800/224`}
+          alt={businessName}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <button
           onClick={() => router.back()}
           className="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-black/30 flex items-center justify-center text-white backdrop-blur-sm active:scale-95 transition-transform"

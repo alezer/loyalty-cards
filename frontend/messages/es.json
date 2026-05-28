@@ -92,7 +92,9 @@
       "navStamps": "Mis Sellos",
       "navRewards": "Premios",
       "navTrend": "Tendencia",
-      "qrModalTitle": "Escanear mi QR"
+      "qrModalTitle": "Escanear mi QR",
+      "sectionShops": "Comercios",
+      "noShops": "Aún no hay comercios disponibles"
     }
   },
   "staff": {
