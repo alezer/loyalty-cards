@@ -11,11 +11,13 @@
     "brand": "Loyalty Cards",
     "language": "Idioma",
     "signOut": "Cerrar sesión",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "terms": "Términos y Condiciones",
+    "menu": "Menú"
   },
   "auth": {
     "title": "Bienvenido",
-    "subtitle": "Acumula sellos, canjea premios",
+    "subtitle": "Un QR. Sellos y premios en cada comercio.",
     "continueWithGoogle": "Continuar con Google",
     "continueWithEmail": "Continuar con email",
     "orDivider": "o",

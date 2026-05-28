@@ -11,11 +11,13 @@
     "brand": "Loyalty Cards",
     "language": "Language",
     "signOut": "Sign out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "terms": "Terms and Conditions",
+    "menu": "Menu"
   },
   "auth": {
     "title": "Welcome",
-    "subtitle": "Collect stamps, redeem rewards",
+    "subtitle": "One QR. Stamps and rewards at every shop.",
     "continueWithGoogle": "Continue with Google",
     "continueWithEmail": "Continue with email",
     "orDivider": "or",

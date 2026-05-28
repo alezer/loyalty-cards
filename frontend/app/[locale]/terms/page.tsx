@@ -537,7 +537,7 @@ export default async function TermsPage() {
           className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-8 transition-colors"
         >
           <ArrowLeft size={16} />
-          {isEs ? 'Volver al inicio de sesión' : 'Back to login'}
+          {isEs ? 'Atrás' : 'Back'}
         </Link>
 
         {/* Header */}
