@@ -86,7 +86,7 @@ export default function BusinessDetailPage() {
           const { data: rewardData } = await supabase
             .from('rewards')
             .select('id, reward_code')
-            .eq('loyalty_card_id', row.id)
+            .eq('card_id', row.id)
             .eq('is_redeemed', false)
             .order('created_at', { ascending: false })
 
