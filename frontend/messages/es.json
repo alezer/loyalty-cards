@@ -63,6 +63,15 @@
     "ready": "La app está lista."
   },
   "customer": {
+    "business": {
+      "tabStamps": "Mis Sellos",
+      "tabNews": "Noticias",
+      "tabInfo": "Información",
+      "stampsCollected": "sellos acumulados",
+      "address": "Dirección",
+      "viewOnMaps": "Ver en Google Maps",
+      "openingHours": "Horario de apertura"
+    },
     "qr": {
       "title": "Mi código QR",
       "greeting": "¡Hola, {name}!",

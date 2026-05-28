@@ -63,6 +63,15 @@
     "ready": "App is ready."
   },
   "customer": {
+    "business": {
+      "tabStamps": "My Stamps",
+      "tabNews": "News",
+      "tabInfo": "Information",
+      "stampsCollected": "stamps collected",
+      "address": "Address",
+      "viewOnMaps": "View on Google Maps",
+      "openingHours": "Opening hours"
+    },
     "qr": {
       "title": "My QR code",
       "greeting": "Hi, {name}!",
