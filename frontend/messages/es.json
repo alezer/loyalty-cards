@@ -73,7 +73,12 @@
       "noRewards": "No tienes premios disponibles",
       "rewardLabel": "Recompensa — muéstrala para canjearla",
       "stampsTab": "Mis Sellos",
-      "noStamps": "Aún no tienes sellos"
+      "noStamps": "Aún no tienes sellos",
+      "navHome": "Inicio",
+      "navStamps": "Mis Sellos",
+      "navRewards": "Premios",
+      "navTrend": "Tendencia",
+      "qrModalTitle": "Escanear mi QR"
     }
   },
   "staff": {
