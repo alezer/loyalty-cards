@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { ChevronLeft, MapPin, Clock, ExternalLink, X } from 'lucide-react'
@@ -58,7 +58,9 @@ export default function BusinessDetailPage() {
   const tCommon = useTranslations('common')
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
   const businessId = params.businessId as string
+  const fromHome = searchParams.get('source') === 'home'
 
   const [businessName, setBusinessName] = useState<string>('—')
   const [stampsCount, setStampsCount] = useState<number>(0)
@@ -66,7 +68,7 @@ export default function BusinessDetailPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
   const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<Tab>('stamps')
+  const [activeTab, setActiveTab] = useState<Tab>(fromHome ? 'info' : 'stamps')
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
 
   useEffect(() => {
@@ -111,11 +113,16 @@ export default function BusinessDetailPage() {
       return next
     })
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'stamps', label: t('tabStamps') },
-    { id: 'news', label: t('tabNews') },
-    { id: 'info', label: t('tabInfo') },
-  ]
+  const tabs: { id: Tab; label: string }[] = fromHome
+    ? [
+        { id: 'news', label: t('tabNews') },
+        { id: 'info', label: t('tabInfo') },
+      ]
+    : [
+        { id: 'stamps', label: t('tabStamps') },
+        { id: 'news', label: t('tabNews') },
+        { id: 'info', label: t('tabInfo') },
+      ]
 
   if (loading) {
     return (
