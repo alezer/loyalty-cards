@@ -5,27 +5,15 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { Home, Stamp, QrCode, Gift, TrendingUp, X } from 'lucide-react'
+import { Home, Stamp, QrCode, X } from 'lucide-react'
 
 const StampQRCard = dynamic(
   () => import('@/components/QRDisplay').then((m) => m.StampQRCard),
   { ssr: false, loading: () => <QRPlaceholder /> },
 )
 
-const RewardQRCard = dynamic(
-  () => import('@/components/QRDisplay').then((m) => m.RewardQRCard),
-  { ssr: false, loading: () => <QRPlaceholder /> },
-)
-
 function QRPlaceholder() {
   return <div className="w-[240px] h-[240px] bg-gray-100 rounded-2xl animate-pulse" />
-}
-
-interface Reward {
-  id: string
-  reward_code: string
-  created_at: string
-  loyalty_cards: { business_id: string; businesses: { name: string } | null } | null
 }
 
 interface LoyaltyCardEntry {
@@ -34,13 +22,7 @@ interface LoyaltyCardEntry {
   businesses: { name: string; stamps_goal: number } | null
 }
 
-interface RewardGroup {
-  businessId: string
-  businessName: string
-  rewards: Reward[]
-}
-
-type Tab = 'home' | 'stamps' | 'rewards' | 'trend'
+type Tab = 'home' | 'stamps'
 
 export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
@@ -49,11 +31,9 @@ export default function CustomerQRPage() {
 
   const [userId, setUserId] = useState<string | null>(null)
   const [userName, setUserName] = useState<string | null>(null)
-  const [rewards, setRewards] = useState<Reward[]>([])
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>('stamps')
-  const [selectedGroup, setSelectedGroup] = useState<RewardGroup | null>(null)
   const [qrModalOpen, setQrModalOpen] = useState(false)
 
   useEffect(() => {
@@ -67,14 +47,6 @@ export default function CustomerQRPage() {
 
       setUserId(user.id)
       setUserName(user.user_metadata?.full_name ?? null)
-
-      const { data } = await supabase
-        .from('rewards')
-        .select('id, reward_code, created_at, loyalty_cards(business_id, businesses(name))')
-        .eq('is_redeemed', false)
-        .order('created_at', { ascending: false })
-
-      setRewards((data as unknown as Reward[]) ?? [])
 
       const { data: cards } = await supabase
         .from('loyalty_cards')
@@ -104,16 +76,6 @@ export default function CustomerQRPage() {
       </div>
     )
   }
-
-  const rewardGroups: RewardGroup[] = Object.values(
-    rewards.reduce<Record<string, RewardGroup>>((acc, r) => {
-      const bizId = r.loyalty_cards?.business_id ?? 'unknown'
-      const bizName = r.loyalty_cards?.businesses?.name ?? '—'
-      if (!acc[bizId]) acc[bizId] = { businessId: bizId, businessName: bizName, rewards: [] }
-      acc[bizId].rewards.push(r)
-      return acc
-    }, {}),
-  )
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
@@ -150,26 +112,6 @@ export default function CustomerQRPage() {
             )}
           </div>
         )}
-
-        {/* Rewards — business list */}
-        {activeTab === 'rewards' && (
-          <div className="max-w-sm mx-auto flex flex-col gap-3">
-            {rewardGroups.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center mt-4">{t('noRewards')}</p>
-            ) : (
-              rewardGroups.map((g) => (
-                <button
-                  key={g.businessId}
-                  onClick={() => setSelectedGroup(g)}
-                  className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-amber-50 transition-colors text-left w-full"
-                >
-                  <span className="font-medium text-gray-900">{g.businessName}</span>
-                  <span className="text-amber-600 font-semibold tabular-nums">{g.rewards.length} ×</span>
-                </button>
-              ))
-            )}
-          </div>
-        )}
       </div>
 
       {/* Bottom navigation bar */}
@@ -184,6 +126,9 @@ export default function CustomerQRPage() {
             <Home size={20} />
           </NavButton>
 
+          {/* Center spacer — the floating QR button sits here */}
+          <div className="flex-1" />
+
           {/* My Stamps */}
           <NavButton
             active={activeTab === 'stamps'}
@@ -191,27 +136,6 @@ export default function CustomerQRPage() {
             onClick={() => setActiveTab('stamps')}
           >
             <Stamp size={20} />
-          </NavButton>
-
-          {/* Center spacer — the floating QR button sits here */}
-          <div className="flex-1" />
-
-          {/* Rewards */}
-          <NavButton
-            active={activeTab === 'rewards'}
-            label={t('navRewards')}
-            onClick={() => setActiveTab('rewards')}
-          >
-            <Gift size={20} />
-          </NavButton>
-
-          {/* Trend */}
-          <NavButton
-            active={activeTab === 'trend'}
-            label={t('navTrend')}
-            onClick={() => setActiveTab('trend')}
-          >
-            <TrendingUp size={20} />
           </NavButton>
 
           {/* Floating center QR button */}
@@ -252,38 +176,6 @@ export default function CustomerQRPage() {
                 showToStaffLabel={t('showToStaff')}
               />
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reward modal */}
-      {selectedGroup && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-          onClick={() => setSelectedGroup(null)}
-        >
-          <div
-            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">{selectedGroup.businessName}</h2>
-              <button
-                onClick={() => setSelectedGroup(null)}
-                className="text-gray-400 hover:text-gray-600"
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            {selectedGroup.rewards.map((r) => (
-              <RewardQRCard
-                key={r.id}
-                rewardCode={r.reward_code}
-                expiresInLabel={t('expiresIn')}
-                rewardLabel={t('rewardLabel')}
-              />
-            ))}
           </div>
         </div>
       )}
