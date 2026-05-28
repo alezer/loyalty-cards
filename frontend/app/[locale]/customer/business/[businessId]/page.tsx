@@ -186,7 +186,7 @@ export default function BusinessDetailPage() {
             </div>
 
             {/* Rewards card */}
-            {rewards.length > 0 && (
+            {rewards.length > 0 ? (
               <button
                 onClick={() => setRewardsModalOpen(true)}
                 className="w-full text-left bg-amber-50 rounded-2xl p-5 border border-amber-200 hover:bg-amber-100 active:bg-amber-200 transition-colors"
@@ -199,6 +199,16 @@ export default function BusinessDetailPage() {
                   <span className="text-3xl font-bold text-amber-600 tabular-nums">{rewards.length}</span>
                 </div>
               </button>
+            ) : (
+              <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-gray-400">{t('rewardsTitle')}</h3>
+                    <p className="text-sm text-gray-400 mt-0.5">{t('noRewards')}</p>
+                  </div>
+                  <span className="text-3xl font-bold text-gray-200 tabular-nums">0</span>
+                </div>
+              </div>
             )}
           </div>
         )}
