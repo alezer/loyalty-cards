@@ -136,6 +136,11 @@ export default function BusinessDetailPage() {
     <main className="min-h-screen bg-gray-50">
       {/* Hero image */}
       <div className="relative h-56 bg-gradient-to-br from-brand-400 to-brand-700 overflow-hidden">
+        <img
+          src={`https://picsum.photos/seed/${businessId}/800/224`}
+          alt={businessName}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <button
           onClick={() => router.back()}
           className="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-black/30 flex items-center justify-center text-white backdrop-blur-sm active:scale-95 transition-transform"

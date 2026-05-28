@@ -108,23 +108,21 @@ export default function CustomerQRPage() {
             {businesses.length === 0 ? (
               <p className="text-gray-400 text-sm text-center mt-4">{t('noShops')}</p>
             ) : (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-3">
                 {businesses.map((biz) => (
                   <Link
                     key={biz.id}
                     href={`/${locale}/customer/business/${biz.id}?source=home`}
-                    className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                    className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                   >
-                    {biz.logo_url && (
-                      <img
-                        src={biz.logo_url}
-                        alt={biz.name}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    )}
+                    <img
+                      src={biz.logo_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
+                      alt={biz.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
                     {/* Gradient overlay for text legibility */}
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
-                    <p className="absolute bottom-3 left-3 right-3 text-white font-semibold text-sm leading-tight">
+                    <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
                       {biz.name}
                     </p>
                   </Link>
