@@ -5,7 +5,13 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { Home, Stamp, QrCode, X, Gift } from 'lucide-react'
+import { Home, Stamp, QrCode, Gift } from 'lucide-react'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer'
 
 const StampQRCard = dynamic(
   () => import('@/components/QRDisplay').then((m) => m.StampQRCard),
@@ -222,36 +228,23 @@ export default function CustomerQRPage() {
         </div>
       </nav>
 
-      {/* QR stamp modal */}
-      {qrModalOpen && userId && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-          onClick={() => setQrModalOpen(false)}
-        >
-          <div
-            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">{t('qrModalTitle')}</h2>
-              <button
-                onClick={() => setQrModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="flex justify-center">
+      {/* QR stamp drawer */}
+      <Drawer open={qrModalOpen} onOpenChange={setQrModalOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle className="text-center">{t('qrModalTitle')}</DrawerTitle>
+          </DrawerHeader>
+          <div className="flex justify-center pb-8 px-4">
+            {userId && (
               <StampQRCard
                 customerId={userId}
                 generateNewLabel={t('generateNewQR')}
                 showToStaffLabel={t('showToStaff')}
               />
-            </div>
+            )}
           </div>
-        </div>
-      )}
+        </DrawerContent>
+      </Drawer>
     </main>
   )
 }
