@@ -73,29 +73,47 @@ export default function BusinessDetailPage() {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase
-      .from('loyalty_cards')
-      .select('id, stamps_count, businesses(name, stamps_goal)')
-      .eq('business_id', businessId)
-      .single()
-      .then(async ({ data }) => {
-        const row = data as unknown as { id: string; stamps_count: number; businesses: { name: string; stamps_goal: number } | null } | null
-        if (row) {
-          setBusinessName(row.businesses?.name ?? '—')
-          setStampsCount(row.stamps_count)
-          setStampsGoal(row.businesses?.stamps_goal ?? 10)
 
-          const { data: rewardData } = await supabase
-            .from('rewards')
-            .select('id, reward_code')
-            .eq('card_id', row.id)
-            .eq('is_redeemed', false)
-            .order('created_at', { ascending: false })
+    const fetchData = async () => {
+      const { data: cardData } = await supabase
+        .from('loyalty_cards')
+        .select('id, stamps_count, businesses(name, stamps_goal)')
+        .eq('business_id', businessId)
+        .single()
 
-          setRewards((rewardData as unknown as Reward[]) ?? [])
+      const card = cardData as unknown as { id: string; stamps_count: number; businesses: { name: string; stamps_goal: number } | null } | null
+
+      if (card) {
+        setBusinessName(card.businesses?.name ?? '—')
+        setStampsCount(card.stamps_count)
+        setStampsGoal(card.businesses?.stamps_goal ?? 10)
+
+        const { data: rewardData } = await supabase
+          .from('rewards')
+          .select('id, reward_code')
+          .eq('card_id', card.id)
+          .eq('is_redeemed', false)
+          .order('created_at', { ascending: false })
+
+        setRewards((rewardData as unknown as Reward[]) ?? [])
+      } else {
+        const { data: bizData } = await supabase
+          .from('businesses')
+          .select('name, stamps_goal')
+          .eq('id', businessId)
+          .single()
+
+        if (bizData) {
+          const biz = bizData as unknown as { name: string; stamps_goal: number }
+          setBusinessName(biz.name)
+          setStampsGoal(biz.stamps_goal ?? 10)
         }
-        setLoading(false)
-      })
+      }
+
+      setLoading(false)
+    }
+
+    fetchData()
   }, [businessId])
 
   const cycleCount = stampsGoal
