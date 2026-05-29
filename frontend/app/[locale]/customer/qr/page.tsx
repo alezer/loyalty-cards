@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { Home, Stamp, QrCode, X } from 'lucide-react'
+import { Home, Stamp, QrCode, X, Gift } from 'lucide-react'
 
 const StampQRCard = dynamic(
   () => import('@/components/QRDisplay').then((m) => m.StampQRCard),
@@ -17,9 +17,11 @@ function QRPlaceholder() {
 }
 
 interface LoyaltyCardEntry {
+  id: string
   business_id: string
   stamps_count: number
-  businesses: { name: string; stamps_goal: number } | null
+  businesses: { name: string; stamps_goal: number; logo_url: string | null } | null
+  rewards: { is_redeemed: boolean }[]
 }
 
 interface BusinessEntry {
@@ -58,7 +60,7 @@ export default function CustomerQRPage() {
       const [{ data: cards }, { data: allBusinesses }] = await Promise.all([
         supabase
           .from('loyalty_cards')
-          .select('business_id, stamps_count, businesses(name, stamps_goal)')
+          .select('id, business_id, stamps_count, businesses(name, stamps_goal, logo_url), rewards(is_redeemed)')
           .order('updated_at', { ascending: false }),
         supabase
           .from('businesses')
@@ -134,28 +136,52 @@ export default function CustomerQRPage() {
 
         {/* My Stamps tab */}
         {activeTab === 'stamps' && (
-          <div className="max-w-sm mx-auto flex flex-col gap-3">
+          <div className="max-w-sm mx-auto">
             {loyaltyCards.length === 0 ? (
               <p className="text-gray-400 text-sm text-center mt-4">{t('noStamps')}</p>
             ) : (
-              loyaltyCards.map((card) => {
-                const goal = card.businesses?.stamps_goal
-                const cycleCount = goal
-                  ? card.stamps_count % goal || goal
-                  : card.stamps_count
-                return (
-                  <Link
-                    key={card.business_id}
-                    href={`/${locale}/customer/business/${card.business_id}`}
-                    className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-brand-50 transition-colors"
-                  >
-                    <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
-                    <span className="text-brand-600 font-semibold tabular-nums">
-                      {cycleCount}/{goal ?? '?'}
-                    </span>
-                  </Link>
-                )
-              })
+              <div className="flex flex-col gap-3">
+                {loyaltyCards.map((card) => {
+                  const goal = card.businesses?.stamps_goal
+                  const cycleCount = goal
+                    ? card.stamps_count % goal || goal
+                    : card.stamps_count
+                  const unredeemedCount = card.rewards.filter((r) => !r.is_redeemed).length
+                  const logoUrl = card.businesses?.logo_url
+                  return (
+                    <Link
+                      key={card.business_id}
+                      href={`/${locale}/customer/business/${card.business_id}`}
+                      className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                    >
+                      <img
+                        src={logoUrl ?? `https://picsum.photos/seed/${card.business_id}/600/160`}
+                        alt={card.businesses?.name ?? ''}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+
+                      {/* Top-right stamp + reward badges */}
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                        <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm rounded-full px-2.5 py-1 text-white text-xs font-semibold">
+                          <Stamp size={11} />
+                          {cycleCount}/{goal ?? '?'}
+                        </span>
+                        {unredeemedCount > 0 && (
+                          <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm rounded-full px-2.5 py-1 text-white text-xs font-semibold">
+                            <Gift size={11} />
+                            {unredeemedCount}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
+                        {card.businesses?.name ?? '—'}
+                      </p>
+                    </Link>
+                  )
+                })}
+              </div>
             )}
           </div>
         )}
