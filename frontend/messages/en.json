@@ -83,6 +83,7 @@
       "stampTab": "My QR",
       "rewardsTab": "Rewards",
       "expiresIn": "Expires in",
+      "generateNewQR": "Generate new QR",
       "showToStaff": "Show this QR at any of your shops to collect stamps or redeem rewards.",
       "noRewards": "No rewards available",
       "rewardLabel": "Reward — show to redeem",

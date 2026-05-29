@@ -2,49 +2,36 @@
 
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
+import { RefreshCw } from 'lucide-react'
 import { generateStampQR, generateRewardQR, QR_EXPIRY_MS, formatCountdown } from '@/lib/qr'
 
 const REFRESH_INTERVAL_MS = 5 * 1000
 
 interface StampQRCardProps {
   customerId: string
-  expiresInLabel: string // translated "Expires in"
-  showToStaffLabel: string // translated helper text
+  generateNewLabel: string
+  showToStaffLabel: string
 }
 
-export function StampQRCard({ customerId, expiresInLabel, showToStaffLabel }: StampQRCardProps) {
+export function StampQRCard({ customerId, generateNewLabel, showToStaffLabel }: StampQRCardProps) {
   const [qrValue, setQrValue] = useState(() => generateStampQR(customerId))
-  const [generatedAt, setGeneratedAt] = useState(() => Date.now())
-  const [remainingMs, setRemainingMs] = useState(QR_EXPIRY_MS)
 
-  useEffect(() => {
-    // Auto-refresh before expiry
-    const refreshTimer = setInterval(() => {
-      const now = Date.now()
-      setQrValue(generateStampQR(customerId))
-      setGeneratedAt(now)
-      setRemainingMs(QR_EXPIRY_MS)
-    }, REFRESH_INTERVAL_MS)
-
-    // Countdown ticker
-    const countdownTimer = setInterval(() => {
-      setRemainingMs(QR_EXPIRY_MS - (Date.now() - generatedAt))
-    }, 1000)
-
-    return () => {
-      clearInterval(refreshTimer)
-      clearInterval(countdownTimer)
-    }
-  }, [customerId, generatedAt])
+  function regenerate() {
+    setQrValue(generateStampQR(customerId))
+  }
 
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="p-4 bg-white rounded-2xl shadow-md border border-gray-100">
         <QRCodeSVG value={qrValue} size={240} level="M" />
       </div>
-      <p className="text-sm text-gray-500 font-medium">
-        {expiresInLabel}: {formatCountdown(remainingMs)}
-      </p>
+      <button
+        onClick={regenerate}
+        className="flex items-center gap-1.5 text-sm text-brand-600 font-medium hover:text-brand-700 active:scale-95 transition-transform"
+      >
+        <RefreshCw size={14} />
+        {generateNewLabel}
+      </button>
       <p className="text-xs text-gray-400 text-center max-w-xs">{showToStaffLabel}</p>
     </div>
   )
