@@ -245,7 +245,7 @@ export default function CustomerQRPage() {
             <div className="flex justify-center">
               <StampQRCard
                 customerId={userId}
-                expiresInLabel={t('expiresIn')}
+                generateNewLabel={t('generateNewQR')}
                 showToStaffLabel={t('showToStaff')}
               />
             </div>
