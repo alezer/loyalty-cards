@@ -92,40 +92,35 @@ export default function CustomerQRPage() {
   }
 
   return (
-    <main className="h-screen flex flex-col bg-gradient-to-br from-brand-50 to-white">
-      {/* Fixed greeting — never scrolls */}
-      <div className="pt-10 px-4 pb-4 shrink-0">
-        <h1 className="text-2xl font-bold text-gray-900 text-center">
+    <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
+      {/* Scrollable content — padded so it never hides behind the floating button + navbar */}
+      <div className="pb-28 pt-10 px-4">
+        <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
           {userName ? t('greeting', { name: userName }) : t('title')}
         </h1>
-      </div>
-
-      {/* Scrollable tab content */}
-      <div className="flex-1 overflow-hidden px-4">
 
         {/* Home tab */}
         {activeTab === 'home' && (
-          <div className="h-full flex flex-col max-w-sm mx-auto">
-            {/* Section heading — stays visible */}
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1 shrink-0">
+          <div className="max-w-sm mx-auto">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
               {t('sectionShops')}
             </h2>
             {businesses.length === 0 ? (
               <p className="text-gray-400 text-sm text-center mt-4">{t('noShops')}</p>
             ) : (
-              /* Cards scroll independently */
-              <div className="flex-1 overflow-y-auto pb-28 flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
                 {businesses.map((biz) => (
                   <Link
                     key={biz.id}
                     href={`/${locale}/customer/business/${biz.id}?source=home`}
-                    className="relative h-40 shrink-0 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                    className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                   >
                     <img
                       src={biz.logo_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
                       alt={biz.name}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
+                    {/* Gradient overlay for text legibility */}
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
                     <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
                       {biz.name}
@@ -139,7 +134,7 @@ export default function CustomerQRPage() {
 
         {/* My Stamps tab */}
         {activeTab === 'stamps' && (
-          <div className="h-full overflow-y-auto pb-28 max-w-sm mx-auto flex flex-col gap-3">
+          <div className="max-w-sm mx-auto flex flex-col gap-3">
             {loyaltyCards.length === 0 ? (
               <p className="text-gray-400 text-sm text-center mt-4">{t('noStamps')}</p>
             ) : (
@@ -152,7 +147,7 @@ export default function CustomerQRPage() {
                   <Link
                     key={card.business_id}
                     href={`/${locale}/customer/business/${card.business_id}`}
-                    className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-brand-50 transition-colors shrink-0"
+                    className="flex items-center justify-between bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:bg-brand-50 transition-colors"
                   >
                     <span className="font-medium text-gray-900">{card.businesses?.name ?? '—'}</span>
                     <span className="text-brand-600 font-semibold tabular-nums">
@@ -164,12 +159,12 @@ export default function CustomerQRPage() {
             )}
           </div>
         )}
-
       </div>
 
       {/* Bottom navigation bar */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 overflow-visible">
         <div className="relative flex items-center h-16 max-w-lg mx-auto px-2">
+          {/* Home */}
           <NavButton
             active={activeTab === 'home'}
             label={t('navHome')}
@@ -178,8 +173,10 @@ export default function CustomerQRPage() {
             <Home size={20} />
           </NavButton>
 
+          {/* Center spacer — the floating QR button sits here */}
           <div className="flex-1" />
 
+          {/* My Stamps */}
           <NavButton
             active={activeTab === 'stamps'}
             label={t('navStamps')}
@@ -188,6 +185,7 @@ export default function CustomerQRPage() {
             <Stamp size={20} />
           </NavButton>
 
+          {/* Floating center QR button */}
           <button
             onClick={() => setQrModalOpen(true)}
             className="absolute left-1/2 -translate-x-1/2 -top-8 w-16 h-16 rounded-full bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/40 border-4 border-white active:scale-95 transition-transform"

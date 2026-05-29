@@ -133,9 +133,9 @@ export default function BusinessDetailPage() {
   }
 
   return (
-    <main className="h-screen flex flex-col bg-gray-50">
+    <main className="min-h-screen bg-gray-50">
       {/* Hero image */}
-      <div className="relative h-56 shrink-0 bg-gradient-to-br from-brand-400 to-brand-700 overflow-hidden">
+      <div className="relative h-56 bg-gradient-to-br from-brand-400 to-brand-700 overflow-hidden">
         <img
           src={`https://picsum.photos/seed/${businessId}/800/224`}
           alt={businessName}
@@ -156,7 +156,7 @@ export default function BusinessDetailPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex bg-white border-b border-gray-200 shrink-0">
+      <div className="flex bg-white border-b border-gray-200">
         {tabs.map(({ id, label }) => (
           <button
             key={id}
@@ -172,8 +172,6 @@ export default function BusinessDetailPage() {
         ))}
       </div>
 
-      {/* Scrollable tab content */}
-      <div className="flex-1 overflow-y-auto">
       <div className="max-w-lg mx-auto px-4 py-6">
         {/* My Stamps tab */}
         {activeTab === 'stamps' && (
@@ -293,7 +291,6 @@ export default function BusinessDetailPage() {
             </div>
           </div>
         )}
-      </div>
       </div>
       {/* Rewards modal */}
       {rewardsModalOpen && (
