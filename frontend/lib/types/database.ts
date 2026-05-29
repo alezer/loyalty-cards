@@ -15,11 +15,25 @@ export interface Profile {
   updated_at: string
 }
 
+export interface BusinessOpeningHours {
+  monday:    { open: string; close: string } | null
+  tuesday:   { open: string; close: string } | null
+  wednesday: { open: string; close: string } | null
+  thursday:  { open: string; close: string } | null
+  friday:    { open: string; close: string } | null
+  saturday:  { open: string; close: string } | null
+  sunday:    { open: string; close: string } | null
+}
+
 export interface Business {
   id: string
   name: string
   logo_url: string | null
   stamps_goal: number
+  address: string | null
+  opening_hours: BusinessOpeningHours | null
+  instagram: string | null
+  image_url: string | null
   created_at: string
   updated_at: string
 }
