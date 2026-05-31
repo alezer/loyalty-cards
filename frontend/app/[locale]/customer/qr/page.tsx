@@ -53,6 +53,10 @@ export default function CustomerQRPage() {
   const [qrModalOpen, setQrModalOpen] = useState(false)
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [activeTab])
+
+  useEffect(() => {
     const supabase = createClient()
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
