@@ -75,7 +75,19 @@
       "noRewards": "Sin premios aún",
       "tapToRedeem": "Toca para ver tus códigos QR",
       "expiresIn": "Expira en",
-      "rewardLabel": "Premio — muéstralo para canjearlo"
+      "rewardLabel": "Premio — muéstralo para canjearlo",
+      "instagram": "Instagram",
+      "noInfo": "Sin información disponible aún",
+      "noNews": "Sin noticias aún",
+      "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      }
     },
     "qr": {
       "title": "Mi código QR",
