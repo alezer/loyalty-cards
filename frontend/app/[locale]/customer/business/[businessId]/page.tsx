@@ -54,6 +54,7 @@ export default function BusinessDetailPage() {
   const [businessHours, setBusinessHours] = useState<BusinessOpeningHours | null>(null)
   const [businessInstagram, setBusinessInstagram] = useState<string | null>(null)
   const [businessImageUrl, setBusinessImageUrl] = useState<string | null>(null)
+  const [businessLogoUrl, setBusinessLogoUrl] = useState<string | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -61,7 +62,7 @@ export default function BusinessDetailPage() {
     const fetchData = async () => {
       const { data: cardData } = await supabase
         .from('loyalty_cards')
-        .select('id, stamps_count, businesses(name, stamps_goal, address, opening_hours, instagram, image_url)')
+        .select('id, stamps_count, businesses(name, stamps_goal, address, opening_hours, instagram, image_url, logo_url)')
         .eq('business_id', businessId)
         .single()
 
@@ -72,6 +73,7 @@ export default function BusinessDetailPage() {
         opening_hours: BusinessOpeningHours | null
         instagram: string | null
         image_url: string | null
+        logo_url: string | null
       }
       const card = cardData as unknown as {
         id: string
@@ -88,6 +90,7 @@ export default function BusinessDetailPage() {
         setBusinessHours((biz?.opening_hours as BusinessOpeningHours | null) ?? null)
         setBusinessInstagram(biz?.instagram ?? null)
         setBusinessImageUrl(biz?.image_url ?? null)
+        setBusinessLogoUrl(biz?.logo_url ?? null)
 
         const { data: rewardData } = await supabase
           .from('rewards')
@@ -100,7 +103,7 @@ export default function BusinessDetailPage() {
       } else {
         const { data: bizData } = await supabase
           .from('businesses')
-          .select('name, stamps_goal, address, opening_hours, instagram, image_url')
+          .select('name, stamps_goal, address, opening_hours, instagram, image_url, logo_url')
           .eq('id', businessId)
           .single()
 
@@ -112,6 +115,7 @@ export default function BusinessDetailPage() {
             opening_hours: BusinessOpeningHours | null
             instagram: string | null
             image_url: string | null
+            logo_url: string | null
           }
           setBusinessName(biz.name)
           setStampsGoal(biz.stamps_goal ?? 10)
@@ -119,6 +123,7 @@ export default function BusinessDetailPage() {
           setBusinessHours((biz.opening_hours as BusinessOpeningHours | null))
           setBusinessInstagram(biz.instagram)
           setBusinessImageUrl(biz.image_url)
+          setBusinessLogoUrl(biz.logo_url)
         }
       }
 
@@ -193,6 +198,13 @@ export default function BusinessDetailPage() {
         <h1 className="absolute bottom-5 left-5 text-white text-2xl font-bold drop-shadow-md">
           {businessName}
         </h1>
+        {businessLogoUrl && (
+          <img
+            src={businessLogoUrl}
+            alt=""
+            className="absolute top-4 right-4 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-md"
+          />
+        )}
       </div>
 
       {/* Tab bar */}
