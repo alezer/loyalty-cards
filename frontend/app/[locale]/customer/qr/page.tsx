@@ -26,7 +26,7 @@ interface LoyaltyCardEntry {
   id: string
   business_id: string
   stamps_count: number
-  businesses: { name: string; stamps_goal: number; image_url: string | null } | null
+  businesses: { name: string; stamps_goal: number; image_url: string | null; logo_url: string | null } | null
   rewards: { is_redeemed: boolean }[]
 }
 
@@ -34,6 +34,7 @@ interface BusinessEntry {
   id: string
   name: string
   image_url: string | null
+  logo_url: string | null
 }
 
 type Tab = 'home' | 'stamps'
@@ -66,11 +67,11 @@ export default function CustomerQRPage() {
       const [{ data: cards }, { data: allBusinesses }] = await Promise.all([
         supabase
           .from('loyalty_cards')
-          .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url), rewards(is_redeemed)')
+          .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
           .order('updated_at', { ascending: false }),
         supabase
           .from('businesses')
-          .select('id, name, image_url')
+          .select('id, name, image_url, logo_url')
           .order('name', { ascending: true }),
       ])
 
@@ -130,6 +131,13 @@ export default function CustomerQRPage() {
                     />
                     {/* Gradient overlay for text legibility */}
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+                    {biz.logo_url && (
+                      <img
+                        src={biz.logo_url}
+                        alt=""
+                        className="absolute top-3 left-3 w-10 h-10 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                      />
+                    )}
                     <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
                       {biz.name}
                     </p>
@@ -153,7 +161,8 @@ export default function CustomerQRPage() {
                     ? card.stamps_count % goal || goal
                     : card.stamps_count
                   const unredeemedCount = card.rewards.filter((r) => !r.is_redeemed).length
-                  const logoUrl = card.businesses?.image_url
+                  const imageUrl = card.businesses?.image_url
+                  const logoUrl = card.businesses?.logo_url
                   return (
                     <Link
                       key={card.business_id}
@@ -161,11 +170,18 @@ export default function CustomerQRPage() {
                       className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                     >
                       <img
-                        src={logoUrl ?? `https://picsum.photos/seed/${card.business_id}/600/160`}
+                        src={imageUrl ?? `https://picsum.photos/seed/${card.business_id}/600/160`}
                         alt={card.businesses?.name ?? ''}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+                      {logoUrl && (
+                        <img
+                          src={logoUrl}
+                          alt=""
+                          className="absolute top-3 left-3 w-10 h-10 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        />
+                      )}
 
                       {/* Top-right stamp + reward badges */}
                       <div className="absolute top-3 right-3 flex items-center gap-1.5">
