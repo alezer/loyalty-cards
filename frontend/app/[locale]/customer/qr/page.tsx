@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Home, Stamp, QrCode, Gift } from 'lucide-react'
 import {
@@ -43,13 +44,16 @@ export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
   const tCommon = useTranslations('common')
   const locale = useLocale()
+  const searchParams = useSearchParams()
 
   const [userId, setUserId] = useState<string | null>(null)
   const [userName, setUserName] = useState<string | null>(null)
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [businesses, setBusinesses] = useState<BusinessEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<Tab>('home')
+  const [activeTab, setActiveTab] = useState<Tab>(
+    searchParams.get('tab') === 'stamps' ? 'stamps' : 'home',
+  )
   const [qrModalOpen, setQrModalOpen] = useState(false)
 
   useEffect(() => {
@@ -170,7 +174,7 @@ export default function CustomerQRPage() {
                   return (
                     <Link
                       key={card.business_id}
-                      href={`/${locale}/customer/business/${card.business_id}`}
+                      href={`/${locale}/customer/business/${card.business_id}?source=stamps`}
                       className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                     >
                       <img
