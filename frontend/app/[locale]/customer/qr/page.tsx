@@ -135,7 +135,7 @@ export default function CustomerQRPage() {
                       <img
                         src={biz.logo_url}
                         alt=""
-                        className="absolute top-3 left-3 w-10 h-10 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
                       />
                     )}
                     <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
@@ -179,7 +179,7 @@ export default function CustomerQRPage() {
                         <img
                           src={logoUrl}
                           alt=""
-                          className="absolute top-3 left-3 w-10 h-10 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                          className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
                         />
                       )}
 
