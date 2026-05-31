@@ -4,6 +4,7 @@
 -- ================================================================
 
 ALTER TABLE businesses
+  ADD COLUMN IF NOT EXISTS reward        TEXT,
   ADD COLUMN IF NOT EXISTS address       TEXT,
   ADD COLUMN IF NOT EXISTS opening_hours JSONB,
   ADD COLUMN IF NOT EXISTS instagram     TEXT,

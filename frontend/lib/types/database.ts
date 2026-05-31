@@ -30,6 +30,7 @@ export interface Business {
   name: string
   logo_url: string | null
   stamps_goal: number
+  reward: string | null
   address: string | null
   opening_hours: BusinessOpeningHours | null
   instagram: string | null
