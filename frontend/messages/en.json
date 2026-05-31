@@ -178,6 +178,8 @@
       "errorGeneric": "Something went wrong. Please try again.",
       "logoLabel": "Business Logo",
       "logoHint": "Square image recommended",
+      "nameLabel": "Business name",
+      "namePlaceholder": "e.g. The Coffee Corner",
       "addressLabel": "Address",
       "addressPlaceholder": "Street Name 123, 12345 City",
       "openingHoursLabel": "Opening Hours",

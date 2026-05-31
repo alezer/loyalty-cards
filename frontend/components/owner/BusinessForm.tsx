@@ -155,6 +155,18 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
 
         {/* Text fields */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-5">
+          {/* Business Name */}
+          <div className="space-y-1.5">
+            <Label htmlFor="name">{t('nameLabel')}</Label>
+            <Input
+              id="name"
+              name="name"
+              required
+              defaultValue={business?.name ?? ''}
+              placeholder={t('namePlaceholder')}
+            />
+          </div>
+
           {/* Address */}
           <div className="space-y-1.5">
             <Label htmlFor="address">{t('addressLabel')}</Label>

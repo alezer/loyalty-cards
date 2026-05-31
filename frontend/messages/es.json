@@ -178,6 +178,8 @@
       "errorGeneric": "Ha ocurrido un error. Inténtalo de nuevo.",
       "logoLabel": "Logo del comercio",
       "logoHint": "Se recomienda imagen cuadrada",
+      "nameLabel": "Nombre del comercio",
+      "namePlaceholder": "Ej. La Cafetería del Centro",
       "addressLabel": "Dirección",
       "addressPlaceholder": "Calle Mayor 123, 28001 Madrid",
       "openingHoursLabel": "Horario de apertura",
