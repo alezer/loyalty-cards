@@ -26,14 +26,14 @@ interface LoyaltyCardEntry {
   id: string
   business_id: string
   stamps_count: number
-  businesses: { name: string; stamps_goal: number; logo_url: string | null } | null
+  businesses: { name: string; stamps_goal: number; image_url: string | null } | null
   rewards: { is_redeemed: boolean }[]
 }
 
 interface BusinessEntry {
   id: string
   name: string
-  logo_url: string | null
+  image_url: string | null
 }
 
 type Tab = 'home' | 'stamps'
@@ -66,11 +66,11 @@ export default function CustomerQRPage() {
       const [{ data: cards }, { data: allBusinesses }] = await Promise.all([
         supabase
           .from('loyalty_cards')
-          .select('id, business_id, stamps_count, businesses(name, stamps_goal, logo_url), rewards(is_redeemed)')
+          .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url), rewards(is_redeemed)')
           .order('updated_at', { ascending: false }),
         supabase
           .from('businesses')
-          .select('id, name, logo_url')
+          .select('id, name, image_url')
           .order('name', { ascending: true }),
       ])
 
@@ -124,7 +124,7 @@ export default function CustomerQRPage() {
                     className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                   >
                     <img
-                      src={biz.logo_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
+                      src={biz.image_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
                       alt={biz.name}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
@@ -153,7 +153,7 @@ export default function CustomerQRPage() {
                     ? card.stamps_count % goal || goal
                     : card.stamps_count
                   const unredeemedCount = card.rewards.filter((r) => !r.is_redeemed).length
-                  const logoUrl = card.businesses?.logo_url
+                  const logoUrl = card.businesses?.image_url
                   return (
                     <Link
                       key={card.business_id}
