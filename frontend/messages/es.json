@@ -157,6 +157,37 @@
       "noHistory": "Sin historial de sellos",
       "stampDate": "Fecha",
       "stampBy": "Puesto por"
+    },
+    "business": {
+      "title": "Mi Comercio",
+      "subtitle": "Gestiona la información de tu comercio",
+      "noBusiness": "No tienes un comercio asignado. Contacta a un administrador.",
+      "saved": "Cambios guardados",
+      "errorGeneric": "Ha ocurrido un error. Inténtalo de nuevo.",
+      "logoLabel": "Logo del comercio",
+      "logoHint": "Se recomienda imagen cuadrada",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Calle Mayor 123, 28001 Madrid",
+      "openingHoursLabel": "Horario de apertura",
+      "instagramLabel": "Instagram",
+      "instagramPlaceholder": "@tucomercio",
+      "imageLabel": "Imagen del comercio",
+      "imageHint": "Imagen principal que se muestra en tu página de comercio",
+      "rewardLabel": "Recompensa",
+      "rewardPlaceholder": "Ej. Café gratis",
+      "changeImage": "Cambiar imagen",
+      "selectImage": "Seleccionar imagen",
+      "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      },
+      "closed": "Cerrado",
+      "to": "a"
     }
   },
   "profile": {
