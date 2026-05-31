@@ -31,7 +31,17 @@ export default function BusinessDetailPage() {
   const params = useParams()
   const searchParams = useSearchParams()
   const businessId = params.businessId as string
-  const fromHome = searchParams.get('source') === 'home'
+  const locale = params.locale as string
+  const source = searchParams.get('source')
+  const fromHome = source === 'home'
+
+  function handleBack() {
+    if (source === 'stamps') {
+      router.push(`/${locale}/customer/qr?tab=stamps`)
+    } else {
+      router.push(`/${locale}/customer/qr`)
+    }
+  }
 
   const [businessName, setBusinessName] = useState<string>('—')
   const [stampsCount, setStampsCount] = useState<number>(0)
@@ -172,7 +182,7 @@ export default function BusinessDetailPage() {
           />
         )}
         <button
-          onClick={() => router.back()}
+          onClick={handleBack}
           className="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-black/30 flex items-center justify-center text-white backdrop-blur-sm active:scale-95 transition-transform"
           aria-label={tCommon('back')}
         >

@@ -53,6 +53,10 @@ export async function saveBusinessDetails(formData: FormData): Promise<ActionRes
 
   const updates: Record<string, unknown> = {}
 
+  const name = (formData.get('name') as string)?.trim()
+  if (!name) return { success: false, error: 'name_required' }
+  updates.name = name
+
   const address = formData.get('address') as string | null
   const instagram = formData.get('instagram') as string | null
   const reward = formData.get('reward') as string | null
