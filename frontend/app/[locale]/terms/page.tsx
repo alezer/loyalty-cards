@@ -40,10 +40,11 @@ function EnContent() {
       <P>
         For the purposes of EU Regulation 2016/679 (General Data Protection Regulation — GDPR), the
         operator of this Service acts as the data controller responsible for your personal data. For any
-        data-related enquiries, please contact us at:{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        data-related enquiries, please{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          contact us
+        </Link>
+        .
       </P>
 
       <SectionTitle>3. Data We Collect</SectionTitle>
@@ -137,10 +138,10 @@ function EnContent() {
         </LI>
       </UL>
       <P>
-        To exercise any of these rights, contact us at{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        To exercise any of these rights,{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          contact us
+        </Link>
         . We will respond within 30 calendar days.
       </P>
 
@@ -151,10 +152,9 @@ function EnContent() {
       </P>
       <UL>
         <LI>
-          Send an email to{' '}
-          <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-            privacy@loyaltycards.app
-          </a>{' '}
+          <Link href="/contact" className="text-brand-600 underline">
+            Contact us
+          </Link>{' '}
           with the subject <strong>"Account Deletion Request"</strong>.
         </LI>
         <LI>Include the email address associated with your account.</LI>
@@ -253,10 +253,11 @@ function EnContent() {
       <SectionTitle>15. Contact</SectionTitle>
       <P>
         For any questions, requests, or concerns regarding these Terms or the processing of your personal
-        data, please contact us at:{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        data, please use our{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          contact form
+        </Link>
+        .
       </P>
     </>
   )
@@ -280,10 +281,11 @@ function EsContent() {
       <P>
         A los efectos del Reglamento (UE) 2016/679 (Reglamento General de Protección de Datos — RGPD),
         el operador de este Servicio actúa como responsable del tratamiento de tus datos personales.
-        Para cualquier consulta relacionada con tus datos, puedes contactarnos en:{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        Para cualquier consulta relacionada con tus datos, puedes{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          contactarnos
+        </Link>
+        .
       </P>
 
       <SectionTitle>3. Datos que recopilamos</SectionTitle>
@@ -387,10 +389,10 @@ function EsContent() {
         </LI>
       </UL>
       <P>
-        Para ejercer cualquiera de estos derechos, contáctanos en{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        Para ejercer cualquiera de estos derechos,{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          contáctanos
+        </Link>
         . Responderemos en un plazo máximo de 30 días naturales.
       </P>
 
@@ -401,10 +403,9 @@ function EsContent() {
       </P>
       <UL>
         <LI>
-          Envía un correo electrónico a{' '}
-          <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-            privacy@loyaltycards.app
-          </a>{' '}
+          <Link href="/contact" className="text-brand-600 underline">
+            Contáctanos
+          </Link>{' '}
           con el asunto <strong>"Solicitud de eliminación de cuenta"</strong>.
         </LI>
         <LI>Incluye la dirección de correo electrónico asociada a tu cuenta.</LI>
@@ -515,10 +516,11 @@ function EsContent() {
       <SectionTitle>15. Contacto</SectionTitle>
       <P>
         Para cualquier pregunta, solicitud o consulta sobre estos Términos o el tratamiento de tus datos
-        personales, puedes contactarnos en:{' '}
-        <a href="mailto:privacy@loyaltycards.app" className="text-brand-600 underline">
-          privacy@loyaltycards.app
-        </a>
+        personales, utiliza nuestro{' '}
+        <Link href="/contact" className="text-brand-600 underline">
+          formulario de contacto
+        </Link>
+        .
       </P>
     </>
   )
