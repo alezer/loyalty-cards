@@ -5,12 +5,23 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, MapPin, Clock, ExternalLink, X } from 'lucide-react'
+import { ChevronLeft, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
 import type { BusinessOpeningHours } from '@/lib/types/database'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer'
 
 const RewardQRCard = dynamic(
   () => import('@/components/QRDisplay').then((m) => m.RewardQRCard),
   { ssr: false, loading: () => <div className="w-[180px] h-[180px] bg-amber-100 rounded-xl animate-pulse" /> },
+)
+
+const StampQRCard = dynamic(
+  () => import('@/components/QRDisplay').then((m) => m.StampQRCard),
+  { ssr: false, loading: () => <div className="w-[240px] h-[240px] bg-gray-100 rounded-2xl animate-pulse" /> },
 )
 
 type Tab = 'stamps' | 'news' | 'info'
@@ -27,6 +38,7 @@ const DAYS_ORDER = [
 export default function BusinessDetailPage() {
   const t = useTranslations('customer.business')
   const tCommon = useTranslations('common')
+  const tQr = useTranslations('customer.qr')
   const router = useRouter()
   const params = useParams()
   const searchParams = useSearchParams()
@@ -55,11 +67,16 @@ export default function BusinessDetailPage() {
   const [businessInstagram, setBusinessInstagram] = useState<string | null>(null)
   const [businessImageUrl, setBusinessImageUrl] = useState<string | null>(null)
   const [businessLogoUrl, setBusinessLogoUrl] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [qrModalOpen, setQrModalOpen] = useState(false)
 
   useEffect(() => {
     const supabase = createClient()
 
     const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) setUserId(user.id)
+
       const { data: cardData } = await supabase
         .from('loyalty_cards')
         .select('id, stamps_count, businesses(name, stamps_goal, address, opening_hours, instagram, image_url, logo_url)')
@@ -224,7 +241,7 @@ export default function BusinessDetailPage() {
         ))}
       </div>
 
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className="max-w-lg mx-auto px-4 py-6 pb-28">
         {/* My Stamps tab */}
         {activeTab === 'stamps' && (
           <div className="flex flex-col gap-4">
@@ -362,6 +379,55 @@ export default function BusinessDetailPage() {
           </div>
         )}
       </div>
+      {/* Bottom navigation bar */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 overflow-visible">
+        <div className="relative flex items-center h-16 max-w-lg mx-auto px-2">
+          <button
+            onClick={() => router.push(`/${locale}/customer/qr`)}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <Home size={20} />
+            <span className="text-[10px] font-medium leading-tight">{tQr('navHome')}</span>
+          </button>
+
+          <div className="flex-1" />
+
+          <button
+            onClick={() => router.push(`/${locale}/customer/qr?tab=stamps`)}
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <Stamp size={20} />
+            <span className="text-[10px] font-medium leading-tight">{tQr('navStamps')}</span>
+          </button>
+
+          <button
+            onClick={() => setQrModalOpen(true)}
+            className="absolute left-1/2 -translate-x-1/2 -top-8 w-16 h-16 rounded-full bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/40 border-4 border-white active:scale-95 transition-transform"
+            aria-label={tQr('qrModalTitle')}
+          >
+            <QrCode size={28} className="text-white" />
+          </button>
+        </div>
+      </nav>
+
+      {/* QR stamp drawer */}
+      <Drawer open={qrModalOpen} onOpenChange={setQrModalOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle className="text-center">{tQr('qrModalTitle')}</DrawerTitle>
+          </DrawerHeader>
+          <div className="flex justify-center pb-8 px-4">
+            {userId && (
+              <StampQRCard
+                customerId={userId}
+                generateNewLabel={tQr('generateNewQR')}
+                showToStaffLabel={tQr('showToStaff')}
+              />
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
+
       {/* Rewards modal */}
       {rewardsModalOpen && (
         <div
