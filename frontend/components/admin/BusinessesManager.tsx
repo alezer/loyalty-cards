@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -23,14 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { createBusiness, updateBusiness, deleteBusiness } from '@/app/actions/admin'
+import { createBusiness, deleteBusiness } from '@/app/actions/admin'
 import type { BusinessWithOwner } from '@/lib/types/database'
 
 interface Props {
   initialBusinesses: BusinessWithOwner[]
 }
-
-type EditTarget = { id: string; name: string; stampsGoal: number }
 
 interface FormFieldsProps {
   name: string
@@ -75,7 +73,6 @@ export function BusinessesManager({ initialBusinesses }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const [createOpen, setCreateOpen] = useState(false)
-  const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<BusinessWithOwner | null>(null)
 
   const [name, setName] = useState('')
@@ -89,13 +86,6 @@ export function BusinessesManager({ initialBusinesses }: Props) {
     setCreateOpen(true)
   }
 
-  function openEdit(biz: BusinessWithOwner) {
-    setName(biz.name)
-    setStampsGoal(String(biz.stamps_goal))
-    setFormError(null)
-    setEditTarget({ id: biz.id, name: biz.name, stampsGoal: biz.stamps_goal })
-  }
-
   function handleCreate() {
     const goal = parseInt(stampsGoal)
     if (!name || !goal || goal < 1) return
@@ -104,19 +94,6 @@ export function BusinessesManager({ initialBusinesses }: Props) {
       const result = await createBusiness(name, goal)
       if (!result.success) { setFormError(result.error); return }
       setCreateOpen(false)
-      router.refresh()
-    })
-  }
-
-  function handleEdit() {
-    if (!editTarget) return
-    const goal = parseInt(stampsGoal)
-    if (!name || !goal || goal < 1) return
-    setFormError(null)
-    startTransition(async () => {
-      const result = await updateBusiness(editTarget.id, name, goal)
-      if (!result.success) { setFormError(result.error); return }
-      setEditTarget(null)
       router.refresh()
     })
   }
@@ -167,13 +144,13 @@ export function BusinessesManager({ initialBusinesses }: Props) {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => openEdit(biz)}
+                      <Link
+                        href={`/admin/businesses/${biz.id}` as never}
                         className="text-gray-400 hover:text-brand-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
                         aria-label={t('editTitle')}
                       >
                         <Pencil size={14} />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => setDeleteTarget(biz)}
                         className="text-gray-400 hover:text-red-500 min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -208,30 +185,6 @@ export function BusinessesManager({ initialBusinesses }: Props) {
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>{t('cancel')}</Button>
             <Button onClick={handleCreate} disabled={isPending || !name}>
-              {isPending ? t('saving') : t('save')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit dialog */}
-      <Dialog open={!!editTarget} onOpenChange={(open) => { if (!open) setEditTarget(null) }}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('editTitle')}</DialogTitle>
-          </DialogHeader>
-          <FormFields
-            name={name}
-            stampsGoal={stampsGoal}
-            formError={formError}
-            onNameChange={setName}
-            onStampsGoalChange={setStampsGoal}
-            nameLabel={t('nameLabel')}
-            stampsGoalLabel={t('stampsGoalLabel')}
-          />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditTarget(null)}>{t('cancel')}</Button>
-            <Button onClick={handleEdit} disabled={isPending || !name}>
               {isPending ? t('saving') : t('save')}
             </Button>
           </DialogFooter>
