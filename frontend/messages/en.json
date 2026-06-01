@@ -13,6 +13,7 @@
     "signOut": "Sign out",
     "profile": "Profile",
     "terms": "Terms and Conditions",
+    "contact": "Contact us",
     "menu": "Menu"
   },
   "auth": {
@@ -234,6 +235,18 @@
       "irreversible": "This action is irreversible and cannot be undone.",
       "cancel": "Cancel"
     }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Leave us a message and we'll get back to you.",
+    "emailLabel": "Your email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "How can we help you?",
+    "send": "Send message",
+    "sending": "Sending...",
+    "successTitle": "Message sent!",
+    "successDesc": "Thank you for reaching out. We'll get back to you soon.",
+    "errorGeneric": "Something went wrong. Please try again."
   },
   "admin": {
     "nav": {

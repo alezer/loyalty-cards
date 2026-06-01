@@ -113,6 +113,14 @@ export interface AdminMetrics {
   }>
 }
 
+export interface ContactMessage {
+  id: string
+  user_id: string | null
+  email: string
+  message: string
+  created_at: string
+}
+
 // RPC response from add_stamp()
 export interface AddStampResult {
   success: boolean
@@ -156,6 +164,12 @@ export type Database = {
         Row: Reward
         Insert: Omit<Reward, 'id' | 'reward_code' | 'created_at'>
         Update: Partial<Pick<Reward, 'is_redeemed' | 'redeemed_at' | 'staff_id_redeemer'>>
+        Relationships: []
+      }
+      contact_messages: {
+        Row: ContactMessage
+        Insert: Omit<ContactMessage, 'id' | 'created_at'>
+        Update: never
         Relationships: []
       }
     }
