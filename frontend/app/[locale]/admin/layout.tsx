@@ -34,7 +34,6 @@ export default async function AdminLayout({
   const tabs = [
     { href: '/admin/dashboard', label: t('dashboard') },
     { href: '/admin/businesses', label: t('businesses') },
-    { href: '/admin/users', label: t('users') },
   ]
 
   return <DashboardShell tabs={tabs}>{children}</DashboardShell>
