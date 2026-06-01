@@ -202,7 +202,7 @@ export default function BusinessDetailPage() {
           <img
             src={businessLogoUrl}
             alt=""
-            className="absolute top-4 right-4 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-md"
+            className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
           />
         )}
       </div>
