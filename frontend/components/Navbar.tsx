@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { QrCode, UserRound, FileText, LogOut, Menu } from 'lucide-react'
+import { QrCode, UserRound, FileText, Mail, LogOut, Menu } from 'lucide-react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { LanguageSelector } from './LanguageSelector'
 import { createClient } from '@/lib/supabase/client'
@@ -93,6 +93,14 @@ export function Navbar() {
                   >
                     <FileText size={15} className="text-gray-400" />
                     {t('terms')}
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Mail size={15} className="text-gray-400" />
+                    {t('contact')}
                   </Link>
                   <div className="my-1 border-t border-gray-100" />
                   <button

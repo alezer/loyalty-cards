@@ -13,6 +13,7 @@
     "signOut": "Cerrar sesión",
     "profile": "Perfil",
     "terms": "Términos y Condiciones",
+    "contact": "Contacto",
     "menu": "Menú"
   },
   "auth": {
@@ -234,6 +235,18 @@
       "irreversible": "Esta acción es irreversible y no se puede deshacer.",
       "cancel": "Cancelar"
     }
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Déjanos un mensaje y nos pondremos en contacto contigo.",
+    "emailLabel": "Tu correo electrónico",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "¿En qué podemos ayudarte?",
+    "send": "Enviar mensaje",
+    "sending": "Enviando...",
+    "successTitle": "¡Mensaje enviado!",
+    "successDesc": "Gracias por escribirnos. Nos pondremos en contacto contigo pronto.",
+    "errorGeneric": "Ha ocurrido un error. Inténtalo de nuevo."
   },
   "admin": {
     "nav": {
