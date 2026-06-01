@@ -40,7 +40,7 @@ export default function ContactPage() {
       user_id: user?.id ?? null,
       email: email.trim(),
       message: message.trim(),
-    })
+    } as never)
 
     setSending(false)
     if (dbError) {
