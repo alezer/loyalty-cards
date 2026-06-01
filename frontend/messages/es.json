@@ -122,6 +122,7 @@
       "rewardRedeemed": "¡Recompensa canjeada con éxito!",
       "errors": {
         "qr_invalid": "Código QR no válido",
+        "qr_expired": "Código QR expirado — pide al cliente que genere uno nuevo",
         "duplicate_scan": "Este cliente ya recibió un sello hace menos de 5 segundos",
         "unauthorized": "No autorizado",
         "not_staff": "No tienes permisos de personal",

@@ -122,6 +122,7 @@
       "rewardRedeemed": "Reward redeemed successfully!",
       "errors": {
         "qr_invalid": "Invalid QR code",
+        "qr_expired": "QR code expired — ask the customer to generate a new one",
         "duplicate_scan": "This customer was already stamped less than 5 seconds ago",
         "unauthorized": "Unauthorized",
         "not_staff": "You don't have staff permissions",

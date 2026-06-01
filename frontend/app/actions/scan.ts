@@ -1,11 +1,12 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { parseQR } from '@/lib/qr'
+import { parseQR, isQRExpired } from '@/lib/qr'
 import type { UserRole, AddStampResult } from '@/lib/types/database'
 
 export type ScanErrorCode =
   | 'qr_invalid'
+  | 'qr_expired'
   | 'duplicate_scan'
   | 'unauthorized'
   | 'not_staff'
@@ -35,6 +36,10 @@ export async function processScan(qrString: string): Promise<ScanResult> {
   const parsed = parseQR(qrString)
   if (parsed.type === 'invalid') {
     return { success: false, error: 'qr_invalid' }
+  }
+
+  if (isQRExpired(parsed.timestamp)) {
+    return { success: false, error: 'qr_expired' }
   }
 
   const supabase = await createClient()
