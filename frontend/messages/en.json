@@ -252,7 +252,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "businesses": "Businesses",
-      "users": "Users"
+      "users": "Users",
+      "messages": "Messages"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -310,6 +311,19 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Contact form submissions",
+      "noMessages": "No messages yet",
+      "date": "Date",
+      "email": "Email",
+      "message": "Message",
+      "deleteTitle": "Delete message",
+      "deleteDesc": "Delete this message from {email}? This cannot be undone.",
+      "cancel": "Cancel",
       "delete": "Delete",
       "deleting": "Deleting..."
     }
