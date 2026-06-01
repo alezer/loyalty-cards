@@ -17,7 +17,7 @@
   },
   "auth": {
     "title": "Bienvenido",
-    "subtitle": "Un QR. Sellos y premios en cada comercio.",
+    "subtitle": "Únete a tus comercios favoritos. Colecciona sellos. Gana premios.",
     "continueWithGoogle": "Continuar con Google",
     "continueWithEmail": "Continuar con email",
     "orDivider": "o",
@@ -100,7 +100,7 @@
       "noRewards": "No tienes premios disponibles",
       "rewardLabel": "Recompensa — muéstrala para canjearla",
       "stampsTab": "Mis Sellos",
-      "noStamps": "Aún no tienes sellos",
+      "noStamps": "Tu colección de sellos está vacía. Visita un comercio y muestra tu QR para empezar.",
       "navHome": "Inicio",
       "navStamps": "Mis Sellos",
       "navRewards": "Premios",
