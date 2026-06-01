@@ -9,9 +9,13 @@ CREATE TABLE contact_messages (
 
 ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 
--- Any authenticated user can submit a message
+-- Any authenticated or anonymous user can submit a message
 CREATE POLICY "contact_messages: authenticated insert"
   ON contact_messages FOR INSERT TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "contact_messages: anon insert"
+  ON contact_messages FOR INSERT TO anon
   WITH CHECK (true);
 
 -- Only admins can read messages

@@ -15,7 +15,6 @@ export default function ContactPage() {
 
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +23,6 @@ export default function ContactPage() {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user?.email) setEmail(user.email)
-      setLoading(false)
     })
   }, [])
 
@@ -48,14 +46,6 @@ export default function ContactPage() {
     } else {
       setSent(true)
     }
-  }
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-gray-400 text-sm">{tCommon('loading')}</p>
-      </main>
-    )
   }
 
   return (
