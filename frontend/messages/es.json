@@ -75,7 +75,6 @@
       "rewardsTitle": "Premios",
       "noRewards": "Sin premios aún",
       "tapToRedeem": "Toca para ver tus códigos QR",
-      "expiresIn": "Expira en",
       "rewardLabel": "Premio — muéstralo para canjearlo",
       "instagram": "Instagram",
       "noInfo": "Sin información disponible aún",
@@ -95,7 +94,6 @@
       "greeting": "¡Hola, {name}!",
       "stampTab": "Mi QR",
       "rewardsTab": "Premios",
-      "expiresIn": "Expira en",
       "generateNewQR": "Generar nuevo QR",
       "showToStaff": "Muéstralo en cualquiera de tus comercios para sellar o canjear premios.",
       "noRewards": "No tienes premios disponibles",
@@ -124,7 +122,6 @@
       "rewardRedeemed": "¡Recompensa canjeada con éxito!",
       "errors": {
         "qr_invalid": "Código QR no válido",
-        "qr_expired": "Código QR expirado — pide al cliente uno nuevo",
         "duplicate_scan": "Este cliente ya recibió un sello hace menos de 5 segundos",
         "unauthorized": "No autorizado",
         "not_staff": "No tienes permisos de personal",

@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { RefreshCw } from 'lucide-react'
-import { generateStampQR, generateRewardQR, QR_EXPIRY_MS, formatCountdown } from '@/lib/qr'
-
-const REFRESH_INTERVAL_MS = 5 * 1000
+import { generateStampQR, generateRewardQR } from '@/lib/qr'
 
 interface StampQRCardProps {
   customerId: string
@@ -39,41 +37,17 @@ export function StampQRCard({ customerId, generateNewLabel, showToStaffLabel }: 
 
 interface RewardQRCardProps {
   rewardCode: string
-  expiresInLabel: string
   rewardLabel: string
 }
 
-export function RewardQRCard({ rewardCode, expiresInLabel, rewardLabel }: RewardQRCardProps) {
-  const [qrValue, setQrValue] = useState(() => generateRewardQR(rewardCode))
-  const [generatedAt, setGeneratedAt] = useState(() => Date.now())
-  const [remainingMs, setRemainingMs] = useState(QR_EXPIRY_MS)
-
-  useEffect(() => {
-    const refreshTimer = setInterval(() => {
-      const now = Date.now()
-      setQrValue(generateRewardQR(rewardCode))
-      setGeneratedAt(now)
-      setRemainingMs(QR_EXPIRY_MS)
-    }, REFRESH_INTERVAL_MS)
-
-    const countdownTimer = setInterval(() => {
-      setRemainingMs(QR_EXPIRY_MS - (Date.now() - generatedAt))
-    }, 1000)
-
-    return () => {
-      clearInterval(refreshTimer)
-      clearInterval(countdownTimer)
-    }
-  }, [rewardCode, generatedAt])
+export function RewardQRCard({ rewardCode, rewardLabel }: RewardQRCardProps) {
+  const qrValue = generateRewardQR(rewardCode)
 
   return (
     <div className="flex flex-col items-center gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200">
       <div className="p-3 bg-white rounded-xl shadow-sm">
         <QRCodeSVG value={qrValue} size={180} level="M" />
       </div>
-      <p className="text-xs text-amber-700 font-medium">
-        {expiresInLabel}: {formatCountdown(remainingMs)}
-      </p>
       <p className="text-xs text-amber-600 text-center">{rewardLabel}</p>
     </div>
   )

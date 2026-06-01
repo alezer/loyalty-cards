@@ -1,51 +1,31 @@
 // QR string wire format:
-//   Stamp:  stamp:{customerId}:{unixMs}
-//   Reward: reward:{rewardCode}:{unixMs}
-//
-// Both carry a millisecond timestamp so scanners can reject QRs older than
-// QR_EXPIRY_MS (5 seconds), preventing screenshot replay attacks.
-
-export const QR_EXPIRY_MS = 5 * 1000
+//   Stamp:  stamp:{customerId}
+//   Reward: reward:{rewardCode}
 
 export function generateStampQR(customerId: string): string {
-  return `stamp:${customerId}:${Date.now()}`
+  return `stamp:${customerId}`
 }
 
 export function generateRewardQR(rewardCode: string): string {
-  return `reward:${rewardCode}:${Date.now()}`
+  return `reward:${rewardCode}`
 }
 
 export type ParsedQR =
-  | { type: 'stamp'; customerId: string; timestamp: number }
-  | { type: 'reward'; rewardCode: string; timestamp: number }
+  | { type: 'stamp'; customerId: string }
+  | { type: 'reward'; rewardCode: string }
   | { type: 'invalid' }
 
 export function parseQR(raw: string): ParsedQR {
   const parts = raw.split(':')
 
-  // UUIDs already contain hyphens but no colons, so splitting by ':' gives
-  // exactly 3 parts for both stamp and reward formats.
-  if (parts.length !== 3) return { type: 'invalid' }
+  if (parts.length !== 2) return { type: 'invalid' }
 
-  const [type, value, tsStr] = parts
-  const timestamp = parseInt(tsStr, 10)
+  const [type, value] = parts
 
-  if (isNaN(timestamp) || !value) return { type: 'invalid' }
+  if (!value) return { type: 'invalid' }
 
-  if (type === 'stamp') return { type: 'stamp', customerId: value, timestamp }
-  if (type === 'reward') return { type: 'reward', rewardCode: value, timestamp }
+  if (type === 'stamp') return { type: 'stamp', customerId: value }
+  if (type === 'reward') return { type: 'reward', rewardCode: value }
 
   return { type: 'invalid' }
-}
-
-export function isQRExpired(timestamp: number): boolean {
-  return Date.now() - timestamp > QR_EXPIRY_MS
-}
-
-/** Formats remaining seconds as MM:SS */
-export function formatCountdown(remainingMs: number): string {
-  const totalSeconds = Math.max(0, Math.ceil(remainingMs / 1000))
-  const m = Math.floor(totalSeconds / 60)
-  const s = totalSeconds % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
 }

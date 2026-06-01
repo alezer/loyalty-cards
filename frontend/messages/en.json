@@ -75,7 +75,6 @@
       "rewardsTitle": "Rewards",
       "noRewards": "No rewards yet",
       "tapToRedeem": "Tap to see your QR codes",
-      "expiresIn": "Expires in",
       "rewardLabel": "Reward — show to redeem",
       "instagram": "Instagram",
       "noInfo": "No information available yet",
@@ -95,7 +94,6 @@
       "greeting": "Hi, {name}!",
       "stampTab": "My QR",
       "rewardsTab": "Rewards",
-      "expiresIn": "Expires in",
       "generateNewQR": "Generate new QR",
       "showToStaff": "Show this QR at any of your shops to collect stamps or redeem rewards.",
       "noRewards": "No rewards available",
@@ -124,7 +122,6 @@
       "rewardRedeemed": "Reward redeemed successfully!",
       "errors": {
         "qr_invalid": "Invalid QR code",
-        "qr_expired": "QR code expired — ask the customer for a new one",
         "duplicate_scan": "This customer was already stamped less than 5 seconds ago",
         "unauthorized": "Unauthorized",
         "not_staff": "You don't have staff permissions",
