@@ -123,6 +123,22 @@ export async function deleteOwnerUser(userId: string): Promise<ActionResult> {
   return { success: true }
 }
 
+// ── Contact messages ──────────────────────────────────────────────────────────
+
+export async function deleteContactMessage(id: string): Promise<ActionResult> {
+  const auth = await requireAdmin()
+  if ('error' in auth) return { success: false, error: auth.error }
+
+  const { error } = (await supabaseAdmin
+    .from('contact_messages')
+    .delete()
+    .eq('id', id)) as unknown as { error: { message: string } | null }
+
+  if (error) return { success: false, error: error.message }
+  revalidatePath('/admin/messages')
+  return { success: true }
+}
+
 export async function impersonateUser(
   userId: string,
 ): Promise<{ magicLink: string } | { error: string }> {

@@ -252,7 +252,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "businesses": "Comercios",
-      "users": "Usuarios"
+      "users": "Usuarios",
+      "messages": "Mensajes"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -310,6 +311,19 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "saving": "Guardando...",
+      "delete": "Eliminar",
+      "deleting": "Eliminando..."
+    },
+    "messages": {
+      "title": "Mensajes",
+      "subtitle": "Envíos del formulario de contacto",
+      "noMessages": "No hay mensajes aún",
+      "date": "Fecha",
+      "email": "Email",
+      "message": "Mensaje",
+      "deleteTitle": "Eliminar mensaje",
+      "deleteDesc": "¿Eliminar este mensaje de {email}? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
       "delete": "Eliminar",
       "deleting": "Eliminando..."
     }
