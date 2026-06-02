@@ -38,6 +38,7 @@ export async function processScan(qrString: string): Promise<ScanResult> {
     return { success: false, error: 'qr_invalid' }
   }
 
+  // 2. Validate timestamp — reject QRs older than 5 minutes (screenshot replay guard)
   if (isQRExpired(parsed.timestamp)) {
     return { success: false, error: 'qr_expired' }
   }

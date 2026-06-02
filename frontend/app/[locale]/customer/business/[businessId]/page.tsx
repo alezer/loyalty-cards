@@ -452,6 +452,7 @@ export default function BusinessDetailPage() {
               <RewardQRCard
                 key={reward.id}
                 rewardCode={reward.reward_code}
+                expiresInLabel={t('expiresIn')}
                 rewardLabel={t('rewardLabel')}
               />
             ))}
