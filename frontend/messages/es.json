@@ -171,6 +171,9 @@
       "stampDate": "Fecha",
       "stampBy": "Puesto por"
     },
+    "scan": {
+      "title": "Escanear"
+    },
     "news": {
       "title": "Noticias",
       "subtitle": "Publica novedades y anuncios para tus clientes",

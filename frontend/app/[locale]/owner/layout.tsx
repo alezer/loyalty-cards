@@ -36,6 +36,7 @@ export default async function OwnerLayout({
     { href: '/owner/team', label: t('team.title') },
     { href: '/owner/clients', label: t('clients.title') },
     { href: '/owner/news', label: t('news.title') },
+    { href: '/owner/scan', label: t('scan.title') },
   ]
 
   return <DashboardShell tabs={tabs}>{children}</DashboardShell>
