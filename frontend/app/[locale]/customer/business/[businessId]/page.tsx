@@ -128,6 +128,10 @@ export default function BusinessDetailPage() {
           .order('created_at', { ascending: false })
 
         setRewards((rewardData as unknown as Reward[]) ?? [])
+
+        if (fromHome && (card.stamps_count > 0 || (rewardData && rewardData.length > 0))) {
+          setActiveTab('stamps')
+        }
       } else {
         const { data: bizData } = await supabase
           .from('businesses')
@@ -192,16 +196,12 @@ export default function BusinessDetailPage() {
     ? `https://instagram.com/${businessInstagram.replace('@', '')}`
     : null
 
-  const tabs: { id: Tab; label: string }[] = fromHome
-    ? [
-        { id: 'news', label: t('tabNews') },
-        { id: 'info', label: t('tabInfo') },
-      ]
-    : [
-        { id: 'stamps', label: t('tabStamps') },
-        { id: 'news', label: t('tabNews') },
-        { id: 'info', label: t('tabInfo') },
-      ]
+  const hasStampsOrRewards = stampsCount > 0 || rewards.length > 0
+  const tabs: { id: Tab; label: string }[] = [
+    ...(!fromHome || hasStampsOrRewards ? [{ id: 'stamps' as Tab, label: t('tabStamps') }] : []),
+    { id: 'news', label: t('tabNews') },
+    { id: 'info', label: t('tabInfo') },
+  ]
 
   if (loading) {
     return (
