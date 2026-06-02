@@ -171,6 +171,9 @@
       "stampDate": "Date",
       "stampBy": "Stamped by"
     },
+    "scan": {
+      "title": "Scan"
+    },
     "news": {
       "title": "News",
       "subtitle": "Publish updates and announcements for your customers",

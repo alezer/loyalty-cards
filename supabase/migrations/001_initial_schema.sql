@@ -269,9 +269,9 @@ BEGIN
   FROM   profiles
   WHERE  id = auth.uid();
 
-  -- Only staff of the correct business (or admin) may add stamps
+  -- Only staff or owner of the correct business (or admin) may add stamps
   IF NOT (
-       (v_caller_role = 'staff' AND v_caller_biz = p_business_id)
+       (v_caller_role IN ('staff', 'owner') AND v_caller_biz = p_business_id)
     OR  v_caller_role = 'admin'
   ) THEN
     RAISE EXCEPTION 'No autorizado: solo el staff del comercio puede agregar sellos'
@@ -425,6 +425,18 @@ CREATE POLICY "stamps: staff insert own business"
   ON stamps_log FOR INSERT TO authenticated
   WITH CHECK (
     get_my_role() = 'staff'
+    AND staff_id = auth.uid()
+    AND EXISTS (
+      SELECT 1 FROM loyalty_cards lc
+      WHERE lc.id          = card_id
+        AND lc.business_id = get_my_business_id()
+    )
+  );
+
+CREATE POLICY "stamps: owner insert own business"
+  ON stamps_log FOR INSERT TO authenticated
+  WITH CHECK (
+    get_my_role() = 'owner'
     AND staff_id = auth.uid()
     AND EXISTS (
       SELECT 1 FROM loyalty_cards lc
