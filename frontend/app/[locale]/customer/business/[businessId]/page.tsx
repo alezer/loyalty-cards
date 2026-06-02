@@ -6,7 +6,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { ChevronLeft, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
-import type { BusinessOpeningHours } from '@/lib/types/database'
+import type { BusinessOpeningHours, BusinessNews } from '@/lib/types/database'
 import {
   Drawer,
   DrawerContent,
@@ -69,6 +69,7 @@ export default function BusinessDetailPage() {
   const [businessLogoUrl, setBusinessLogoUrl] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [qrModalOpen, setQrModalOpen] = useState(false)
+  const [news, setNews] = useState<BusinessNews[]>([])
 
   useEffect(() => {
     const supabase = createClient()
@@ -143,6 +144,14 @@ export default function BusinessDetailPage() {
           setBusinessLogoUrl(biz.logo_url)
         }
       }
+
+      const { data: newsData } = await supabase
+        .from('business_news')
+        .select('id, business_id, title, description, created_at, updated_at')
+        .eq('business_id', businessId)
+        .order('created_at', { ascending: false })
+
+      setNews((newsData as unknown as BusinessNews[]) ?? [])
 
       setLoading(false)
     }
@@ -296,9 +305,26 @@ export default function BusinessDetailPage() {
 
         {/* News tab */}
         {activeTab === 'news' && (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-            <p className="text-sm">{t('noNews')}</p>
-          </div>
+          news.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+              <p className="text-sm">{t('noNews')}</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {news.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-xl border border-gray-100 px-5 py-4 shadow-sm"
+                >
+                  <p className="font-semibold text-gray-900">{item.title}</p>
+                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-line">{item.description}</p>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(item.created_at))}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )
         )}
 
         {/* Information tab */}
