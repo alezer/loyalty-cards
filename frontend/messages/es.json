@@ -200,6 +200,7 @@
     },
     "business": {
       "title": "Mi Comercio",
+      "information": "Información",
       "subtitle": "Gestiona la información de tu comercio",
       "noBusiness": "No tienes un comercio asignado. Contacta a un administrador.",
       "saved": "Cambios guardados",
