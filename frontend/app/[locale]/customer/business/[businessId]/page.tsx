@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
-import type { BusinessOpeningHours } from '@/lib/types/database'
+import { ChevronLeft, ChevronDown, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
+import type { BusinessOpeningHours, BusinessNews } from '@/lib/types/database'
 import {
   Drawer,
   DrawerContent,
@@ -69,6 +69,17 @@ export default function BusinessDetailPage() {
   const [businessLogoUrl, setBusinessLogoUrl] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [qrModalOpen, setQrModalOpen] = useState(false)
+  const [news, setNews] = useState<BusinessNews[]>([])
+  const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
+
+  function toggleNews(id: string) {
+    setExpandedNews((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
 
   useEffect(() => {
     const supabase = createClient()
@@ -143,6 +154,14 @@ export default function BusinessDetailPage() {
           setBusinessLogoUrl(biz.logo_url)
         }
       }
+
+      const { data: newsData } = await supabase
+        .from('business_news')
+        .select('id, business_id, title, description, created_at, updated_at')
+        .eq('business_id', businessId)
+        .order('created_at', { ascending: false })
+
+      setNews((newsData as unknown as BusinessNews[]) ?? [])
 
       setLoading(false)
     }
@@ -296,9 +315,38 @@ export default function BusinessDetailPage() {
 
         {/* News tab */}
         {activeTab === 'news' && (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-            <p className="text-sm">{t('noNews')}</p>
-          </div>
+          news.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+              <p className="text-sm">{t('noNews')}</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {news.map((item) => {
+                const expanded = expandedNews.has(item.id)
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => toggleNews(item.id)}
+                    className="w-full text-left bg-white rounded-xl border border-gray-100 px-5 py-4 shadow-sm active:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="font-semibold text-gray-900 leading-snug">{item.title}</p>
+                      <ChevronDown
+                        size={16}
+                        className={`shrink-0 mt-0.5 text-gray-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                      />
+                    </div>
+                    <p className={`text-sm text-gray-600 mt-1 whitespace-pre-line ${expanded ? '' : 'line-clamp-2'}`}>
+                      {item.description}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-2">
+                      {new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(item.created_at))}
+                    </p>
+                  </button>
+                )
+              })}
+            </div>
+          )
         )}
 
         {/* Information tab */}

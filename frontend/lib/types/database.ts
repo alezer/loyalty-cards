@@ -121,6 +121,15 @@ export interface ContactMessage {
   created_at: string
 }
 
+export interface BusinessNews {
+  id: string
+  business_id: string
+  title: string
+  description: string
+  created_at: string
+  updated_at: string
+}
+
 // RPC response from add_stamp()
 export interface AddStampResult {
   success: boolean
@@ -170,6 +179,12 @@ export type Database = {
         Row: ContactMessage
         Insert: Omit<ContactMessage, 'id' | 'created_at'>
         Update: never
+        Relationships: []
+      }
+      business_news: {
+        Row: BusinessNews
+        Insert: Omit<BusinessNews, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Pick<BusinessNews, 'title' | 'description'>>
         Relationships: []
       }
     }
