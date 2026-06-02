@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { Plus, Pencil, Trash2, Newspaper } from 'lucide-react'
+import { Plus, Pencil, Trash2, Newspaper, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -29,6 +29,7 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
+  const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<BusinessNews | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<BusinessNews | null>(null)
@@ -43,6 +44,15 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
       month: 'short',
       day: 'numeric',
     }).format(new Date(iso))
+
+  function toggleNews(id: string) {
+    setExpandedNews((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
 
   function resetForm() {
     setTitle('')
@@ -125,36 +135,45 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
         <p className="text-sm text-gray-400 text-center py-12">{t('noNews')}</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {initialNews.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-xl border border-gray-200 px-5 py-4 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">{item.title}</p>
-                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.description}</p>
+          {initialNews.map((item) => {
+            const expanded = expandedNews.has(item.id)
+            return (
+              <div key={item.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <button
+                  onClick={() => toggleNews(item.id)}
+                  className="w-full text-left px-5 pt-4 pb-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-semibold text-gray-900 leading-snug">{item.title}</p>
+                    <ChevronDown
+                      size={15}
+                      className={`shrink-0 mt-0.5 text-gray-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                    />
+                  </div>
+                  <p className={`text-sm text-gray-500 mt-1 ${expanded ? 'whitespace-pre-line' : 'line-clamp-2'}`}>
+                    {item.description}
+                  </p>
                   <p className="text-xs text-gray-400 mt-2">{formatDate(item.created_at)}</p>
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
+                </button>
+                <div className="flex items-center gap-1 px-3 pb-2 border-t border-gray-100 pt-2">
                   <button
                     onClick={() => openEdit(item)}
-                    className="text-gray-400 hover:text-brand-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="text-gray-400 hover:text-brand-600 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     aria-label={t('edit')}
                   >
-                    <Pencil size={15} />
+                    <Pencil size={14} />
                   </button>
                   <button
                     onClick={() => setDeleteTarget(item)}
-                    className="text-gray-400 hover:text-red-500 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="text-gray-400 hover:text-red-500 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                     aria-label={t('delete')}
                   >
-                    <Trash2 size={15} />
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
