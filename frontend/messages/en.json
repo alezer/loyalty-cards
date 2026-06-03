@@ -200,6 +200,7 @@
     },
     "business": {
       "title": "My Business",
+      "information": "Information",
       "subtitle": "Manage your business information",
       "noBusiness": "You don't have a business assigned. Contact an administrator.",
       "saved": "Changes saved",

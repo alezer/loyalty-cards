@@ -15,9 +15,10 @@ import type { ClientWithCard } from '@/lib/types/database'
 interface Props {
   clients: ClientWithCard[]
   locale: string
+  basePath?: string
 }
 
-export function ClientsTable({ clients, locale }: Props) {
+export function ClientsTable({ clients, locale, basePath = '/owner/business/clients' }: Props) {
   const t = useTranslations('owner.clients')
   const router = useRouter()
 
@@ -42,7 +43,7 @@ export function ClientsTable({ clients, locale }: Props) {
             <TableRow
               key={client.id}
               className="cursor-pointer hover:bg-gray-50"
-              onClick={() => router.push(`/owner/clients/${client.id}` as never)}
+              onClick={() => router.push(`${basePath}/${client.id}` as never)}
             >
               <TableCell className="font-medium">
                 {client.full_name ?? '—'}

@@ -33,9 +33,6 @@ export default async function OwnerLayout({
 
   const tabs = [
     { href: '/owner/business', label: t('business.title') },
-    { href: '/owner/team', label: t('team.title') },
-    { href: '/owner/clients', label: t('clients.title') },
-    { href: '/owner/news', label: t('news.title') },
     { href: '/owner/scan', label: t('scan.title') },
   ]
 
