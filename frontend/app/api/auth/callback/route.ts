@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
     .single()) as unknown as { data: { role: UserRole } | null }
   const appRole = profile?.role
   if (appRole === 'admin') return NextResponse.redirect(`${origin}/${locale}/admin/dashboard`)
-  if (appRole === 'owner') return NextResponse.redirect(`${origin}/${locale}/owner/team`)
+  if (appRole === 'owner') return NextResponse.redirect(`${origin}/${locale}/owner/business/information`)
   if (appRole === 'staff') return NextResponse.redirect(`${origin}/${locale}/staff/scan`)
 
   return NextResponse.redirect(`${origin}/${locale}/customer/qr`)
