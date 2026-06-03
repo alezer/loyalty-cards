@@ -13,6 +13,8 @@ export async function GET(request: NextRequest) {
   // Locale is forwarded as a query param by the sign-in helpers so we can
   // redirect back into the correct locale tree.
   const locale = searchParams.get('locale') ?? 'es'
+  // next=reset-password signals that this is a password-recovery callback.
+  const next = searchParams.get('next')
 
   if (!code) {
     return NextResponse.redirect(`${origin}/${locale}/login?error=missing_code`)
@@ -51,6 +53,11 @@ export async function GET(request: NextRequest) {
 
   if (!user) {
     return NextResponse.redirect(`${origin}/${locale}/login?error=no_session`)
+  }
+
+  // Password recovery — skip role logic and go straight to the reset page.
+  if (next === 'reset-password') {
+    return NextResponse.redirect(`${origin}/${locale}/reset-password`)
   }
 
   // Auto-assign customer role for new users; owners are created by admin only.

@@ -347,8 +347,17 @@ export default function LoginPage() {
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
-                  {formMode === 'register' && (
+                  {formMode === 'register' ? (
                     <p className="text-xs text-gray-400 px-1">{t('passwordHint')}</p>
+                  ) : (
+                    <div className="flex justify-end">
+                      <Link
+                        href="/forgot-password"
+                        className="text-xs text-brand-600 hover:underline py-1"
+                      >
+                        {t('forgotPassword')}
+                      </Link>
+                    </div>
                   )}
                 </div>
 

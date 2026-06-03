@@ -38,6 +38,7 @@
     "termsCheckboxLabel": "He leído y acepto los <link>Términos de Servicio</link>",
     "termsRequired": "Debes aceptar los Términos de Servicio para crear una cuenta",
     "viewTerms": "Términos de Servicio",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
       "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión",
@@ -262,6 +263,42 @@
       "description": "Esto eliminará permanentemente tu cuenta, sellos y premios. No podrás recuperar tus datos tras realizar esta acción.",
       "irreversible": "Esta acción es irreversible y no se puede deshacer.",
       "cancel": "Cancelar"
+    }
+  },
+  "forgotPassword": {
+    "title": "Recuperar contraseña",
+    "subtitle": "Introduce tu correo y te enviaremos el enlace de restablecimiento.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "submit": "Solicitar restablecimiento",
+    "submitting": "Enviando...",
+    "successTitle": "¡Solicitud recibida!",
+    "successDesc": "Hemos registrado tu solicitud. Te enviaremos el enlace de restablecimiento por correo en breve.",
+    "backToLogin": "Volver al inicio de sesión",
+    "errors": {
+      "invalidEmail": "Introduce un correo electrónico válido",
+      "generic": "Ha ocurrido un error. Inténtalo de nuevo."
+    }
+  },
+  "resetPassword": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Introduce y confirma tu nueva contraseña.",
+    "passwordLabel": "Nueva contraseña",
+    "passwordPlaceholder": "••••••••",
+    "confirmLabel": "Confirmar contraseña",
+    "confirmPlaceholder": "••••••••",
+    "passwordHint": "Mínimo 8 caracteres, al menos 1 letra y 1 número",
+    "submit": "Actualizar contraseña",
+    "submitting": "Actualizando...",
+    "successTitle": "¡Contraseña actualizada!",
+    "successDesc": "Tu contraseña ha sido restablecida. Serás redirigido al inicio de sesión.",
+    "requestNewLink": "Solicitar un nuevo enlace",
+    "errors": {
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "passwordNeedsLetterAndNumber": "La contraseña debe contener al menos 1 letra y 1 número",
+      "generic": "Ha ocurrido un error. Inténtalo de nuevo.",
+      "noSession": "El enlace ha caducado o no es válido. Solicita un nuevo enlace de restablecimiento."
     }
   },
   "contact": {
