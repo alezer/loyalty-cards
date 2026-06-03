@@ -38,6 +38,7 @@
     "termsCheckboxLabel": "I have read and agree to the <link>Terms of Service</link>",
     "termsRequired": "You must accept the Terms of Service to create an account",
     "viewTerms": "Terms of Service",
+    "forgotPassword": "Forgot your password?",
     "errors": {
       "invalidCredentials": "Incorrect email or password",
       "emailNotConfirmed": "Please confirm your email before signing in",
@@ -262,6 +263,42 @@
       "description": "This will permanently delete your account, stamps, and rewards. You will not be able to recover your data after this action.",
       "irreversible": "This action is irreversible and cannot be undone.",
       "cancel": "Cancel"
+    }
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "subtitle": "Enter your email and we'll send you a reset link.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@email.com",
+    "submit": "Request reset",
+    "submitting": "Sending...",
+    "successTitle": "Request received!",
+    "successDesc": "We've logged your request. You'll receive a password reset link by email shortly.",
+    "backToLogin": "Back to sign in",
+    "errors": {
+      "invalidEmail": "Please enter a valid email address",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "resetPassword": {
+    "title": "Set new password",
+    "subtitle": "Enter and confirm your new password.",
+    "passwordLabel": "New password",
+    "passwordPlaceholder": "••••••••",
+    "confirmLabel": "Confirm password",
+    "confirmPlaceholder": "••••••••",
+    "passwordHint": "At least 8 characters, with at least 1 letter and 1 number",
+    "submit": "Update password",
+    "submitting": "Updating...",
+    "successTitle": "Password updated!",
+    "successDesc": "Your password has been reset. You'll be redirected to sign in.",
+    "requestNewLink": "Request a new link",
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordNeedsLetterAndNumber": "Password must contain at least 1 letter and 1 number",
+      "generic": "Something went wrong. Please try again.",
+      "noSession": "The link has expired or is invalid. Please request a new reset link."
     }
   },
   "contact": {
