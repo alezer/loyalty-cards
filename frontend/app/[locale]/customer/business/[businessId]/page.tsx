@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, ChevronDown, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
+import { ChevronLeft, ChevronDown, ChevronRight, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
 import type { BusinessOpeningHours, BusinessNews } from '@/lib/types/database'
 import {
   Drawer,
@@ -60,6 +60,7 @@ export default function BusinessDetailPage() {
   const [stampsGoal, setStampsGoal] = useState<number>(10)
   const [rewards, setRewards] = useState<Reward[]>([])
   const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
+  const [currentRewardIndex, setCurrentRewardIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>(fromHome ? 'info' : 'stamps')
   const [businessAddress, setBusinessAddress] = useState<string | null>(null)
@@ -288,7 +289,7 @@ export default function BusinessDetailPage() {
             {/* Rewards card */}
             {rewards.length > 0 ? (
               <button
-                onClick={() => setRewardsModalOpen(true)}
+                onClick={() => { setCurrentRewardIndex(0); setRewardsModalOpen(true) }}
                 className="w-full text-left bg-amber-50 rounded-2xl p-5 border border-amber-200 hover:bg-amber-100 active:bg-amber-200 transition-colors"
               >
                 <div className="flex items-center justify-between">
@@ -483,7 +484,7 @@ export default function BusinessDetailPage() {
           onClick={() => setRewardsModalOpen(false)}
         >
           <div
-            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4 max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -496,14 +497,35 @@ export default function BusinessDetailPage() {
                 <X size={20} />
               </button>
             </div>
-            {rewards.map((reward) => (
-              <RewardQRCard
-                key={reward.id}
-                rewardCode={reward.reward_code}
-                expiresInLabel={t('expiresIn')}
-                rewardLabel={t('rewardLabel')}
-              />
-            ))}
+            <RewardQRCard
+              key={rewards[currentRewardIndex].id}
+              rewardCode={rewards[currentRewardIndex].reward_code}
+              expiresInLabel={t('expiresIn')}
+              rewardLabel={t('rewardLabel')}
+            />
+            {rewards.length > 1 && (
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setCurrentRewardIndex((i) => i - 1)}
+                  disabled={currentRewardIndex === 0}
+                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Previous reward"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <span className="text-sm text-gray-500">
+                  {currentRewardIndex + 1} / {rewards.length}
+                </span>
+                <button
+                  onClick={() => setCurrentRewardIndex((i) => i + 1)}
+                  disabled={currentRewardIndex === rewards.length - 1}
+                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Next reward"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
