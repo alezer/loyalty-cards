@@ -16,7 +16,7 @@ import {
 
 const RewardQRCard = dynamic(
   () => import('@/components/QRDisplay').then((m) => m.RewardQRCard),
-  { ssr: false, loading: () => <div className="w-[180px] h-[180px] bg-amber-100 rounded-xl animate-pulse" /> },
+  { ssr: false, loading: () => <div className="w-[180px] h-[180px] bg-brand-100 rounded-xl animate-pulse" /> },
 )
 
 const StampQRCard = dynamic(
@@ -288,14 +288,14 @@ export default function BusinessDetailPage() {
             {rewards.length > 0 ? (
               <button
                 onClick={() => { setCurrentRewardIndex(0); setRewardsModalOpen(true) }}
-                className="w-full text-left bg-amber-50 rounded-2xl p-5 border border-amber-200 hover:bg-amber-100 active:bg-amber-200 transition-colors"
+                className="w-full text-left bg-brand-50 rounded-2xl p-5 border border-brand-200 hover:bg-brand-100 active:bg-brand-200 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-amber-900">{t('rewardsTitle')}</h3>
-                    <p className="text-sm text-amber-700 mt-0.5">{t('tapToRedeem')}</p>
+                    <h3 className="font-semibold text-brand-900">{t('rewardsTitle')}</h3>
+                    <p className="text-sm text-brand-700 mt-0.5">{t('tapToRedeem')}</p>
                   </div>
-                  <span className="text-3xl font-bold text-amber-600 tabular-nums">{rewards.length}</span>
+                  <span className="text-3xl font-bold text-brand-600 tabular-nums">{rewards.length}</span>
                 </div>
               </button>
             ) : (

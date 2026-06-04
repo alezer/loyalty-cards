@@ -67,14 +67,14 @@ export function RewardQRCard({ rewardCode, expiresInLabel, rewardLabel }: Reward
   }, [rewardCode, generatedAt])
 
   return (
-    <div className="flex flex-col items-center gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200">
+    <div className="flex flex-col items-center gap-3 p-4 bg-brand-50 rounded-2xl border border-brand-200">
       <div className="p-3 bg-white rounded-xl shadow-sm">
         <QRCodeSVG value={qrValue} size={180} level="M" />
       </div>
-      <p className="text-xs text-amber-700 font-medium">
+      <p className="text-xs text-brand-700 font-medium">
         {expiresInLabel}: {formatCountdown(remainingMs)}
       </p>
-      <p className="text-xs text-amber-600 text-center">{rewardLabel}</p>
+      <p className="text-xs text-brand-600 text-center">{rewardLabel}</p>
     </div>
   )
 }
