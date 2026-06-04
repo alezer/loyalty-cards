@@ -44,7 +44,7 @@ async function uploadImage(
   if (error) return null
 
   const { data } = supabaseAdmin.storage.from('business-assets').getPublicUrl(path)
-  return data.publicUrl
+  return `${data.publicUrl}?t=${Date.now()}`
 }
 
 export async function saveBusinessDetails(formData: FormData): Promise<ActionResult> {
