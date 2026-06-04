@@ -4,6 +4,7 @@
     "error": "Ha ocurrido un error",
     "back": "Volver",
     "notLoggedIn": "No has iniciado sesión",
+    "goToLogin": "Ir al inicio de sesión",
     "save": "Guardar",
     "saving": "Guardando..."
   },

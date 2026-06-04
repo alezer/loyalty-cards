@@ -4,6 +4,7 @@
     "error": "An error occurred",
     "back": "Back",
     "notLoggedIn": "You are not logged in",
+    "goToLogin": "Go to login",
     "save": "Save",
     "saving": "Saving..."
   },
