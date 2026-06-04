@@ -243,6 +243,10 @@
     "namePlaceholder": "Tu nombre",
     "emailLabel": "Correo electrónico",
     "savedConfirmation": "Cambios guardados",
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Elige tu idioma preferido"
+    },
     "password": {
       "title": "Cambiar contraseña",
       "newLabel": "Nueva contraseña",
