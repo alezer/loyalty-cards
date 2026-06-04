@@ -69,6 +69,7 @@ export default function BusinessDetailPage() {
   const [businessImageUrl, setBusinessImageUrl] = useState<string | null>(null)
   const [businessLogoUrl, setBusinessLogoUrl] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [cardId, setCardId] = useState<string | null>(null)
   const [qrModalOpen, setQrModalOpen] = useState(false)
   const [news, setNews] = useState<BusinessNews[]>([])
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
@@ -112,6 +113,7 @@ export default function BusinessDetailPage() {
 
       if (card) {
         const biz = card.businesses
+        setCardId(card.id)
         setBusinessName(biz?.name ?? '—')
         setStampsCount(card.stamps_count)
         setStampsGoal(biz?.stamps_goal ?? 10)
@@ -173,6 +175,56 @@ export default function BusinessDetailPage() {
 
     fetchData()
   }, [businessId])
+
+  useEffect(() => {
+    if (!cardId) return
+    const supabase = createClient()
+
+    const channel = supabase
+      .channel(`card-${cardId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'loyalty_cards', filter: `id=eq.${cardId}` },
+        (payload) => {
+          setStampsCount((payload.new as { stamps_count: number }).stamps_count)
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'rewards', filter: `card_id=eq.${cardId}` },
+        (payload) => {
+          const reward = payload.new as Reward
+          setRewards((prev) => [reward, ...prev])
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'rewards', filter: `card_id=eq.${cardId}` },
+        (payload) => {
+          const updated = payload.new as { id: string; is_redeemed: boolean }
+          if (updated.is_redeemed) {
+            setRewards((prev) => prev.filter((r) => r.id !== updated.id))
+          }
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'business_news', filter: `business_id=eq.${businessId}` },
+        async () => {
+          const { data } = await supabase
+            .from('business_news')
+            .select('id, business_id, title, description, created_at, updated_at')
+            .eq('business_id', businessId)
+            .order('created_at', { ascending: false })
+          setNews((data as unknown as BusinessNews[]) ?? [])
+        },
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [cardId, businessId])
 
   const cycleCount = stampsGoal
     ? stampsCount === 0

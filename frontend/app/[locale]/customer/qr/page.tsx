@@ -62,6 +62,32 @@ export default function CustomerQRPage() {
   }, [activeTab])
 
   useEffect(() => {
+    if (!userId) return
+    const supabase = createClient()
+
+    const fetchCards = async () => {
+      const { data: cards } = await supabase
+        .from('loyalty_cards')
+        .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
+        .order('updated_at', { ascending: false })
+      if (cards) setLoyaltyCards(cards as unknown as LoyaltyCardEntry[])
+    }
+
+    const channel = supabase
+      .channel(`customer-cards-${userId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'loyalty_cards', filter: `customer_id=eq.${userId}` },
+        fetchCards,
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [userId])
+
+  useEffect(() => {
     const supabase = createClient()
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
