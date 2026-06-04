@@ -194,6 +194,7 @@ export default function BusinessDetailPage() {
         { event: 'UPDATE', schema: 'public', table: 'loyalty_cards', filter: `id=eq.${cardId}` },
         (payload) => {
           setStampsCount((payload.new as { stamps_count: number }).stamps_count)
+          setQrModalOpen(false)
         },
       )
       .on(

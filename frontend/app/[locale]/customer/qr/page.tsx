@@ -78,7 +78,10 @@ export default function CustomerQRPage() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'loyalty_cards', filter: `customer_id=eq.${userId}` },
-        fetchCards,
+        () => {
+          fetchCards()
+          setQrModalOpen(false)
+        },
       )
       .subscribe()
 
