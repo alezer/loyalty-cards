@@ -226,6 +226,15 @@ export default function BusinessDetailPage() {
     }
   }, [cardId, businessId])
 
+  useEffect(() => {
+    if (rewards.length === 0) {
+      setRewardsModalOpen(false)
+      setCurrentRewardIndex(0)
+    } else if (currentRewardIndex >= rewards.length) {
+      setCurrentRewardIndex(rewards.length - 1)
+    }
+  }, [rewards.length]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const cycleCount = stampsGoal
     ? stampsCount === 0
       ? 0
@@ -528,7 +537,7 @@ export default function BusinessDetailPage() {
       </Drawer>
 
       {/* Rewards modal */}
-      {rewardsModalOpen && (
+      {rewardsModalOpen && rewards.length > 0 && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
           onClick={() => setRewardsModalOpen(false)}
