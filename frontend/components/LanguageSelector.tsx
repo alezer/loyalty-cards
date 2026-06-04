@@ -8,6 +8,7 @@ import { usePathname, useRouter } from '@/i18n/navigation'
 const LOCALES = [
   { code: 'es', nativeName: 'Español' },
   { code: 'en', nativeName: 'English' },
+  { code: 'ca', nativeName: 'Català' },
 ] as const
 
 export function LanguageSelector() {
