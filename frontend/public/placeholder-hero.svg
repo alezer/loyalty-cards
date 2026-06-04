@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 160">
+  <!-- sky -->
+  <rect width="600" height="160" fill="#f1f5f9"/>
+  <!-- ground -->
+  <rect y="125" width="600" height="35" fill="#e2e8f0"/>
+
+  <!-- Left building -->
+  <rect x="60" y="55" width="110" height="70" rx="2" fill="#cbd5e1"/>
+  <rect x="75" y="68" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="110" y="68" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="145" y="68" width="18" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="93" y="98" width="32" height="27" rx="1" fill="#94a3b8"/>
+
+  <!-- Center main store -->
+  <rect x="210" y="30" width="180" height="95" rx="2" fill="#94a3b8"/>
+  <!-- Awning -->
+  <rect x="210" y="70" width="180" height="16" fill="#64748b"/>
+  <!-- Sign area -->
+  <rect x="230" y="40" width="140" height="24" rx="2" fill="#7c8a9e"/>
+  <!-- Door -->
+  <rect x="267" y="93" width="66" height="32" rx="1" fill="#475569"/>
+  <!-- Left window -->
+  <rect x="220" y="93" width="38" height="23" rx="1" fill="#b0bec9"/>
+  <!-- Right window -->
+  <rect x="342" y="93" width="38" height="23" rx="1" fill="#b0bec9"/>
+
+  <!-- Right building -->
+  <rect x="430" y="45" width="110" height="80" rx="2" fill="#cbd5e1"/>
+  <rect x="445" y="58" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="480" y="58" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="515" y="58" width="18" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="445" y="88" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="480" y="88" width="25" height="22" rx="1" fill="#94a3b8"/>
+  <rect x="457" y="100" width="32" height="25" rx="1" fill="#94a3b8"/>
+</svg>

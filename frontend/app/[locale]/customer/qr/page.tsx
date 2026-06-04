@@ -143,7 +143,7 @@ export default function CustomerQRPage() {
                       className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                     >
                       <img
-                        src={biz.image_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
+                        src={biz.image_url ?? '/placeholder-hero.svg'}
                         alt={biz.name}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
@@ -206,7 +206,7 @@ export default function CustomerQRPage() {
                       className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
                     >
                       <img
-                        src={imageUrl ?? `https://picsum.photos/seed/${card.business_id}/600/160`}
+                        src={imageUrl ?? '/placeholder-hero.svg'}
                         alt={card.businesses?.name ?? ''}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
