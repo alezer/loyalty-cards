@@ -216,13 +216,11 @@ export default function BusinessDetailPage() {
     <main className="min-h-screen bg-gray-50">
       {/* Hero image */}
       <div className="relative h-56 bg-gradient-to-br from-brand-400 to-brand-700 overflow-hidden">
-        {businessImageUrl && (
-          <img
-            src={businessImageUrl}
-            alt={businessName}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
+        <img
+          src={businessImageUrl ?? '/placeholder-hero.svg'}
+          alt={businessName}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <button
           onClick={handleBack}
           className="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-black/30 flex items-center justify-center text-white backdrop-blur-sm active:scale-95 transition-transform"
@@ -235,13 +233,11 @@ export default function BusinessDetailPage() {
         <h1 className="absolute bottom-5 left-5 text-white text-2xl font-bold drop-shadow-md">
           {businessName}
         </h1>
-        {businessLogoUrl && (
-          <img
-            src={businessLogoUrl}
-            alt=""
-            className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
-          />
-        )}
+        <img
+          src={businessLogoUrl ?? '/placeholder-logo.svg'}
+          alt=""
+          className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
+        />
       </div>
 
       {/* Tab bar */}
