@@ -149,11 +149,13 @@ export default function CustomerQRPage() {
                       />
                       {/* Gradient overlay for text legibility */}
                       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
-                      <img
-                        src={biz.logo_url ?? '/placeholder-logo.svg'}
-                        alt=""
-                        className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
-                      />
+                      {biz.logo_url && (
+                        <img
+                          src={biz.logo_url}
+                          alt=""
+                          className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        />
+                      )}
 
                       {/* Top-right stamp + reward badges (only when the customer has a card) */}
                       {card && (
@@ -209,11 +211,13 @@ export default function CustomerQRPage() {
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
-                      <img
-                        src={logoUrl ?? '/placeholder-logo.svg'}
-                        alt=""
-                        className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
-                      />
+                      {logoUrl && (
+                        <img
+                          src={logoUrl}
+                          alt=""
+                          className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        />
+                      )}
 
                       {/* Top-right stamp + reward badges */}
                       <div className="absolute top-3 right-3 flex items-center gap-2">

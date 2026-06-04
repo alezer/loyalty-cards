@@ -233,11 +233,13 @@ export default function BusinessDetailPage() {
         <h1 className="absolute bottom-5 left-5 text-white text-2xl font-bold drop-shadow-md">
           {businessName}
         </h1>
-        <img
-          src={businessLogoUrl ?? '/placeholder-logo.svg'}
-          alt=""
-          className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
-        />
+        {businessLogoUrl && (
+          <img
+            src={businessLogoUrl}
+            alt=""
+            className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
+          />
+        )}
       </div>
 
       {/* Tab bar */}
