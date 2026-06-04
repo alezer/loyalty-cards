@@ -62,7 +62,10 @@ export async function saveBusinessDetails(formData: FormData): Promise<ActionRes
   const reward = formData.get('reward') as string | null
 
   updates.address = address?.trim() || null
-  updates.instagram = instagram?.trim() || null
+  const instagramTrimmed = instagram?.trim() || null
+  updates.instagram = instagramTrimmed
+    ? instagramTrimmed.replace(/^https?:\/\/(www\.)?instagram\.com\/?/, '').replace(/\/$/, '') || null
+    : null
   updates.reward = reward?.trim() || null
 
   const hours: BusinessOpeningHours = {
