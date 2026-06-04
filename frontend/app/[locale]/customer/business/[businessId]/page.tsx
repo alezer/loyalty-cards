@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -73,6 +73,13 @@ export default function BusinessDetailPage() {
   const [qrModalOpen, setQrModalOpen] = useState(false)
   const [news, setNews] = useState<BusinessNews[]>([])
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
+  const [hasUnreadNews, setHasUnreadNews] = useState(false)
+  const activeTabRef = useRef<Tab>(activeTab)
+
+  useEffect(() => {
+    activeTabRef.current = activeTab
+    if (activeTab === 'news') setHasUnreadNews(false)
+  }, [activeTab])
 
   function toggleNews(id: string) {
     setExpandedNews((prev) => {
@@ -210,13 +217,16 @@ export default function BusinessDetailPage() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'business_news', filter: `business_id=eq.${businessId}` },
-        async () => {
+        async (payload) => {
           const { data } = await supabase
             .from('business_news')
             .select('id, business_id, title, description, created_at, updated_at')
             .eq('business_id', businessId)
             .order('created_at', { ascending: false })
           setNews((data as unknown as BusinessNews[]) ?? [])
+          if (payload.eventType === 'INSERT' && activeTabRef.current !== 'news') {
+            setHasUnreadNews(true)
+          }
         },
       )
       .subscribe()
@@ -315,7 +325,12 @@ export default function BusinessDetailPage() {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            {label}
+            <span className="relative inline-block">
+              {label}
+              {id === 'news' && hasUnreadNews && (
+                <span className="absolute -top-1 -right-3 w-2 h-2 rounded-full bg-red-500" />
+              )}
+            </span>
           </button>
         ))}
       </div>
