@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Home, Stamp, QrCode, Gift } from 'lucide-react'
 import {
@@ -44,6 +44,7 @@ export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
   const tCommon = useTranslations('common')
   const locale = useLocale()
+  const router = useRouter()
   const searchParams = useSearchParams()
 
   const [userId, setUserId] = useState<string | null>(null)
@@ -65,7 +66,7 @@ export default function CustomerQRPage() {
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) {
-        setLoading(false)
+        router.replace(`/${locale}/login`)
         return
       }
 
@@ -100,9 +101,9 @@ export default function CustomerQRPage() {
   if (!userId) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-3">
-        <p className="text-gray-500">Login</p>
-        <Link href={`/${locale}/login`} className="text-brand-600 hover:underline font-medium">
-          Login
+        <p className="text-gray-400 animate-pulse">{tCommon('loading')}</p>
+        <Link href={`/${locale}/login`} className="text-brand-600 hover:underline font-medium text-sm">
+          {tCommon('goToLogin')}
         </Link>
       </div>
     )
