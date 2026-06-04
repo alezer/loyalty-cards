@@ -5,7 +5,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { RefreshCw } from 'lucide-react'
 import { generateStampQR, generateRewardQR, QR_EXPIRY_MS, formatCountdown } from '@/lib/qr'
 
-const REFRESH_INTERVAL_MS = 20 * 1000
+const REFRESH_INTERVAL_MS = 60 * 1000
 
 interface StampQRCardProps {
   customerId: string
