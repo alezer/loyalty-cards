@@ -50,13 +50,24 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
   )
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [logoError, setLogoError] = useState<string | null>(null)
+  const [imageError, setImageError] = useState<string | null>(null)
 
   function handleImageChange(
     e: React.ChangeEvent<HTMLInputElement>,
     setPreview: (url: string | null) => void,
+    maxSizeMB: number,
+    errorKey: 'errorLogoTooLarge' | 'errorImageTooLarge',
+    setFieldError: (msg: string | null) => void,
   ) {
     const file = e.target.files?.[0]
     if (!file) return
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      e.target.value = ''
+      setFieldError(t(errorKey))
+      return
+    }
+    setFieldError(null)
     const url = URL.createObjectURL(file)
     setPreview(url)
   }
@@ -136,19 +147,22 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
                   <Building2 size={24} />
                 </div>
               )}
-              <label className="cursor-pointer">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
-                  <Upload size={13} />
-                  {logoPreview ? t('changeImage') : t('selectImage')}
-                </span>
-                <input
-                  type="file"
-                  name="logo"
-                  accept="image/*"
-                  className="sr-only"
-                  onChange={(e) => handleImageChange(e, setLogoPreview)}
-                />
-              </label>
+              <div className="flex flex-col gap-1">
+                <label className="cursor-pointer">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
+                    <Upload size={13} />
+                    {logoPreview ? t('changeImage') : t('selectImage')}
+                  </span>
+                  <input
+                    type="file"
+                    name="logo"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={(e) => handleImageChange(e, setLogoPreview, 1, 'errorLogoTooLarge', setLogoError)}
+                  />
+                </label>
+                {logoError && <p className="text-xs text-red-500">{logoError}</p>}
+              </div>
             </div>
           </div>
         </div>
@@ -278,19 +292,22 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
                 className="w-full max-w-sm h-40 rounded-xl object-cover border border-gray-200"
               />
             )}
-            <label className="cursor-pointer inline-block">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
-                <Upload size={13} />
-                {imagePreview ? t('changeImage') : t('selectImage')}
-              </span>
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                className="sr-only"
-                onChange={(e) => handleImageChange(e, setImagePreview)}
-              />
-            </label>
+            <div className="flex flex-col gap-1">
+              <label className="cursor-pointer inline-block">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
+                  <Upload size={13} />
+                  {imagePreview ? t('changeImage') : t('selectImage')}
+                </span>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(e) => handleImageChange(e, setImagePreview, 5, 'errorImageTooLarge', setImageError)}
+                />
+              </label>
+              {imageError && <p className="text-xs text-red-500">{imageError}</p>}
+            </div>
           </div>
         </div>
 

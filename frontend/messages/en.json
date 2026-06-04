@@ -206,6 +206,8 @@
       "noBusiness": "You don't have a business assigned. Contact an administrator.",
       "saved": "Changes saved",
       "errorGeneric": "Something went wrong. Please try again.",
+      "errorLogoTooLarge": "Logo must be smaller than 1 MB",
+      "errorImageTooLarge": "Business image must be smaller than 5 MB",
       "logoLabel": "Business Logo",
       "logoHint": "Square image recommended",
       "nameLabel": "Business name",

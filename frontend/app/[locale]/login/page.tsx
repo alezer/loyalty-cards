@@ -51,7 +51,7 @@ function AuthSkeleton() {
 
 function getDestination(appRole?: UserRole): string {
   if (appRole === 'admin') return '/admin/dashboard'
-  if (appRole === 'owner') return '/owner/team'
+  if (appRole === 'owner') return '/owner/business/information'
   if (appRole === 'staff') return '/staff/scan'
   return '/customer/qr'
 }
