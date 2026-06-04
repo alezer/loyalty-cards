@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { LanguageSelector } from '@/components/LanguageSelector'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -137,6 +138,15 @@ export default function ProfilePage() {
               <p className="text-sm text-green-600">{t('savedConfirmation')}</p>
             )}
           </form>
+        </section>
+
+        {/* Language */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4">
+          <div>
+            <h2 className="font-semibold text-gray-900">{t('language.title')}</h2>
+            <p className="text-sm text-gray-500 mt-0.5">{t('language.subtitle')}</p>
+          </div>
+          <LanguageSelector />
         </section>
 
         {/* Change password — only for email/password accounts */}

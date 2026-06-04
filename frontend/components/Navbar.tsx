@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { QrCode, UserRound, FileText, Mail, LogOut, Menu } from 'lucide-react'
 import { Link, useRouter } from '@/i18n/navigation'
-import { LanguageSelector } from './LanguageSelector'
 import { createClient } from '@/lib/supabase/client'
 
 export function Navbar() {
@@ -63,7 +62,6 @@ export function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-1">
-          <LanguageSelector />
           {isLoggedIn && (
             <div ref={menuRef} className="relative">
               <button
