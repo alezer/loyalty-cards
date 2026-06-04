@@ -32,7 +32,7 @@ export default async function HomePage({
 
   const appRole = user.user_metadata?.app_role as UserRole | undefined
   if (appRole === 'admin') redirect(`/${locale}/admin/dashboard`)
-  if (appRole === 'owner') redirect(`/${locale}/owner/team`)
+  if (appRole === 'owner') redirect(`/${locale}/owner/business/information`)
   if (appRole === 'staff') redirect(`/${locale}/staff/scan`)
 
   redirect(`/${locale}/customer/qr`)
