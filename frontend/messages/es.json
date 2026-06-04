@@ -206,6 +206,8 @@
       "noBusiness": "No tienes un comercio asignado. Contacta a un administrador.",
       "saved": "Cambios guardados",
       "errorGeneric": "Ha ocurrido un error. Inténtalo de nuevo.",
+      "errorLogoTooLarge": "El logo debe ser menor de 1 MB",
+      "errorImageTooLarge": "La imagen del comercio debe ser menor de 5 MB",
       "logoLabel": "Logo del comercio",
       "logoHint": "Se recomienda imagen cuadrada",
       "nameLabel": "Nombre del comercio",

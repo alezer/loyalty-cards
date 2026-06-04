@@ -54,9 +54,17 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
   function handleImageChange(
     e: React.ChangeEvent<HTMLInputElement>,
     setPreview: (url: string | null) => void,
+    maxSizeMB: number,
+    errorKey: 'errorLogoTooLarge' | 'errorImageTooLarge',
   ) {
     const file = e.target.files?.[0]
     if (!file) return
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      e.target.value = ''
+      setError(t(errorKey))
+      return
+    }
+    setError(null)
     const url = URL.createObjectURL(file)
     setPreview(url)
   }
@@ -146,7 +154,7 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
                   name="logo"
                   accept="image/*"
                   className="sr-only"
-                  onChange={(e) => handleImageChange(e, setLogoPreview)}
+                  onChange={(e) => handleImageChange(e, setLogoPreview, 1, 'errorLogoTooLarge')}
                 />
               </label>
             </div>
@@ -288,7 +296,7 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
                 name="image"
                 accept="image/*"
                 className="sr-only"
-                onChange={(e) => handleImageChange(e, setImagePreview)}
+                onChange={(e) => handleImageChange(e, setImagePreview, 5, 'errorImageTooLarge')}
               />
             </label>
           </div>
