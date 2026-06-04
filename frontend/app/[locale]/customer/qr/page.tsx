@@ -127,31 +127,58 @@ export default function CustomerQRPage() {
               <p className="text-gray-400 text-sm text-center mt-4">{t('noShops')}</p>
             ) : (
               <div className="flex flex-col gap-3">
-                {businesses.map((biz) => (
-                  <Link
-                    key={biz.id}
-                    href={`/${locale}/customer/business/${biz.id}?source=home`}
-                    className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
-                  >
-                    <img
-                      src={biz.image_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
-                      alt={biz.name}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    {/* Gradient overlay for text legibility */}
-                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
-                    {biz.logo_url && (
+                {businesses.map((biz) => {
+                  const card = loyaltyCards.find((c) => c.business_id === biz.id)
+                  const goal = card?.businesses?.stamps_goal
+                  const cycleCount = card && goal
+                    ? card.stamps_count % goal || goal
+                    : card?.stamps_count
+                  const unredeemedCount = card
+                    ? card.rewards.filter((r) => !r.is_redeemed).length
+                    : 0
+                  return (
+                    <Link
+                      key={biz.id}
+                      href={`/${locale}/customer/business/${biz.id}?source=home`}
+                      className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                    >
                       <img
-                        src={biz.logo_url}
-                        alt=""
-                        className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        src={biz.image_url ?? `https://picsum.photos/seed/${biz.id}/600/160`}
+                        alt={biz.name}
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
-                    )}
-                    <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
-                      {biz.name}
-                    </p>
-                  </Link>
-                ))}
+                      {/* Gradient overlay for text legibility */}
+                      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
+                      {biz.logo_url && (
+                        <img
+                          src={biz.logo_url}
+                          alt=""
+                          className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                        />
+                      )}
+
+                      {/* Top-right stamp + reward badges (only when the customer has a card) */}
+                      {card && (
+                        <div className="absolute top-3 right-3 flex items-center gap-2">
+                          <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
+                            <Stamp size={14} />
+                            {cycleCount}/{goal ?? '?'}
+                          </span>
+                          {unredeemedCount > 0 && (
+                            <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
+                              <Gift size={14} />
+                              {unredeemedCount}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
+                        {biz.name}
+                      </p>
+                    </Link>
+                  )
+                })}
               </div>
             )}
           </div>
