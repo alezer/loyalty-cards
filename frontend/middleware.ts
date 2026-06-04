@@ -38,6 +38,6 @@ export const config = {
     // Skip Next.js internals, static assets, and /api/ routes.
     // /api/ routes must be excluded so OAuth callbacks reach the route handler
     // without being intercepted by the locale middleware.
-    '/((?!_next/static|_next/image|api/|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|manifest)$).*)',
+    '/((?!_next/static|_next/image|api/|favicon.ico|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|manifest)$).*)',
   ],
 }
