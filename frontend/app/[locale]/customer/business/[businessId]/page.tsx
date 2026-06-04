@@ -63,6 +63,7 @@ export default function BusinessDetailPage() {
   const [currentRewardIndex, setCurrentRewardIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>(fromHome ? 'info' : 'stamps')
+  const touchStartXRef = useRef<number | null>(null)
   const [businessAddress, setBusinessAddress] = useState<string | null>(null)
   const [businessHours, setBusinessHours] = useState<BusinessOpeningHours | null>(null)
   const [businessInstagram, setBusinessInstagram] = useState<string | null>(null)
@@ -561,6 +562,15 @@ export default function BusinessDetailPage() {
           <div
             className="bg-white rounded-2xl p-6 w-full max-w-sm flex flex-col gap-4"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => { touchStartXRef.current = e.touches[0].clientX }}
+            onTouchEnd={(e) => {
+              if (touchStartXRef.current === null) return
+              const delta = touchStartXRef.current - e.changedTouches[0].clientX
+              if (Math.abs(delta) < 50) return
+              if (delta > 0 && currentRewardIndex < rewards.length - 1) setCurrentRewardIndex((i) => i + 1)
+              if (delta < 0 && currentRewardIndex > 0) setCurrentRewardIndex((i) => i - 1)
+              touchStartXRef.current = null
+            }}
           >
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-gray-900">{t('rewardsTitle')}</h2>
