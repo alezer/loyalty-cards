@@ -130,6 +130,13 @@ export interface BusinessNews {
   updated_at: string
 }
 
+export interface FavouriteBusiness {
+  id: string
+  customer_id: string
+  business_id: string
+  created_at: string
+}
+
 // RPC response from add_stamp()
 export interface AddStampResult {
   success: boolean
@@ -187,8 +194,14 @@ export type Database = {
         Update: Partial<Pick<BusinessNews, 'title' | 'description'>>
         Relationships: []
       }
+      favourite_businesses: {
+        Row: FavouriteBusiness
+        Insert: { customer_id: string; business_id: string }
+        Update: never
+        Relationships: []
+      }
     }
-    Views: Record<string, never>
+    Views: Record<never, never>
     Functions: {
       add_stamp: {
         Args: { p_customer_id: string; p_business_id: string }

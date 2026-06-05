@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Home, Stamp, QrCode, Gift, ChevronRight } from 'lucide-react'
+import { Home, Stamp, QrCode, Gift, ChevronRight, Heart } from 'lucide-react'
 import {
   Drawer,
   DrawerContent,
@@ -59,7 +59,6 @@ export default function CustomerQRPage() {
   const searchParams = useSearchParams()
 
   const [userId, setUserId] = useState<string | null>(null)
-  const [userName, setUserName] = useState<string | null>(null)
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [businesses, setBusinesses] = useState<BusinessEntry[]>([])
   const [rewardHistory, setRewardHistory] = useState<RewardEntry[]>([])
@@ -68,6 +67,7 @@ export default function CustomerQRPage() {
     searchParams.get('tab') === 'rewards' ? 'rewards' : 'home',
   )
   const [qrModalOpen, setQrModalOpen] = useState(false)
+  const [favourites, setFavourites] = useState<Set<string>>(new Set())
 
   const formatDate = (dateStr: string) =>
     new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
@@ -149,9 +149,7 @@ export default function CustomerQRPage() {
       }
 
       setUserId(user.id)
-      setUserName(user.user_metadata?.full_name ?? null)
-
-      const [{ data: cards }, { data: allBusinesses }, { data: rawRewards }] = await Promise.all([
+      const [{ data: cards }, { data: allBusinesses }, { data: rawRewards }, { data: favData }] = await Promise.all([
         supabase
           .from('loyalty_cards')
           .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
@@ -164,10 +162,14 @@ export default function CustomerQRPage() {
           .from('rewards')
           .select('id, is_redeemed, redeemed_at, created_at, loyalty_cards(business_id, businesses(name, logo_url, reward))')
           .order('created_at', { ascending: false }),
+        supabase
+          .from('favourite_businesses')
+          .select('business_id'),
       ])
 
       setLoyaltyCards((cards as unknown as LoyaltyCardEntry[]) ?? [])
       setBusinesses((allBusinesses as unknown as BusinessEntry[]) ?? [])
+      setFavourites(new Set(((favData ?? []) as Array<{ business_id: string }>).map((f) => f.business_id)))
 
       if (rawRewards) {
         const mapped: RewardEntry[] = (rawRewards as unknown as Array<{
@@ -196,6 +198,25 @@ export default function CustomerQRPage() {
     })
   }, [])
 
+  const toggleFavourite = async (e: React.MouseEvent, businessId: string) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const isFav = favourites.has(businessId)
+    setFavourites((prev) => {
+      const next = new Set(prev)
+      if (isFav) next.delete(businessId)
+      else next.add(businessId)
+      return next
+    })
+    const supabase = createClient()
+    if (isFav) {
+      await supabase.from('favourite_businesses').delete().eq('business_id', businessId)
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('favourite_businesses') as any).insert({ customer_id: userId!, business_id: businessId })
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -222,7 +243,7 @@ export default function CustomerQRPage() {
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
       <div className="pb-28 pt-10 px-4">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
-          {userName ? t('greeting', { name: userName }) : t('title')}
+          {t('title')}
         </h1>
 
         {/* Home tab */}
@@ -279,9 +300,19 @@ export default function CustomerQRPage() {
                         </div>
                       )}
 
-                      <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
+                      <p className="absolute bottom-3 left-4 right-12 text-white font-semibold text-base leading-tight">
                         {biz.name}
                       </p>
+                      <button
+                        onClick={(e) => toggleFavourite(e, biz.id)}
+                        className="absolute bottom-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm active:scale-90 transition-transform"
+                        aria-label={favourites.has(biz.id) ? 'Remove from favourites' : 'Add to favourites'}
+                      >
+                        <Heart
+                          size={16}
+                          className={favourites.has(biz.id) ? 'fill-red-500 text-red-500' : 'text-white'}
+                        />
+                      </button>
                     </Link>
                   )
                 })}
