@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Home, Stamp, QrCode, Gift } from 'lucide-react'
+import { Home, Stamp, QrCode, Gift, ChevronRight } from 'lucide-react'
 import {
   Drawer,
   DrawerContent,
@@ -38,7 +38,18 @@ interface BusinessEntry {
   logo_url: string | null
 }
 
-type Tab = 'home' | 'stamps'
+interface RewardEntry {
+  id: string
+  is_redeemed: boolean
+  redeemed_at: string | null
+  created_at: string
+  business_id: string
+  business_name: string
+  business_logo_url: string | null
+  business_reward: string | null
+}
+
+type Tab = 'home' | 'rewards'
 
 export default function CustomerQRPage() {
   const t = useTranslations('customer.qr')
@@ -51,11 +62,15 @@ export default function CustomerQRPage() {
   const [userName, setUserName] = useState<string | null>(null)
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [businesses, setBusinesses] = useState<BusinessEntry[]>([])
+  const [rewardHistory, setRewardHistory] = useState<RewardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<Tab>(
-    searchParams.get('tab') === 'stamps' ? 'stamps' : 'home',
+    searchParams.get('tab') === 'rewards' ? 'rewards' : 'home',
   )
   const [qrModalOpen, setQrModalOpen] = useState(false)
+
+  const formatDate = (dateStr: string) =>
+    new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -66,11 +81,43 @@ export default function CustomerQRPage() {
     const supabase = createClient()
 
     const fetchCards = async () => {
-      const { data: cards } = await supabase
-        .from('loyalty_cards')
-        .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
-        .order('updated_at', { ascending: false })
+      const [{ data: cards }, { data: rawRewards }] = await Promise.all([
+        supabase
+          .from('loyalty_cards')
+          .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
+          .order('updated_at', { ascending: false }),
+        supabase
+          .from('rewards')
+          .select('id, is_redeemed, redeemed_at, created_at, loyalty_cards(business_id, businesses(name, logo_url, reward))')
+          .order('created_at', { ascending: false }),
+      ])
+
       if (cards) setLoyaltyCards(cards as unknown as LoyaltyCardEntry[])
+
+      if (rawRewards) {
+        const mapped: RewardEntry[] = (rawRewards as unknown as Array<{
+          id: string
+          is_redeemed: boolean
+          redeemed_at: string | null
+          created_at: string
+          loyalty_cards: {
+            business_id: string
+            businesses: { name: string; logo_url: string | null; reward: string | null } | null
+          } | null
+        }>).map((r) => ({
+          id: r.id,
+          is_redeemed: r.is_redeemed,
+          redeemed_at: r.redeemed_at,
+          created_at: r.created_at,
+          business_id: r.loyalty_cards?.business_id ?? '',
+          business_name: r.loyalty_cards?.businesses?.name ?? '—',
+          business_logo_url: r.loyalty_cards?.businesses?.logo_url ?? null,
+          business_reward: r.loyalty_cards?.businesses?.reward ?? null,
+        }))
+        setRewardHistory(mapped)
+      }
+
+      setQrModalOpen(false)
     }
 
     const channel = supabase
@@ -78,10 +125,12 @@ export default function CustomerQRPage() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'loyalty_cards', filter: `customer_id=eq.${userId}` },
-        () => {
-          fetchCards()
-          setQrModalOpen(false)
-        },
+        () => { fetchCards() },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'rewards' },
+        () => { fetchCards() },
       )
       .subscribe()
 
@@ -102,7 +151,7 @@ export default function CustomerQRPage() {
       setUserId(user.id)
       setUserName(user.user_metadata?.full_name ?? null)
 
-      const [{ data: cards }, { data: allBusinesses }] = await Promise.all([
+      const [{ data: cards }, { data: allBusinesses }, { data: rawRewards }] = await Promise.all([
         supabase
           .from('loyalty_cards')
           .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
@@ -111,10 +160,38 @@ export default function CustomerQRPage() {
           .from('businesses')
           .select('id, name, image_url, logo_url')
           .order('name', { ascending: true }),
+        supabase
+          .from('rewards')
+          .select('id, is_redeemed, redeemed_at, created_at, loyalty_cards(business_id, businesses(name, logo_url, reward))')
+          .order('created_at', { ascending: false }),
       ])
 
       setLoyaltyCards((cards as unknown as LoyaltyCardEntry[]) ?? [])
       setBusinesses((allBusinesses as unknown as BusinessEntry[]) ?? [])
+
+      if (rawRewards) {
+        const mapped: RewardEntry[] = (rawRewards as unknown as Array<{
+          id: string
+          is_redeemed: boolean
+          redeemed_at: string | null
+          created_at: string
+          loyalty_cards: {
+            business_id: string
+            businesses: { name: string; logo_url: string | null; reward: string | null } | null
+          } | null
+        }>).map((r) => ({
+          id: r.id,
+          is_redeemed: r.is_redeemed,
+          redeemed_at: r.redeemed_at,
+          created_at: r.created_at,
+          business_id: r.loyalty_cards?.business_id ?? '',
+          business_name: r.loyalty_cards?.businesses?.name ?? '—',
+          business_logo_url: r.loyalty_cards?.businesses?.logo_url ?? null,
+          business_reward: r.loyalty_cards?.businesses?.reward ?? null,
+        }))
+        setRewardHistory(mapped)
+      }
+
       setLoading(false)
     })
   }, [])
@@ -138,9 +215,11 @@ export default function CustomerQRPage() {
     )
   }
 
+  const availableRewards = rewardHistory.filter((r) => !r.is_redeemed)
+  const redeemedRewards = rewardHistory.filter((r) => r.is_redeemed)
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
-      {/* Scrollable content — padded so it never hides behind the floating button + navbar */}
       <div className="pb-28 pt-10 px-4">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
           {userName ? t('greeting', { name: userName }) : t('title')}
@@ -176,7 +255,6 @@ export default function CustomerQRPage() {
                         alt={biz.name}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                      {/* Gradient overlay for text legibility */}
                       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
                       {biz.logo_url && (
                         <img
@@ -186,7 +264,6 @@ export default function CustomerQRPage() {
                         />
                       )}
 
-                      {/* Top-right stamp + reward badges (only when the customer has a card) */}
                       {card && (
                         <div className="absolute top-3 right-3 flex items-center gap-2">
                           <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
@@ -213,62 +290,102 @@ export default function CustomerQRPage() {
           </div>
         )}
 
-        {/* My Stamps tab */}
-        {activeTab === 'stamps' && (
+        {/* Rewards History tab */}
+        {activeTab === 'rewards' && (
           <div className="max-w-sm mx-auto">
-            {loyaltyCards.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center mt-4">{t('noStamps')}</p>
+            {rewardHistory.length === 0 ? (
+              <p className="text-gray-400 text-sm text-center mt-4">{t('noRewardsHistory')}</p>
             ) : (
-              <div className="flex flex-col gap-3">
-                {loyaltyCards.map((card) => {
-                  const goal = card.businesses?.stamps_goal
-                  const cycleCount = goal
-                    ? card.stamps_count % goal || goal
-                    : card.stamps_count
-                  const unredeemedCount = card.rewards.filter((r) => !r.is_redeemed).length
-                  const imageUrl = card.businesses?.image_url
-                  const logoUrl = card.businesses?.logo_url
-                  return (
-                    <Link
-                      key={card.business_id}
-                      href={`/${locale}/customer/business/${card.business_id}?source=stamps`}
-                      className="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
-                    >
-                      <img
-                        src={imageUrl ?? '/placeholder-hero.svg'}
-                        alt={card.businesses?.name ?? ''}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
-                      {logoUrl && (
-                        <img
-                          src={logoUrl}
-                          alt=""
-                          className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
-                        />
-                      )}
+              <>
+                {/* Available rewards */}
+                {availableRewards.length > 0 && (
+                  <div className="mb-6">
+                    <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1 flex items-center gap-2">
+                      {t('rewardsAvailable')}
+                      <span className="bg-brand-600 text-white text-xs font-bold rounded-full px-2 py-0.5 leading-none">
+                        {availableRewards.length}
+                      </span>
+                    </h2>
+                    <div className="flex flex-col gap-2">
+                      {availableRewards.map((reward) => (
+                        <Link
+                          key={reward.id}
+                          href={`/${locale}/customer/business/${reward.business_id}?source=rewards`}
+                          className="flex items-center gap-3 bg-brand-50 border border-brand-200 rounded-2xl px-4 py-3 active:scale-95 transition-transform"
+                        >
+                          {reward.business_logo_url ? (
+                            <img
+                              src={reward.business_logo_url}
+                              alt=""
+                              className="w-10 h-10 rounded-full object-cover shrink-0"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
+                              <Gift size={18} className="text-brand-600" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-900 text-sm truncate">{reward.business_name}</p>
+                            {reward.business_reward && (
+                              <p className="text-xs text-brand-700 truncate">{reward.business_reward}</p>
+                            )}
+                            <p className="text-xs text-gray-400 mt-0.5">
+                              {t('rewardsEarned')} {formatDate(reward.created_at)}
+                            </p>
+                          </div>
+                          <ChevronRight size={16} className="text-brand-400 shrink-0" />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-                      {/* Top-right stamp + reward badges */}
-                      <div className="absolute top-3 right-3 flex items-center gap-2">
-                        <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
-                          <Stamp size={14} />
-                          {cycleCount}/{goal ?? '?'}
-                        </span>
-                        {unredeemedCount > 0 && (
-                          <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
-                            <Gift size={14} />
-                            {unredeemedCount}
+                {/* Redeemed history */}
+                {redeemedRewards.length > 0 && (
+                  <div>
+                    <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
+                      {t('rewardsHistory')}
+                    </h2>
+                    <div className="flex flex-col gap-2">
+                      {redeemedRewards.map((reward) => (
+                        <div
+                          key={reward.id}
+                          className="flex items-center gap-3 bg-white border border-gray-100 rounded-2xl px-4 py-3"
+                        >
+                          {reward.business_logo_url ? (
+                            <img
+                              src={reward.business_logo_url}
+                              alt=""
+                              className="w-10 h-10 rounded-full object-cover shrink-0 opacity-50"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                              <Gift size={18} className="text-gray-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-500 text-sm truncate">{reward.business_name}</p>
+                            {reward.business_reward && (
+                              <p className="text-xs text-gray-400 truncate">{reward.business_reward}</p>
+                            )}
+                            <p className="text-xs text-gray-400 mt-0.5">
+                              {t('rewardsEarned')} {formatDate(reward.created_at)}
+                            </p>
+                            {reward.redeemed_at && (
+                              <p className="text-xs text-gray-400">
+                                {t('rewardsRedeemedOn')} {formatDate(reward.redeemed_at)}
+                              </p>
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-400 font-medium shrink-0">
+                            {t('rewardsStatusRedeemed')}
                           </span>
-                        )}
-                      </div>
-
-                      <p className="absolute bottom-3 left-4 right-4 text-white font-semibold text-base leading-tight">
-                        {card.businesses?.name ?? '—'}
-                      </p>
-                    </Link>
-                  )
-                })}
-              </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
@@ -289,13 +406,13 @@ export default function CustomerQRPage() {
           {/* Center spacer — the floating QR button sits here */}
           <div className="flex-1" />
 
-          {/* My Stamps */}
+          {/* Rewards */}
           <NavButton
-            active={activeTab === 'stamps'}
-            label={t('navStamps')}
-            onClick={() => setActiveTab('stamps')}
+            active={activeTab === 'rewards'}
+            label={t('navRewards')}
+            onClick={() => setActiveTab('rewards')}
           >
-            <Stamp size={20} />
+            <Gift size={20} />
           </NavButton>
 
           {/* Floating center QR button */}
