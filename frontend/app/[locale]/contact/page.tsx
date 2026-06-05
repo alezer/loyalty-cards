@@ -14,6 +14,7 @@ export default function ContactPage() {
   const tCommon = useTranslations('common')
 
   const [email, setEmail] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
@@ -22,7 +23,10 @@ export default function ContactPage() {
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user?.email) setEmail(user.email)
+      if (user?.email) {
+        setEmail(user.email)
+        setIsLoggedIn(true)
+      }
     })
   }, [])
 
@@ -77,6 +81,8 @@ export default function ContactPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                readOnly={isLoggedIn}
+                className={isLoggedIn ? 'bg-gray-50 text-gray-500 cursor-default' : ''}
                 required
               />
             </div>
