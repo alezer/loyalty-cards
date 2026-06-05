@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
@@ -68,6 +68,9 @@ export default function CustomerQRPage() {
   )
   const [qrModalOpen, setQrModalOpen] = useState(false)
   const [favourites, setFavourites] = useState<Set<string>>(new Set())
+  const [removingFavourites, setRemovingFavourites] = useState<Set<string>>(new Set())
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const pendingScrollToId = useRef<string | null>(null)
 
   const formatDate = (dateStr: string) =>
     new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
@@ -202,20 +205,32 @@ export default function CustomerQRPage() {
     e.preventDefault()
     e.stopPropagation()
     const isFav = favourites.has(businessId)
-    setFavourites((prev) => {
-      const next = new Set(prev)
-      if (isFav) next.delete(businessId)
-      else next.add(businessId)
-      return next
-    })
     const supabase = createClient()
     if (isFav) {
+      setRemovingFavourites((prev) => new Set(prev).add(businessId))
       await supabase.from('favourite_businesses').delete().eq('business_id', businessId)
+      setTimeout(() => {
+        setFavourites((prev) => { const next = new Set(prev); next.delete(businessId); return next })
+        setRemovingFavourites((prev) => { const next = new Set(prev); next.delete(businessId); return next })
+      }, 300)
     } else {
+      pendingScrollToId.current = businessId
+      setFavourites((prev) => new Set(prev).add(businessId))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('favourite_businesses') as any).insert({ customer_id: userId!, business_id: businessId })
     }
   }
+
+  useEffect(() => {
+    const id = pendingScrollToId.current
+    if (!id || !carouselRef.current) return
+    pendingScrollToId.current = null
+    const favouriteBusinesses = businesses.filter((b) => favourites.has(b.id))
+    const idx = favouriteBusinesses.findIndex((b) => b.id === id)
+    if (idx < 0) return
+    const child = carouselRef.current.children[idx] as HTMLElement | undefined
+    if (child) carouselRef.current.scrollTo({ left: child.offsetLeft, behavior: 'smooth' })
+  }, [favourites, businesses])
 
   if (loading) {
     return (
@@ -253,7 +268,7 @@ export default function CustomerQRPage() {
                   <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
                     {t('sectionFavourites')}
                   </h2>
-                  <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+                  <div ref={carouselRef} className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
                     {favouriteBusinesses.map((biz) => {
                       const card = loyaltyCards.find((c) => c.business_id === biz.id)
                       const goal = card?.businesses?.stamps_goal
@@ -267,7 +282,7 @@ export default function CustomerQRPage() {
                         <Link
                           key={biz.id}
                           href={`/${locale}/customer/business/${biz.id}?source=home`}
-                          className="relative h-40 w-60 shrink-0 snap-start rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                          className={`relative h-40 w-60 shrink-0 snap-start rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-all duration-300 ${removingFavourites.has(biz.id) ? 'opacity-0 scale-95' : 'opacity-100'}`}
                         >
                           <img
                             src={biz.image_url ?? '/placeholder-hero.svg'}
