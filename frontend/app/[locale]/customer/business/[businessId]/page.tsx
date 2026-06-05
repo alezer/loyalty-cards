@@ -350,7 +350,9 @@ export default function BusinessDetailPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="text-center mb-6">
                 <p className="text-base font-medium text-gray-700">
-                  {t('collectStamps', { goal: stampsGoal, reward: businessReward ?? '' })}
+                  {businessReward
+                    ? t('collectStamps', { goal: stampsGoal, reward: businessReward })
+                    : t('collectStampsNoReward', { goal: stampsGoal })}
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-2">

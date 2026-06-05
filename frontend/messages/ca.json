@@ -72,6 +72,7 @@
       "tabInfo": "Informació",
       "stampsCollected": "segells acumulats",
       "collectStamps": "Acumula {goal} segells i aconsegueix {reward}",
+      "collectStampsNoReward": "Acumula {goal} segells i aconsegueix una recompensa!",
       "address": "Adreça",
       "viewOnMaps": "Veure a Google Maps",
       "openingHours": "Horari d'obertura",
