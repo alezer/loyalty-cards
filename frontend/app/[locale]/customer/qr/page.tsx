@@ -59,7 +59,6 @@ export default function CustomerQRPage() {
   const searchParams = useSearchParams()
 
   const [userId, setUserId] = useState<string | null>(null)
-  const [userName, setUserName] = useState<string | null>(null)
   const [loyaltyCards, setLoyaltyCards] = useState<LoyaltyCardEntry[]>([])
   const [businesses, setBusinesses] = useState<BusinessEntry[]>([])
   const [rewardHistory, setRewardHistory] = useState<RewardEntry[]>([])
@@ -149,8 +148,6 @@ export default function CustomerQRPage() {
       }
 
       setUserId(user.id)
-      setUserName(user.user_metadata?.full_name ?? null)
-
       const [{ data: cards }, { data: allBusinesses }, { data: rawRewards }] = await Promise.all([
         supabase
           .from('loyalty_cards')
@@ -222,7 +219,7 @@ export default function CustomerQRPage() {
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
       <div className="pb-28 pt-10 px-4">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
-          {userName ? t('greeting', { name: userName }) : t('title')}
+          {t('title')}
         </h1>
 
         {/* Home tab */}
