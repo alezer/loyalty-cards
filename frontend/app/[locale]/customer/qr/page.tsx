@@ -253,7 +253,7 @@ export default function CustomerQRPage() {
                   <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
                     {t('sectionFavourites')}
                   </h2>
-                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
+                  <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
                     {favouriteBusinesses.map((biz) => {
                       const card = loyaltyCards.find((c) => c.business_id === biz.id)
                       const goal = card?.businesses?.stamps_goal
