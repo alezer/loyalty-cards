@@ -112,7 +112,13 @@
       "navTrend": "Tendència",
       "qrModalTitle": "Escanejar el meu QR",
       "sectionShops": "Comerços",
-      "noShops": "Encara no hi ha comerços disponibles"
+      "noShops": "Encara no hi ha comerços disponibles",
+      "rewardsAvailable": "Disponibles",
+      "rewardsHistory": "Historial",
+      "rewardsEarned": "Obtingut",
+      "rewardsRedeemedOn": "Bescanviat",
+      "rewardsStatusRedeemed": "Bescanviat",
+      "noRewardsHistory": "Encara no tens premis. Acumula segells a qualsevol comerç per començar."
     }
   },
   "staff": {
