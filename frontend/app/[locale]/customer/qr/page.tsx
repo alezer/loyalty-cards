@@ -279,19 +279,19 @@ export default function CustomerQRPage() {
                             <img
                               src={biz.logo_url}
                               alt=""
-                              className="absolute top-3 left-3 w-14 h-14 rounded-full object-cover border-2 border-white/80 shadow-sm"
+                              className="absolute top-3 left-3 w-10 h-10 rounded-full object-cover border-2 border-white/80 shadow-sm"
                             />
                           )}
 
                           {card && (
-                            <div className="absolute top-3 right-3 flex items-center gap-2">
-                              <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
-                                <Stamp size={14} />
+                            <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                              <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm rounded-full px-2 py-1 text-white text-xs font-semibold">
+                                <Stamp size={11} />
                                 {cycleCount}/{goal ?? '?'}
                               </span>
                               {unredeemedCount > 0 && (
-                                <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-sm font-semibold">
-                                  <Gift size={14} />
+                                <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm rounded-full px-2 py-1 text-white text-xs font-semibold">
+                                  <Gift size={11} />
                                   {unredeemedCount}
                                 </span>
                               )}
