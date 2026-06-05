@@ -112,7 +112,13 @@
       "navTrend": "Tendencia",
       "qrModalTitle": "Escanear mi QR",
       "sectionShops": "Comercios",
-      "noShops": "Aún no hay comercios disponibles"
+      "noShops": "Aún no hay comercios disponibles",
+      "rewardsAvailable": "Disponibles",
+      "rewardsHistory": "Historial",
+      "rewardsEarned": "Obtenido",
+      "rewardsRedeemedOn": "Canjeado",
+      "rewardsStatusRedeemed": "Canjeado",
+      "noRewardsHistory": "Aún no tienes premios. Acumula sellos en cualquier comercio para empezar."
     }
   },
   "staff": {

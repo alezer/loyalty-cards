@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, ChevronDown, ChevronRight, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode } from 'lucide-react'
+import { ChevronLeft, ChevronDown, ChevronRight, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode, Gift } from 'lucide-react'
 import type { BusinessOpeningHours, BusinessNews } from '@/lib/types/database'
 import {
   Drawer,
@@ -48,8 +48,8 @@ export default function BusinessDetailPage() {
   const fromHome = source === 'home'
 
   function handleBack() {
-    if (source === 'stamps') {
-      router.push(`/${locale}/customer/qr?tab=stamps`)
+    if (source === 'rewards') {
+      router.push(`/${locale}/customer/qr?tab=rewards`)
     } else {
       router.push(`/${locale}/customer/qr`)
     }
@@ -257,7 +257,6 @@ export default function BusinessDetailPage() {
       ? 0
       : stampsCount % stampsGoal || stampsGoal
     : stampsCount
-  const progress = stampsGoal ? (cycleCount / stampsGoal) * 100 : 0
 
   const openDays = businessHours
     ? DAYS_ORDER.filter((day) => businessHours[day] !== null).map((day) => ({
@@ -534,11 +533,11 @@ export default function BusinessDetailPage() {
           <div className="flex-1" />
 
           <button
-            onClick={() => router.push(`/${locale}/customer/qr?tab=stamps`)}
+            onClick={() => router.push(`/${locale}/customer/qr?tab=rewards`)}
             className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <Stamp size={20} />
-            <span className="text-[10px] font-medium leading-tight">{tQr('navStamps')}</span>
+            <Gift size={20} />
+            <span className="text-[10px] font-medium leading-tight">{tQr('navRewards')}</span>
           </button>
 
           <button

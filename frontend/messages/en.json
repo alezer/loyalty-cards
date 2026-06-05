@@ -112,7 +112,13 @@
       "navTrend": "Trend",
       "qrModalTitle": "Scan my QR",
       "sectionShops": "Shops",
-      "noShops": "No shops available yet"
+      "noShops": "No shops available yet",
+      "rewardsAvailable": "Available",
+      "rewardsHistory": "History",
+      "rewardsEarned": "Earned",
+      "rewardsRedeemedOn": "Redeemed",
+      "rewardsStatusRedeemed": "Redeemed",
+      "noRewardsHistory": "You haven't earned any rewards yet. Collect stamps at any shop to get started."
     }
   },
   "staff": {
