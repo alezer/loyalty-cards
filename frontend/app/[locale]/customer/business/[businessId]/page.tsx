@@ -353,15 +353,26 @@ export default function BusinessDetailPage() {
                   {t('collectStamps', { goal: stampsGoal, reward: businessReward ?? '' })}
                 </p>
               </div>
-              <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-brand-500 to-brand-600 rounded-full transition-all duration-700 ease-out"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-gray-400 mt-2">
-                <span>0</span>
-                <span>{stampsGoal}</span>
+              <div className="flex flex-wrap justify-center gap-2">
+                {Array.from({ length: stampsGoal }, (_, i) => {
+                  const filled = i < cycleCount
+                  return (
+                    <div
+                      key={i}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                        filled
+                          ? 'bg-brand-600 shadow-lg shadow-brand-600/40'
+                          : 'border-2 border-dashed border-gray-300 bg-gray-50'
+                      }`}
+                    >
+                      {filled ? (
+                        <Stamp size={20} className="text-white -rotate-12 drop-shadow-sm" />
+                      ) : (
+                        <span className="text-xs text-gray-300 font-medium select-none">{i + 1}</span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
