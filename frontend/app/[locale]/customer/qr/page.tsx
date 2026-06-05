@@ -68,6 +68,7 @@ export default function CustomerQRPage() {
   )
   const [qrModalOpen, setQrModalOpen] = useState(false)
   const [favourites, setFavourites] = useState<Set<string>>(new Set())
+  const [removingFavourites, setRemovingFavourites] = useState<Set<string>>(new Set())
 
   const formatDate = (dateStr: string) =>
     new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
@@ -202,16 +203,16 @@ export default function CustomerQRPage() {
     e.preventDefault()
     e.stopPropagation()
     const isFav = favourites.has(businessId)
-    setFavourites((prev) => {
-      const next = new Set(prev)
-      if (isFav) next.delete(businessId)
-      else next.add(businessId)
-      return next
-    })
     const supabase = createClient()
     if (isFav) {
+      setRemovingFavourites((prev) => new Set(prev).add(businessId))
       await supabase.from('favourite_businesses').delete().eq('business_id', businessId)
+      setTimeout(() => {
+        setFavourites((prev) => { const next = new Set(prev); next.delete(businessId); return next })
+        setRemovingFavourites((prev) => { const next = new Set(prev); next.delete(businessId); return next })
+      }, 300)
     } else {
+      setFavourites((prev) => new Set(prev).add(businessId))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('favourite_businesses') as any).insert({ customer_id: userId!, business_id: businessId })
     }
@@ -267,7 +268,7 @@ export default function CustomerQRPage() {
                         <Link
                           key={biz.id}
                           href={`/${locale}/customer/business/${biz.id}?source=home`}
-                          className="relative h-40 w-60 shrink-0 snap-start rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-transform"
+                          className={`relative h-40 w-60 shrink-0 snap-start rounded-2xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700 shadow-sm active:scale-95 transition-all duration-300 ${removingFavourites.has(biz.id) ? 'opacity-0 scale-95' : 'opacity-100'}`}
                         >
                           <img
                             src={biz.image_url ?? '/placeholder-hero.svg'}
