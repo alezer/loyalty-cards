@@ -242,10 +242,6 @@ export default function CustomerQRPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white">
       <div className="pb-28 pt-10 px-4">
-        <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">
-          {t('title')}
-        </h1>
-
         {/* Home tab */}
         {activeTab === 'home' && (
           <div className="max-w-sm mx-auto">
