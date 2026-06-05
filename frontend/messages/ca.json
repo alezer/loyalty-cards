@@ -71,6 +71,7 @@
       "tabNews": "Notícies",
       "tabInfo": "Informació",
       "stampsCollected": "segells acumulats",
+      "collectStamps": "Acumula {goal} segells i aconsegueix {reward}",
       "address": "Adreça",
       "viewOnMaps": "Veure a Google Maps",
       "openingHours": "Horari d'obertura",

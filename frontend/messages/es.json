@@ -71,6 +71,7 @@
       "tabNews": "Noticias",
       "tabInfo": "Información",
       "stampsCollected": "sellos acumulados",
+      "collectStamps": "Acumula {goal} sellos y consigue {reward}",
       "address": "Dirección",
       "viewOnMaps": "Ver en Google Maps",
       "openingHours": "Horario de apertura",

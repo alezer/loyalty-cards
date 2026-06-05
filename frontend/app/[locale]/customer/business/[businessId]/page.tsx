@@ -58,6 +58,7 @@ export default function BusinessDetailPage() {
   const [businessName, setBusinessName] = useState<string>('—')
   const [stampsCount, setStampsCount] = useState<number>(0)
   const [stampsGoal, setStampsGoal] = useState<number>(10)
+  const [businessReward, setBusinessReward] = useState<string | null>(null)
   const [rewards, setRewards] = useState<Reward[]>([])
   const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
   const [currentRewardIndex, setCurrentRewardIndex] = useState(0)
@@ -100,13 +101,14 @@ export default function BusinessDetailPage() {
 
       const { data: cardData } = await supabase
         .from('loyalty_cards')
-        .select('id, stamps_count, businesses(name, stamps_goal, address, opening_hours, instagram, image_url, logo_url)')
+        .select('id, stamps_count, businesses(name, stamps_goal, reward, address, opening_hours, instagram, image_url, logo_url)')
         .eq('business_id', businessId)
         .single()
 
       type BizFields = {
         name: string
         stamps_goal: number
+        reward: string | null
         address: string | null
         opening_hours: BusinessOpeningHours | null
         instagram: string | null
@@ -125,6 +127,7 @@ export default function BusinessDetailPage() {
         setBusinessName(biz?.name ?? '—')
         setStampsCount(card.stamps_count)
         setStampsGoal(biz?.stamps_goal ?? 10)
+        setBusinessReward(biz?.reward ?? null)
         setBusinessAddress(biz?.address ?? null)
         setBusinessHours((biz?.opening_hours as BusinessOpeningHours | null) ?? null)
         setBusinessInstagram(biz?.instagram ?? null)
@@ -146,7 +149,7 @@ export default function BusinessDetailPage() {
       } else {
         const { data: bizData } = await supabase
           .from('businesses')
-          .select('name, stamps_goal, address, opening_hours, instagram, image_url, logo_url')
+          .select('name, stamps_goal, reward, address, opening_hours, instagram, image_url, logo_url')
           .eq('id', businessId)
           .single()
 
@@ -154,6 +157,7 @@ export default function BusinessDetailPage() {
           const biz = bizData as unknown as {
             name: string
             stamps_goal: number
+            reward: string | null
             address: string | null
             opening_hours: BusinessOpeningHours | null
             instagram: string | null
@@ -162,6 +166,7 @@ export default function BusinessDetailPage() {
           }
           setBusinessName(biz.name)
           setStampsGoal(biz.stamps_goal ?? 10)
+          setBusinessReward(biz.reward ?? null)
           setBusinessAddress(biz.address)
           setBusinessHours((biz.opening_hours as BusinessOpeningHours | null))
           setBusinessInstagram(biz.instagram)
@@ -344,11 +349,9 @@ export default function BusinessDetailPage() {
             {/* Progress card */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="text-center mb-6">
-                <div className="inline-flex items-baseline gap-1">
-                  <span className="text-5xl font-bold text-brand-600 tabular-nums">{cycleCount}</span>
-                  <span className="text-2xl text-gray-400">/{stampsGoal}</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">{t('stampsCollected')}</p>
+                <p className="text-base font-medium text-gray-700">
+                  {t('collectStamps', { goal: stampsGoal, reward: businessReward ?? '' })}
+                </p>
               </div>
               <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden">
                 <div

@@ -71,6 +71,7 @@
       "tabNews": "News",
       "tabInfo": "Information",
       "stampsCollected": "stamps collected",
+      "collectStamps": "Collect {goal} stamps and get {reward}",
       "address": "Address",
       "viewOnMaps": "View on Google Maps",
       "openingHours": "Opening hours",
