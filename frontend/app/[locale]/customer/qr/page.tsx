@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
@@ -69,6 +69,8 @@ export default function CustomerQRPage() {
   const [qrModalOpen, setQrModalOpen] = useState(false)
   const [favourites, setFavourites] = useState<Set<string>>(new Set())
   const [removingFavourites, setRemovingFavourites] = useState<Set<string>>(new Set())
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const pendingScrollToId = useRef<string | null>(null)
 
   const formatDate = (dateStr: string) =>
     new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
@@ -212,11 +214,23 @@ export default function CustomerQRPage() {
         setRemovingFavourites((prev) => { const next = new Set(prev); next.delete(businessId); return next })
       }, 300)
     } else {
+      pendingScrollToId.current = businessId
       setFavourites((prev) => new Set(prev).add(businessId))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('favourite_businesses') as any).insert({ customer_id: userId!, business_id: businessId })
     }
   }
+
+  useEffect(() => {
+    const id = pendingScrollToId.current
+    if (!id || !carouselRef.current) return
+    pendingScrollToId.current = null
+    const favouriteBusinesses = businesses.filter((b) => favourites.has(b.id))
+    const idx = favouriteBusinesses.findIndex((b) => b.id === id)
+    if (idx < 0) return
+    const child = carouselRef.current.children[idx] as HTMLElement | undefined
+    if (child) carouselRef.current.scrollTo({ left: child.offsetLeft, behavior: 'smooth' })
+  }, [favourites, businesses])
 
   if (loading) {
     return (
@@ -254,7 +268,7 @@ export default function CustomerQRPage() {
                   <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
                     {t('sectionFavourites')}
                   </h2>
-                  <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+                  <div ref={carouselRef} className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
                     {favouriteBusinesses.map((biz) => {
                       const card = loyaltyCards.find((c) => c.business_id === biz.id)
                       const goal = card?.businesses?.stamps_goal
