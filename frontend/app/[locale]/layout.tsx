@@ -5,6 +5,7 @@ import { getMessages, getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { Navbar } from '@/components/Navbar'
+import { InstallBanner } from '@/components/InstallBanner'
 import '../globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -20,6 +21,9 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: 'Loyalty Cards',
+  },
+  icons: {
+    apple: '/apple-touch-icon.png',
   },
 }
 
@@ -52,6 +56,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <Navbar />
           {children}
+          <InstallBanner />
         </NextIntlClientProvider>
       </body>
     </html>

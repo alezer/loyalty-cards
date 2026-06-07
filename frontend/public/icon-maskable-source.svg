@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Full-bleed green background (no rounded corners — OS will apply shape mask) -->
+  <rect width="512" height="512" fill="#16a34a"/>
+  <!-- White card body (scaled into 80% safe zone: 51px inset on each side) -->
+  <rect x="100" y="168" width="312" height="194" rx="18" fill="white"/>
+  <!-- Dark green card header strip -->
+  <rect x="100" y="168" width="312" height="52" rx="18" fill="#15803d"/>
+  <rect x="100" y="198" width="312" height="22" fill="#15803d"/>
+  <!-- Stamp circles row 1 -->
+  <circle cx="180" cy="272" r="24" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <circle cx="256" cy="272" r="24" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <circle cx="332" cy="272" r="24" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <!-- Checkmark in first stamp -->
+  <path d="M168 272 l10 10 l20 -20" stroke="#16a34a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Stamp circles row 2 -->
+  <circle cx="180" cy="328" r="24" fill="#f0fdf4" stroke="#86efac" stroke-width="3"/>
+  <circle cx="256" cy="328" r="24" fill="#f0fdf4" stroke="#86efac" stroke-width="3"/>
+  <circle cx="332" cy="328" r="24" fill="#f0fdf4" stroke="#86efac" stroke-width="3"/>
+</svg>

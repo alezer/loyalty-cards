@@ -7,6 +7,12 @@ node_modules/
 .next/
 out/
 
+# PWA service worker (generated at build time by next-pwa)
+**/public/sw.js
+**/public/sw.js.map
+**/public/workbox-*.js
+**/public/workbox-*.js.map
+
 # Production builds
 build/
 dist/
