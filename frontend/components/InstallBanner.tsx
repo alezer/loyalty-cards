@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { X, Share2, PlusSquare } from 'lucide-react'
+import { X, Share, PlusSquare } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
@@ -99,7 +99,7 @@ export function InstallBanner() {
                   <li className="flex items-center gap-2">
                     <span className="font-medium">1.</span>
                     <span>Toca</span>
-                    <Share2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <Share className="h-4 w-4 text-blue-500 flex-shrink-0" />
                     <span className="font-medium">Compartir</span>
                     <span>en Safari</span>
                   </li>
