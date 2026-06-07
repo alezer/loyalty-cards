@@ -9,7 +9,7 @@
     "saving": "Saving..."
   },
   "nav": {
-    "brand": "Loyalty Cards",
+    "brand": "FidCli",
     "language": "Language",
     "signOut": "Sign out",
     "profile": "Profile",
@@ -61,7 +61,7 @@
     "saving": "Saving..."
   },
   "home": {
-    "title": "Loyalty Cards",
+    "title": "FidCli",
     "description": "Universal QR loyalty card system",
     "ready": "App is ready."
   },

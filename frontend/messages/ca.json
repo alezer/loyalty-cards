@@ -9,7 +9,7 @@
     "saving": "Desant..."
   },
   "nav": {
-    "brand": "Loyalty Cards",
+    "brand": "FidCli",
     "language": "Idioma",
     "signOut": "Tancar sessió",
     "profile": "Perfil",
@@ -61,7 +61,7 @@
     "saving": "Desant..."
   },
   "home": {
-    "title": "Loyalty Cards",
+    "title": "FidCli",
     "description": "Sistema de targetes de fidelització amb QR universal",
     "ready": "L'app està llesta."
   },
