@@ -31,7 +31,7 @@ function EnContent() {
 
       <SectionTitle>1. Introduction</SectionTitle>
       <P>
-        These Terms of Service and Privacy Policy govern your use of Loyalty Cards ("the Service"). By
+        These Terms of Service and Privacy Policy govern your use of FidCli ("the Service"). By
         creating an account and using the Service, you agree to these terms in full. If you do not agree,
         you must not use the Service.
       </P>
@@ -272,7 +272,7 @@ function EsContent() {
 
       <SectionTitle>1. Introducción</SectionTitle>
       <P>
-        Estos Términos de Servicio y Política de Privacidad regulan el uso de Loyalty Cards ("el
+        Estos Términos de Servicio y Política de Privacidad regulan el uso de FidCli ("el
         Servicio"). Al crear una cuenta y utilizar el Servicio, aceptas estos términos en su totalidad.
         Si no estás de acuerdo, no debes utilizar el Servicio.
       </P>
@@ -546,7 +546,7 @@ export default async function TermsPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-1">
           {isEs ? 'Términos de Servicio y Privacidad' : 'Terms of Service & Privacy Policy'}
         </h1>
-        <p className="text-sm text-gray-400 mb-2">Loyalty Cards</p>
+        <p className="text-sm text-gray-400 mb-2">FidCli</p>
 
         <hr className="border-gray-100 mb-2" />
 
@@ -556,7 +556,7 @@ export default async function TermsPage() {
         <hr className="border-gray-100 mt-10 mb-6" />
 
         <p className="text-xs text-gray-400 text-center pb-10">
-          © {new Date().getFullYear()} Loyalty Cards.{' '}
+          © {new Date().getFullYear()} FidCli.{' '}
           {isEs ? 'Todos los derechos reservados.' : 'All rights reserved.'}
         </p>
       </div>
