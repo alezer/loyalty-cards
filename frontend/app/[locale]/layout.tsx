@@ -12,15 +12,15 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
-    default: 'Loyalty Cards',
-    template: '%s | Loyalty Cards',
+    default: 'FidCli',
+    template: '%s | FidCli',
   },
   description: 'Sistema de tarjetas de fidelización con QR universal',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Loyalty Cards',
+    title: 'FidCli',
   },
   icons: {
     apple: '/apple-touch-icon.png',

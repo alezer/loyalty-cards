@@ -1,6 +1,6 @@
 {
-  "name": "Loyalty Cards",
-  "short_name": "Loyalty",
+  "name": "FidCli",
+  "short_name": "FidCli",
   "description": "Sistema de tarjetas de fidelización con QR universal",
   "start_url": "/",
   "scope": "/",

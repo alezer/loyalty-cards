@@ -74,7 +74,7 @@ export function InstallBanner() {
           />
 
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm text-gray-900">Instalar Loyalty Cards</p>
+            <p className="font-semibold text-sm text-gray-900">Instalar FidCli</p>
 
             {state === 'android' && (
               <>
