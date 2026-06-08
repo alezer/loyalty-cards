@@ -354,8 +354,10 @@ export default function BusinessDetailPage() {
                     : t('collectStampsNoReward', { goal: stampsGoal })}
                 </p>
               </div>
-              <div className="flex flex-wrap justify-center gap-2">
-                {Array.from({ length: stampsGoal }, (_, i) => {
+              {(() => {
+                const topCount = Math.ceil(stampsGoal / 2)
+                const bottomCount = Math.floor(stampsGoal / 2)
+                const renderStamp = (i: number) => {
                   const filled = i < cycleCount
                   return (
                     <div
@@ -373,8 +375,20 @@ export default function BusinessDetailPage() {
                       )}
                     </div>
                   )
-                })}
-              </div>
+                }
+                return (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex justify-center gap-2">
+                      {Array.from({ length: topCount }, (_, i) => renderStamp(i))}
+                    </div>
+                    {bottomCount > 0 && (
+                      <div className="flex justify-center gap-2">
+                        {Array.from({ length: bottomCount }, (_, i) => renderStamp(topCount + i))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
             </div>
 
             {/* Rewards card */}
