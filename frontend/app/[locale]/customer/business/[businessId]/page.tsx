@@ -376,7 +376,11 @@ export default function BusinessDetailPage() {
                     </div>
                   )
                 }
-                return (
+                return stampsGoal <= 5 ? (
+                  <div className="flex justify-center gap-2">
+                    {Array.from({ length: stampsGoal }, (_, i) => renderStamp(i))}
+                  </div>
+                ) : (
                   <div className="flex flex-col items-center gap-2">
                     <div className="flex justify-center gap-2">
                       {Array.from({ length: topCount }, (_, i) => renderStamp(i))}
