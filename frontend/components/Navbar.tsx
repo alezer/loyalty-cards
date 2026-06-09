@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { QrCode, UserRound, FileText, Mail, LogOut, Menu } from 'lucide-react'
+import { UserRound, FileText, Mail, LogOut, Menu } from 'lucide-react'
+import Image from 'next/image'
 import { Link, useRouter } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -54,9 +55,7 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-2 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 rounded-lg"
         >
-          <span className="bg-brand-600 text-white rounded-lg p-1.5" aria-hidden="true">
-            <QrCode size={18} />
-          </span>
+          <Image src="/Logo3.png" alt="Logo" width={32} height={32} className="rounded-lg" />
           <span className="font-semibold text-gray-900 text-sm">{t('brand')}</span>
         </Link>
 

@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { QrCode, Mail, Eye, EyeOff, AlertCircle, CheckCircle2, User } from 'lucide-react'
+import { Mail, Eye, EyeOff, AlertCircle, CheckCircle2, User } from 'lucide-react'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, Link } from '@/i18n/navigation'
 import type { UserRole } from '@/lib/types/database'
@@ -218,8 +219,8 @@ export default function LoginPage() {
     <main className="min-h-[calc(100vh-56px)] flex flex-col items-center justify-center px-6 py-10 bg-gradient-to-b from-brand-50 via-white to-white">
       {/* Logo block */}
       <div className="mb-10 text-center">
-        <div className="inline-flex items-center justify-center bg-brand-600 text-white rounded-2xl w-16 h-16 mb-4 shadow-lg shadow-brand-200">
-          <QrCode size={32} />
+        <div className="inline-flex items-center justify-center rounded-2xl w-16 h-16 mb-4">
+          <Image src="/Logo3.png" alt="Logo" width={64} height={64} className="rounded-2xl" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{t('title')}</h1>
         <p className="mt-1 text-gray-500 text-base">{t('subtitle')}</p>
