@@ -18,7 +18,7 @@
     "menu": "Menu"
   },
   "auth": {
-    "title": "Welcome",
+    "title": "FidCli",
     "subtitle": "Join your favorite shops. Collect stamps. Earn rewards.",
     "continueWithGoogle": "Continue with Google",
     "continueWithEmail": "Continue with email",
