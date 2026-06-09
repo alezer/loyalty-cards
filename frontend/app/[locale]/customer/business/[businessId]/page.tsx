@@ -255,10 +255,11 @@ export default function BusinessDetailPage() {
         .single()
 
       if (!data) return
+      const row = data as unknown as { stamps_count: number }
       setStampsCount((current) => {
-        if (data.stamps_count !== current) {
+        if (row.stamps_count !== current) {
           setQrModalOpen(false)
-          return data.stamps_count
+          return row.stamps_count
         }
         return current
       })
