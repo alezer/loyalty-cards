@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
@@ -71,6 +71,7 @@ export default function CustomerQRPage() {
   const [removingFavourites, setRemovingFavourites] = useState<Set<string>>(new Set())
   const carouselRef = useRef<HTMLDivElement>(null)
   const pendingScrollToId = useRef<string | null>(null)
+  const loyaltyCardsRef = useRef<LoyaltyCardEntry[]>(loyaltyCards)
 
   const formatDate = (dateStr: string) =>
     new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(dateStr))
@@ -79,68 +80,93 @@ export default function CustomerQRPage() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [activeTab])
 
+  useEffect(() => { loyaltyCardsRef.current = loyaltyCards }, [loyaltyCards])
+
+  const fetchCards = useCallback(async () => {
+    const supabase = createClient()
+    const [{ data: cards }, { data: rawRewards }] = await Promise.all([
+      supabase
+        .from('loyalty_cards')
+        .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
+        .order('updated_at', { ascending: false }),
+      supabase
+        .from('rewards')
+        .select('id, is_redeemed, redeemed_at, created_at, loyalty_cards(business_id, businesses(name, logo_url, reward))')
+        .order('created_at', { ascending: false }),
+    ])
+
+    if (cards) setLoyaltyCards(cards as unknown as LoyaltyCardEntry[])
+
+    if (rawRewards) {
+      const mapped: RewardEntry[] = (rawRewards as unknown as Array<{
+        id: string
+        is_redeemed: boolean
+        redeemed_at: string | null
+        created_at: string
+        loyalty_cards: {
+          business_id: string
+          businesses: { name: string; logo_url: string | null; reward: string | null } | null
+        } | null
+      }>).map((r) => ({
+        id: r.id,
+        is_redeemed: r.is_redeemed,
+        redeemed_at: r.redeemed_at,
+        created_at: r.created_at,
+        business_id: r.loyalty_cards?.business_id ?? '',
+        business_name: r.loyalty_cards?.businesses?.name ?? '—',
+        business_logo_url: r.loyalty_cards?.businesses?.logo_url ?? null,
+        business_reward: r.loyalty_cards?.businesses?.reward ?? null,
+      }))
+      setRewardHistory(mapped)
+    }
+  }, [])
+
   useEffect(() => {
     if (!userId) return
     const supabase = createClient()
-
-    const fetchCards = async () => {
-      const [{ data: cards }, { data: rawRewards }] = await Promise.all([
-        supabase
-          .from('loyalty_cards')
-          .select('id, business_id, stamps_count, businesses(name, stamps_goal, image_url, logo_url), rewards(is_redeemed)')
-          .order('updated_at', { ascending: false }),
-        supabase
-          .from('rewards')
-          .select('id, is_redeemed, redeemed_at, created_at, loyalty_cards(business_id, businesses(name, logo_url, reward))')
-          .order('created_at', { ascending: false }),
-      ])
-
-      if (cards) setLoyaltyCards(cards as unknown as LoyaltyCardEntry[])
-
-      if (rawRewards) {
-        const mapped: RewardEntry[] = (rawRewards as unknown as Array<{
-          id: string
-          is_redeemed: boolean
-          redeemed_at: string | null
-          created_at: string
-          loyalty_cards: {
-            business_id: string
-            businesses: { name: string; logo_url: string | null; reward: string | null } | null
-          } | null
-        }>).map((r) => ({
-          id: r.id,
-          is_redeemed: r.is_redeemed,
-          redeemed_at: r.redeemed_at,
-          created_at: r.created_at,
-          business_id: r.loyalty_cards?.business_id ?? '',
-          business_name: r.loyalty_cards?.businesses?.name ?? '—',
-          business_logo_url: r.loyalty_cards?.businesses?.logo_url ?? null,
-          business_reward: r.loyalty_cards?.businesses?.reward ?? null,
-        }))
-        setRewardHistory(mapped)
-      }
-
-      setQrModalOpen(false)
-    }
 
     const channel = supabase
       .channel(`customer-cards-${userId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'loyalty_cards', filter: `customer_id=eq.${userId}` },
-        () => { fetchCards() },
+        () => { fetchCards(); setQrModalOpen(false) },
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rewards' },
-        () => { fetchCards() },
+        () => { fetchCards(); setQrModalOpen(false) },
       )
       .subscribe()
 
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [userId])
+  }, [userId, fetchCards])
+
+  useEffect(() => {
+    if (!qrModalOpen || !userId) return
+    const supabase = createClient()
+
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('loyalty_cards')
+        .select('id, stamps_count')
+
+      if (!data) return
+      const rows = data as Array<{ id: string; stamps_count: number }>
+      const changed = rows.some((row) => {
+        const card = loyaltyCardsRef.current.find((c) => c.id === row.id)
+        return !card || card.stamps_count !== row.stamps_count
+      })
+      if (!changed) return
+
+      await fetchCards()
+      setQrModalOpen(false)
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [qrModalOpen, userId, fetchCards])
 
   useEffect(() => {
     const supabase = createClient()
