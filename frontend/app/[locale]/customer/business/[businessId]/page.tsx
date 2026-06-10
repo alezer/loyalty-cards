@@ -244,6 +244,31 @@ export default function BusinessDetailPage() {
   }, [cardId, businessId])
 
   useEffect(() => {
+    if (!qrModalOpen || !cardId) return
+    const supabase = createClient()
+
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('loyalty_cards')
+        .select('stamps_count')
+        .eq('id', cardId)
+        .single()
+
+      if (!data) return
+      const row = data as unknown as { stamps_count: number }
+      setStampsCount((current) => {
+        if (row.stamps_count !== current) {
+          setQrModalOpen(false)
+          return row.stamps_count
+        }
+        return current
+      })
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [qrModalOpen, cardId])
+
+  useEffect(() => {
     if (rewards.length === 0) {
       setRewardsModalOpen(false)
       setCurrentRewardIndex(0)
