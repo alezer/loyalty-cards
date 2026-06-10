@@ -220,7 +220,7 @@ export default function LoginPage() {
       {/* Logo block */}
       <div className="mb-10 text-center">
         <div className="inline-flex items-center justify-center rounded-2xl w-16 h-16 mb-4">
-          <Image src="/FidCliLogo2.png" alt="Logo" width={64} height={64} className="rounded-2xl" />
+          <Image src="/FidCLiLogo2.png" alt="Logo" width={64} height={64} className="rounded-2xl" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{t('title')}</h1>
         <p className="mt-1 text-gray-500 text-base">{t('subtitle')}</p>
