@@ -55,7 +55,7 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-2 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 rounded-lg"
         >
-          <Image src="/FidCLiLogo2.png" alt="Logo" width={32} height={32} className="rounded-lg" />
+          <Image src="/FidCliLogo2.png" alt="Logo" width={32} height={32} className="rounded-lg" />
           <span className="font-semibold text-gray-900 text-sm">{t('brand')}</span>
         </Link>
 
