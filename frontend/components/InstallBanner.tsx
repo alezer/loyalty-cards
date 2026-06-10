@@ -101,7 +101,7 @@ export function InstallBanner() {
                     <span>Toca</span>
                     <Share className="h-4 w-4 text-blue-500 flex-shrink-0" />
                     <span className="font-medium">Compartir</span>
-                    <span>en Safari</span>
+                    <span>en tu navegador</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="font-medium">2.</span>
