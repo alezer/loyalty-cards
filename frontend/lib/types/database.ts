@@ -131,6 +131,7 @@ export interface BusinessNews {
   business_id: string
   title: string
   description: string
+  image_url: string | null
   created_at: string
   updated_at: string
 }
@@ -196,7 +197,7 @@ export type Database = {
       business_news: {
         Row: BusinessNews
         Insert: Omit<BusinessNews, 'id' | 'created_at' | 'updated_at'>
-        Update: Partial<Pick<BusinessNews, 'title' | 'description'>>
+        Update: Partial<Pick<BusinessNews, 'title' | 'description' | 'image_url'>>
         Relationships: []
       }
       favourite_businesses: {

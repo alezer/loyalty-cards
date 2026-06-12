@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { Plus, Pencil, Trash2, Newspaper, ChevronDown } from 'lucide-react'
+import { Plus, Pencil, Trash2, Newspaper, ChevronDown, Upload, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -36,6 +36,10 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [removeImage, setRemoveImage] = useState(false)
+  const [imageError, setImageError] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
   const formatDate = (iso: string) =>
@@ -57,21 +61,50 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
   function resetForm() {
     setTitle('')
     setDescription('')
+    setImageFile(null)
+    setImagePreview(null)
+    setRemoveImage(false)
+    setImageError(null)
     setFormError(null)
   }
 
   function openEdit(item: BusinessNews) {
     setTitle(item.title)
     setDescription(item.description)
+    setImageFile(null)
+    setImagePreview(item.image_url)
+    setRemoveImage(false)
+    setImageError(null)
     setFormError(null)
     setEditTarget(item)
+  }
+
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) {
+      e.target.value = ''
+      setImageError(t('errorImageTooLarge'))
+      return
+    }
+    setImageError(null)
+    setRemoveImage(false)
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+  }
+
+  function handleRemoveImage() {
+    setImageFile(null)
+    setImagePreview(null)
+    setRemoveImage(true)
+    setImageError(null)
   }
 
   function handleCreate() {
     if (!title.trim() || !description.trim()) return
     setFormError(null)
     startTransition(async () => {
-      const result = await createNews(title.trim(), description.trim())
+      const result = await createNews(title.trim(), description.trim(), imageFile)
       if (!result.success) {
         setFormError(result.error)
         return
@@ -86,7 +119,13 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
     if (!editTarget || !title.trim() || !description.trim()) return
     setFormError(null)
     startTransition(async () => {
-      const result = await updateNews(editTarget.id, title.trim(), description.trim())
+      const result = await updateNews(
+        editTarget.id,
+        title.trim(),
+        description.trim(),
+        imageFile,
+        removeImage,
+      )
       if (!result.success) {
         setFormError(result.error)
         return
@@ -153,6 +192,13 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
                   <p className={`text-sm text-gray-500 mt-1 ${expanded ? 'whitespace-pre-line' : 'line-clamp-2'}`}>
                     {item.description}
                   </p>
+                  {expanded && item.image_url && (
+                    <img
+                      src={item.image_url}
+                      alt=""
+                      className="mt-3 w-full rounded-lg object-cover aspect-[4/5]"
+                    />
+                  )}
                   <p className="text-xs text-gray-400 mt-2">{formatDate(item.created_at)}</p>
                 </button>
                 <div className="flex items-center gap-1 px-3 pb-2 border-t border-gray-100 pt-2">
@@ -195,6 +241,10 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
             description={description}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
+            imagePreview={imagePreview}
+            onImageChange={handleImageChange}
+            onRemoveImage={handleRemoveImage}
+            imageError={imageError}
             error={formError}
             t={t}
           />
@@ -231,6 +281,10 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
             description={description}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
+            imagePreview={imagePreview}
+            onImageChange={handleImageChange}
+            onRemoveImage={handleRemoveImage}
+            imageError={imageError}
             error={formError}
             t={t}
           />
@@ -281,6 +335,10 @@ function NewsForm({
   description,
   onTitleChange,
   onDescriptionChange,
+  imagePreview,
+  onImageChange,
+  onRemoveImage,
+  imageError,
   error,
   t,
 }: {
@@ -288,9 +346,15 @@ function NewsForm({
   description: string
   onTitleChange: (v: string) => void
   onDescriptionChange: (v: string) => void
+  imagePreview: string | null
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onRemoveImage: () => void
+  imageError: string | null
   error: string | null
   t: ReturnType<typeof useTranslations<'owner.news'>>
 }) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   return (
     <div className="space-y-4 py-2">
       <div className="space-y-1.5">
@@ -311,6 +375,45 @@ function NewsForm({
           placeholder={t('descriptionPlaceholder')}
           rows={4}
         />
+      </div>
+      <div className="space-y-1.5">
+        <Label>{t('imageLabel')}</Label>
+        {imagePreview ? (
+          <div className="relative">
+            <img
+              src={imagePreview}
+              alt=""
+              className="w-full rounded-lg object-cover max-h-48 border border-gray-200"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                onRemoveImage()
+                if (fileInputRef.current) fileInputRef.current.value = ''
+              }}
+              className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+              aria-label={t('removeImage')}
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <label className="cursor-pointer flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
+              <Upload size={13} />
+              {t('selectImage')}
+            </span>
+            <span className="text-xs text-gray-400">max 5 MB</span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={onImageChange}
+            />
+          </label>
+        )}
+        {imageError && <p className="text-xs text-red-500">{imageError}</p>}
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
