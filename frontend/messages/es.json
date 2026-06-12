@@ -243,7 +243,8 @@
         "sunday": "Domingo"
       },
       "closed": "Cerrado",
-      "to": "a"
+      "to": "a",
+      "addShift": "Añadir turno"
     }
   },
   "profile": {

@@ -19,11 +19,17 @@ interface DayHours {
   open: string
   close: string
 }
-type HoursState = Record<Day, DayHours | null>
+type HoursState = Record<Day, DayHours[] | null>
 
 function initHours(opening_hours: BusinessOpeningHours | null): HoursState {
   return Object.fromEntries(
-    DAYS.map((d) => [d, opening_hours?.[d] ?? null]),
+    DAYS.map((d) => {
+      const val = opening_hours?.[d]
+      if (!val) return [d, null]
+      // backward compat: old data stored a plain object, not an array
+      if (!Array.isArray(val)) return [d, [val as DayHours]]
+      return [d, val.length === 0 ? null : val]
+    }),
   ) as HoursState
 }
 
@@ -75,15 +81,35 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
   function toggleDay(day: Day) {
     setHours((prev) => ({
       ...prev,
-      [day]: prev[day] ? null : { open: '09:00', close: '18:00' },
+      [day]: prev[day] ? null : [{ open: '09:00', close: '18:00' }],
     }))
   }
 
-  function updateDayTime(day: Day, field: 'open' | 'close', value: string) {
-    setHours((prev) => ({
-      ...prev,
-      [day]: prev[day] ? { ...prev[day]!, [field]: value } : prev[day],
-    }))
+  function addShift(day: Day) {
+    setHours((prev) => {
+      const shifts = prev[day]
+      if (!shifts || shifts.length >= 2) return prev
+      return { ...prev, [day]: [...shifts, { open: '09:00', close: '18:00' }] }
+    })
+  }
+
+  function removeShift(day: Day) {
+    setHours((prev) => {
+      const shifts = prev[day]
+      if (!shifts || shifts.length <= 1) return prev
+      return { ...prev, [day]: [shifts[0]] }
+    })
+  }
+
+  function updateDayTime(day: Day, index: number, field: 'open' | 'close', value: string) {
+    setHours((prev) => {
+      const shifts = prev[day]
+      if (!shifts) return prev
+      return {
+        ...prev,
+        [day]: shifts.map((s, i) => (i === index ? { ...s, [field]: value } : s)),
+      }
+    })
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -95,10 +121,15 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
     const fd = new FormData(formRef.current)
 
     for (const day of DAYS) {
-      const h = hours[day]
-      fd.set(`hours_${day}_is_open`, h ? 'true' : 'false')
-      fd.set(`hours_${day}_from`, h?.open ?? '')
-      fd.set(`hours_${day}_to`, h?.close ?? '')
+      const shifts = hours[day]
+      fd.set(`hours_${day}_is_open`, shifts ? 'true' : 'false')
+      if (shifts) {
+        fd.set(`hours_${day}_count`, String(shifts.length))
+        shifts.forEach((s, i) => {
+          fd.set(`hours_${day}_${i}_from`, s.open)
+          fd.set(`hours_${day}_${i}_to`, s.close)
+        })
+      }
     }
 
     startTransition(async () => {
@@ -218,25 +249,25 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
         {/* Opening hours */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
           <Label>{t('openingHoursLabel')}</Label>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {DAYS.map((day) => {
-              const h = hours[day]
+              const shifts = hours[day]
               return (
-                <div key={day} className="flex items-center gap-3 min-h-[40px]">
+                <div key={day} className="flex items-start gap-3 min-h-[40px]">
                   {/* Day toggle */}
                   <button
                     type="button"
                     onClick={() => toggleDay(day)}
                     className={[
-                      'w-5 h-5 rounded flex-shrink-0 border-2 transition-colors flex items-center justify-center',
-                      h
+                      'w-5 h-5 rounded flex-shrink-0 border-2 transition-colors flex items-center justify-center mt-1.5',
+                      shifts
                         ? 'bg-brand-600 border-brand-600'
                         : 'bg-white border-gray-300 hover:border-gray-400',
                     ].join(' ')}
-                    aria-pressed={!!h}
+                    aria-pressed={!!shifts}
                     aria-label={t(`days.${day}`)}
                   >
-                    {h && (
+                    {shifts && (
                       <svg
                         viewBox="0 0 10 8"
                         className="w-3 h-3 text-white"
@@ -250,29 +281,54 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
                   </button>
 
                   {/* Day name */}
-                  <span className="w-24 text-sm font-medium text-gray-700 flex-shrink-0">
+                  <span className="w-24 text-sm font-medium text-gray-700 flex-shrink-0 mt-1.5">
                     {t(`days.${day}`)}
                   </span>
 
                   {/* Time inputs or "Closed" */}
-                  {h ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="time"
-                        value={h.open}
-                        onChange={(e) => updateDayTime(day, 'open', e.target.value)}
-                        className="border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-                      />
-                      <span className="text-xs text-gray-400">{t('to')}</span>
-                      <input
-                        type="time"
-                        value={h.close}
-                        onChange={(e) => updateDayTime(day, 'close', e.target.value)}
-                        className="border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-                      />
+                  {shifts ? (
+                    <div className="flex flex-col gap-1.5">
+                      {shifts.map((s, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <input
+                            type="time"
+                            value={s.open}
+                            onChange={(e) => updateDayTime(day, i, 'open', e.target.value)}
+                            className="border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                          />
+                          <span className="text-xs text-gray-400">{t('to')}</span>
+                          <input
+                            type="time"
+                            value={s.close}
+                            onChange={(e) => updateDayTime(day, i, 'close', e.target.value)}
+                            className="border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                          />
+                          {i === 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeShift(day)}
+                              aria-label="Remove second shift"
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                            >
+                              <svg viewBox="0 0 10 10" className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                <path d="M1 1l8 8M9 1l-8 8" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {shifts.length < 2 && (
+                        <button
+                          type="button"
+                          onClick={() => addShift(day)}
+                          className="self-start text-xs text-brand-600 hover:text-brand-700 font-medium mt-0.5"
+                        >
+                          + {t('addShift')}
+                        </button>
+                      )}
                     </div>
                   ) : (
-                    <span className="text-sm text-gray-400">{t('closed')}</span>
+                    <span className="text-sm text-gray-400 mt-1.5">{t('closed')}</span>
                   )}
                 </div>
               )

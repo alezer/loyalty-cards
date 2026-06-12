@@ -307,11 +307,18 @@ export default function BusinessDetailPage() {
     : stampsCount
 
   const openDays = businessHours
-    ? DAYS_ORDER.filter((day) => businessHours[day] !== null).map((day) => ({
-        day,
-        label: t(`days.${day}`),
-        time: `${businessHours[day]!.open} – ${businessHours[day]!.close}`,
-      }))
+    ? DAYS_ORDER.filter((day) => {
+        const val = businessHours[day]
+        return val !== null && (Array.isArray(val) ? val.length > 0 : true)
+      }).map((day) => {
+        const val = businessHours[day]!
+        const shifts = Array.isArray(val) ? val : [val as { open: string; close: string }]
+        return {
+          day,
+          label: t(`days.${day}`),
+          times: shifts.map((s) => `${s.open} – ${s.close}`),
+        }
+      })
     : []
 
   const mapsUrl = businessAddress
@@ -559,10 +566,12 @@ export default function BusinessDetailPage() {
                       {t('openingHours')}
                     </p>
                     <div className="flex flex-col gap-2">
-                      {openDays.map(({ day, label, time }) => (
-                        <div key={day} className="flex justify-between text-sm">
+                      {openDays.map(({ day, label, times }) => (
+                        <div key={day} className="flex justify-between items-start text-sm">
                           <span className="text-gray-600">{label}</span>
-                          <span className="text-gray-900 font-medium tabular-nums">{time}</span>
+                          <span className="text-gray-900 font-medium tabular-nums text-right flex flex-col items-end gap-0.5">
+                            {times.map((time, i) => <span key={i}>{time}</span>)}
+                          </span>
                         </div>
                       ))}
                     </div>
