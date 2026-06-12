@@ -518,7 +518,7 @@ export default function BusinessDetailPage() {
                       <img
                         src={item.image_url}
                         alt=""
-                        className="mt-3 w-full rounded-lg object-cover max-h-64"
+                        className="mt-3 w-full rounded-lg object-cover aspect-[4/5]"
                       />
                     )}
                     <p className="text-xs text-gray-400 mt-2">
