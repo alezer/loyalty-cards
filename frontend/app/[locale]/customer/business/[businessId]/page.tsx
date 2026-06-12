@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { ChevronLeft, ChevronDown, ChevronRight, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode, Gift } from 'lucide-react'
+import { ChevronLeft, ChevronDown, ChevronRight, MapPin, Clock, ExternalLink, X, Home, Stamp, QrCode, Gift, Heart } from 'lucide-react'
 import type { BusinessOpeningHours, BusinessNews } from '@/lib/types/database'
 import {
   Drawer,
@@ -76,6 +76,7 @@ export default function BusinessDetailPage() {
   const [news, setNews] = useState<BusinessNews[]>([])
   const [expandedNews, setExpandedNews] = useState<Set<string>>(new Set())
   const [hasUnreadNews, setHasUnreadNews] = useState(false)
+  const [isFavourite, setIsFavourite] = useState(false)
   const activeTabRef = useRef<Tab>(activeTab)
 
   useEffect(() => {
@@ -175,13 +176,21 @@ export default function BusinessDetailPage() {
         }
       }
 
-      const { data: newsData } = await supabase
-        .from('business_news')
-        .select('id, business_id, title, description, created_at, updated_at')
-        .eq('business_id', businessId)
-        .order('created_at', { ascending: false })
+      const [{ data: newsData }, { data: favData }] = await Promise.all([
+        supabase
+          .from('business_news')
+          .select('id, business_id, title, description, created_at, updated_at')
+          .eq('business_id', businessId)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('favourite_businesses')
+          .select('business_id')
+          .eq('business_id', businessId)
+          .maybeSingle(),
+      ])
 
       setNews((newsData as unknown as BusinessNews[]) ?? [])
+      setIsFavourite(!!favData)
 
       setLoading(false)
     }
@@ -277,6 +286,20 @@ export default function BusinessDetailPage() {
     }
   }, [rewards.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const toggleFavourite = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const supabase = createClient()
+    if (isFavourite) {
+      setIsFavourite(false)
+      await supabase.from('favourite_businesses').delete().eq('business_id', businessId)
+    } else {
+      setIsFavourite(true)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('favourite_businesses') as any).insert({ customer_id: userId!, business_id: businessId })
+    }
+  }
+
   const cycleCount = stampsGoal
     ? stampsCount === 0
       ? 0
@@ -284,11 +307,18 @@ export default function BusinessDetailPage() {
     : stampsCount
 
   const openDays = businessHours
-    ? DAYS_ORDER.filter((day) => businessHours[day] !== null).map((day) => ({
-        day,
-        label: t(`days.${day}`),
-        time: `${businessHours[day]!.open} – ${businessHours[day]!.close}`,
-      }))
+    ? DAYS_ORDER.filter((day) => {
+        const val = businessHours[day]
+        return val !== null && (Array.isArray(val) ? val.length > 0 : true)
+      }).map((day) => {
+        const val = businessHours[day]!
+        const shifts = Array.isArray(val) ? val : [val as { open: string; close: string }]
+        return {
+          day,
+          label: t(`days.${day}`),
+          times: shifts.map((s) => `${s.open} – ${s.close}`),
+        }
+      })
     : []
 
   const mapsUrl = businessAddress
@@ -332,7 +362,7 @@ export default function BusinessDetailPage() {
         </button>
         {/* Bottom gradient overlay for text legibility */}
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/65 to-transparent" />
-        <h1 className="absolute bottom-5 left-5 text-white text-2xl font-bold drop-shadow-md">
+        <h1 className="absolute bottom-5 left-5 right-14 text-white text-2xl font-bold drop-shadow-md">
           {businessName}
         </h1>
         {businessLogoUrl && (
@@ -342,6 +372,16 @@ export default function BusinessDetailPage() {
             className="absolute top-4 right-4 w-20 h-20 rounded-full object-cover border-2 border-white/80 shadow-md"
           />
         )}
+        <button
+          onClick={toggleFavourite}
+          className="absolute bottom-5 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm active:scale-90 transition-transform"
+          aria-label={isFavourite ? 'Remove from favourites' : 'Add to favourites'}
+        >
+          <Heart
+            size={18}
+            className={isFavourite ? 'fill-red-500 text-red-500' : 'text-white'}
+          />
+        </button>
       </div>
 
       {/* Tab bar */}
@@ -526,10 +566,12 @@ export default function BusinessDetailPage() {
                       {t('openingHours')}
                     </p>
                     <div className="flex flex-col gap-2">
-                      {openDays.map(({ day, label, time }) => (
-                        <div key={day} className="flex justify-between text-sm">
+                      {openDays.map(({ day, label, times }) => (
+                        <div key={day} className="flex justify-between items-start text-sm">
                           <span className="text-gray-600">{label}</span>
-                          <span className="text-gray-900 font-medium tabular-nums">{time}</span>
+                          <span className="text-gray-900 font-medium tabular-nums text-right flex flex-col items-end gap-0.5">
+                            {times.map((time, i) => <span key={i}>{time}</span>)}
+                          </span>
                         </div>
                       ))}
                     </div>

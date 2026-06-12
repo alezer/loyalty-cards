@@ -243,7 +243,8 @@
         "sunday": "Sunday"
       },
       "closed": "Closed",
-      "to": "to"
+      "to": "to",
+      "addShift": "Add time frame"
     }
   },
   "profile": {

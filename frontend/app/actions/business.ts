@@ -80,9 +80,15 @@ export async function saveBusinessDetails(formData: FormData): Promise<ActionRes
   for (const day of DAYS) {
     const isOpen = formData.get(`hours_${day}_is_open`) === 'true'
     if (isOpen) {
-      const from = (formData.get(`hours_${day}_from`) as string) || '09:00'
-      const to = (formData.get(`hours_${day}_to`) as string) || '18:00'
-      hours[day] = { open: from, close: to }
+      const count = Math.min(parseInt((formData.get(`hours_${day}_count`) as string) || '1'), 2)
+      const shifts = []
+      for (let i = 0; i < count; i++) {
+        shifts.push({
+          open: (formData.get(`hours_${day}_${i}_from`) as string) || '09:00',
+          close: (formData.get(`hours_${day}_${i}_to`) as string) || '18:00',
+        })
+      }
+      hours[day] = shifts
     }
   }
   updates.opening_hours = hours

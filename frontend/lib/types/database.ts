@@ -15,14 +15,19 @@ export interface Profile {
   updated_at: string
 }
 
+export interface TimeRange {
+  open: string
+  close: string
+}
+
 export interface BusinessOpeningHours {
-  monday:    { open: string; close: string } | null
-  tuesday:   { open: string; close: string } | null
-  wednesday: { open: string; close: string } | null
-  thursday:  { open: string; close: string } | null
-  friday:    { open: string; close: string } | null
-  saturday:  { open: string; close: string } | null
-  sunday:    { open: string; close: string } | null
+  monday:    TimeRange[] | null
+  tuesday:   TimeRange[] | null
+  wednesday: TimeRange[] | null
+  thursday:  TimeRange[] | null
+  friday:    TimeRange[] | null
+  saturday:  TimeRange[] | null
+  sunday:    TimeRange[] | null
 }
 
 export interface Business {
