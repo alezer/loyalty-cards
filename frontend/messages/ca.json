@@ -243,7 +243,8 @@
         "sunday": "Diumenge"
       },
       "closed": "Tancat",
-      "to": "a"
+      "to": "a",
+      "addShift": "Afegir torn"
     }
   },
   "profile": {
