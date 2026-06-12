@@ -179,7 +179,7 @@ export default function BusinessDetailPage() {
       const [{ data: newsData }, { data: favData }] = await Promise.all([
         supabase
           .from('business_news')
-          .select('id, business_id, title, description, created_at, updated_at')
+          .select('id, business_id, title, description, image_url, created_at, updated_at')
           .eq('business_id', businessId)
           .order('created_at', { ascending: false }),
         supabase
@@ -236,7 +236,7 @@ export default function BusinessDetailPage() {
         async (payload) => {
           const { data } = await supabase
             .from('business_news')
-            .select('id, business_id, title, description, created_at, updated_at')
+            .select('id, business_id, title, description, image_url, created_at, updated_at')
             .eq('business_id', businessId)
             .order('created_at', { ascending: false })
           setNews((data as unknown as BusinessNews[]) ?? [])
@@ -514,6 +514,13 @@ export default function BusinessDetailPage() {
                     <p className={`text-sm text-gray-600 mt-1 whitespace-pre-line ${expanded ? '' : 'line-clamp-2'}`}>
                       {item.description}
                     </p>
+                    {expanded && item.image_url && (
+                      <img
+                        src={item.image_url}
+                        alt=""
+                        className="mt-3 w-full rounded-lg object-cover max-h-64"
+                      />
+                    )}
                     <p className="text-xs text-gray-400 mt-2">
                       {new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(item.created_at))}
                     </p>

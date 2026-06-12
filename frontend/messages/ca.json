@@ -207,7 +207,11 @@
       "saving": "Desant...",
       "delete": "Eliminar",
       "deleting": "Eliminant...",
-      "cancel": "Cancel·lar"
+      "cancel": "Cancel·lar",
+      "imageLabel": "Imatge (opcional)",
+      "selectImage": "Seleccionar imatge",
+      "removeImage": "Eliminar imatge",
+      "errorImageTooLarge": "La imatge ha de pesar menys de 5 MB"
     },
     "business": {
       "title": "El meu Comerç",

@@ -207,7 +207,11 @@
       "saving": "Saving...",
       "delete": "Delete",
       "deleting": "Deleting...",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "imageLabel": "Image (optional)",
+      "selectImage": "Select image",
+      "removeImage": "Remove image",
+      "errorImageTooLarge": "Image must be under 5 MB"
     },
     "business": {
       "title": "My Business",

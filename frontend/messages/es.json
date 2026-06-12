@@ -207,7 +207,11 @@
       "saving": "Guardando...",
       "delete": "Eliminar",
       "deleting": "Eliminando...",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "imageLabel": "Imagen (opcional)",
+      "selectImage": "Seleccionar imagen",
+      "removeImage": "Eliminar imagen",
+      "errorImageTooLarge": "La imagen debe pesar menos de 5 MB"
     },
     "business": {
       "title": "Mi Comercio",
