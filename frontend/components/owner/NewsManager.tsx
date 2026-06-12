@@ -196,7 +196,7 @@ export function NewsManager({ initialNews, hasNoBusiness }: Props) {
                     <img
                       src={item.image_url}
                       alt=""
-                      className="mt-3 w-full rounded-lg object-cover max-h-56"
+                      className="mt-3 w-full rounded-lg object-cover aspect-[4/5]"
                     />
                   )}
                   <p className="text-xs text-gray-400 mt-2">{formatDate(item.created_at)}</p>
