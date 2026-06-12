@@ -29,7 +29,7 @@ export default async function BusinessNewsPage() {
   if (profile.business_id) {
     const { data } = (await supabase
       .from('business_news')
-      .select('id, business_id, title, description, created_at, updated_at')
+      .select('id, business_id, title, description, image_url, created_at, updated_at')
       .eq('business_id', profile.business_id)
       .order('created_at', { ascending: false })) as unknown as {
       data: BusinessNews[] | null
