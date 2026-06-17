@@ -112,10 +112,10 @@ function ResultCard({
 
   if (result.type === 'stamp') {
     return (
-      <div className="w-full rounded-2xl border border-green-200 bg-green-50 p-6 flex flex-col items-center gap-3">
-        <CheckCircle className="text-green-500" size={40} />
-        <p className="text-green-700 font-bold text-lg">{t('stamped')}</p>
-        <p className="text-green-600 text-sm">
+      <div className="w-full rounded-2xl border border-brand-200 bg-brand-50 p-6 flex flex-col items-center gap-3">
+        <CheckCircle className="text-brand-500" size={40} />
+        <p className="text-brand-700 font-bold text-lg">{t('stamped')}</p>
+        <p className="text-brand-600 text-sm">
           {t('stampsProgress', {
             count: result.stampsCount,
             goal: result.stampsGoal,

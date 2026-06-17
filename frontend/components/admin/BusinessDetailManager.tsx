@@ -151,7 +151,7 @@ export function BusinessDetailManager({ business, owners }: Props) {
             />
           </div>
           {formError && <p className="text-sm text-red-500">{formError}</p>}
-          {saved && <p className="text-sm text-green-600">{tBiz('saved')}</p>}
+          {saved && <p className="text-sm text-brand-600">{tBiz('saved')}</p>}
           <Button onClick={handleSaveBusiness} disabled={isPending || !name} size="sm">
             {isPending ? tBiz('saving') : tBiz('save')}
           </Button>
