@@ -11,14 +11,14 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          50:  '#fdf2f2',
-          100: '#fce4e4',
-          200: '#f9c4c4',
-          400: '#C45A5A',
-          500: '#B84545',
-          600: '#8B3A38',
-          700: '#6B2A28',
-          900: '#3D1614',
+          50:  '#fef8f4',
+          100: '#fdeee4',
+          200: '#f8d5be',
+          400: '#D4A574',
+          500: '#C4835A',
+          600: '#B8623B',
+          700: '#955033',
+          900: '#58301E',
         },
         background: 'var(--background)',
         foreground: 'var(--foreground)',
