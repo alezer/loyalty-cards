@@ -68,7 +68,7 @@ export default function ContactPage() {
 
         {sent ? (
           <div className="flex flex-col items-center gap-3 py-12 text-center">
-            <CheckCircle size={48} className="text-green-500" />
+            <CheckCircle size={48} className="text-brand-500" />
             <h2 className="text-lg font-semibold text-gray-900">{t('successTitle')}</h2>
             <p className="text-sm text-gray-500">{t('successDesc')}</p>
           </div>
