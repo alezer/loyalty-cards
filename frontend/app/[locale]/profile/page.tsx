@@ -135,7 +135,7 @@ export default function ProfilePage() {
               {saving ? tCommon('saving') : tCommon('save')}
             </Button>
             {saved && (
-              <p className="text-sm text-green-600">{t('savedConfirmation')}</p>
+              <p className="text-sm text-brand-600">{t('savedConfirmation')}</p>
             )}
           </form>
         </section>
@@ -205,7 +205,7 @@ export default function ProfilePage() {
                 <p className="text-sm text-red-600">{passwordError}</p>
               )}
               {passwordSaved && (
-                <p className="text-sm text-green-600">{t('password.savedConfirmation')}</p>
+                <p className="text-sm text-brand-600">{t('password.savedConfirmation')}</p>
               )}
               <Button type="submit" disabled={passwordSaving || !newPassword || !confirmPassword} className="self-start">
                 {passwordSaving ? tCommon('saving') : t('password.save')}

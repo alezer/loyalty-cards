@@ -372,7 +372,7 @@ export function BusinessForm({ business, hasNoBusiness }: Props) {
           <Button type="submit" disabled={isPending}>
             {isPending ? tCommon('saving') : tCommon('save')}
           </Button>
-          {saved && <p className="text-sm text-green-600">{t('saved')}</p>}
+          {saved && <p className="text-sm text-brand-600">{t('saved')}</p>}
           {error && <p className="text-sm text-red-500">{error}</p>}
         </div>
       </form>

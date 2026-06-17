@@ -83,7 +83,7 @@ export function InstallBanner() {
                 </p>
                 <button
                   onClick={installAndroid}
-                  className="mt-3 rounded-lg bg-green-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-green-700 active:bg-green-800"
+                  className="mt-3 rounded-lg bg-brand-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-700 active:bg-brand-900"
                 >
                   Instalar
                 </button>
